@@ -34,8 +34,11 @@ describe('Valores de ajuste provisionales', () => {
     expect(GAME_TUNING).toEqual({
       startingHearts: 3,
       playerSpeed: 160,
+      playerBodySize: 22,
+      cornerAssistPx: 12,
       hunterSpeed: 120,
       invulnerabilitySeconds: 0.8,
+      maxFrameSeconds: 0.05,
     });
   });
 });
