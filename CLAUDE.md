@@ -63,5 +63,8 @@ Provisionales (deben ser configurables): jugador 160 px/s, Hunter 120 px/s, invu
 
 ## Comandos
 
-Aún no hay código. Cuando exista el proyecto Vite (Fase 1), documenta aquí `npm run dev`,
-`npm run build`, `npm test` y similares.
+- `npm install` — instalar dependencias.
+- `npm run dev` — servidor de desarrollo (Vite).
+- `npm run build` — `tsc --noEmit` + build de producción en `dist/`.
+- `npm test` — pruebas con Vitest (`tests/**/*.test.ts`).
+- `npm run typecheck` — solo comprobación de tipos.
