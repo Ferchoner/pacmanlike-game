@@ -8,6 +8,7 @@ export const SceneKeys = {
   Menu: 'Menu',
   Game: 'Game',
   GameOver: 'GameOver',
+  LevelComplete: 'LevelComplete',
 } as const;
 
 export type SceneKey = (typeof SceneKeys)[keyof typeof SceneKeys];

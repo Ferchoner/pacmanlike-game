@@ -2,6 +2,7 @@ import type Phaser from 'phaser';
 import { GRID } from '../core/GameConstants';
 import type { GridPoint, Level } from '../world/LevelTypes';
 import { cellCenter, cellToWorld } from '../world/gridMath';
+import { addCellLetter } from './tempLabel';
 
 /**
  * TEMP: dibuja el nivel con formas geométricas simples para poder VER los datos.
@@ -14,8 +15,6 @@ import { cellCenter, cellToWorld } from '../world/gridMath';
 const TEMP_COLORS = {
   floor: 0x111111,
   wall: 0x555566,
-  gem: 0xffd23f,
-  exitClosed: 0xcc3333,
   hunter: 0xff4444,
   patrol: 0xff9933,
   patrolRoute: 0x996633,
@@ -46,18 +45,9 @@ export function renderTempLevel(scene: Phaser.Scene, level: Level): void {
     });
   }
 
-  // Gemas: cuadrados pequeños.
-  g.fillStyle(TEMP_COLORS.gem, 1);
-  for (const gem of level.gems) {
-    const c = cellCenter(gem);
-    g.fillRect(c.x - 5, c.y - 5, 10, 10);
-  }
-
-  // Salida (cerrada al empezar): marco rojo.
-  const exit = cellToWorld(level.exit);
-  g.lineStyle(3, TEMP_COLORS.exitClosed, 1);
-  g.strokeRect(exit.x + 3, exit.y + 3, CELL - 6, CELL - 6);
-  addLetter(scene, level.exit, 'E', TEMP_COLORS.exitClosed);
+  // Las gemas y la puerta ya NO se dibujan aquí: cambian durante la partida
+  // (desaparecen / se abre), así que tienen sus propias vistas
+  // (TempGemsView, TempExitView). Este archivo pinta solo lo que no cambia.
 
   // Enemigos: círculos con su letra del mapa ASCII. Son solo marcadores de
   // posición inicial; su movimiento llega en la Fase 5. El jugador ya no se
@@ -76,16 +66,5 @@ function drawMarker(
   const c = cellCenter(point);
   g.fillStyle(color, 1);
   g.fillCircle(c.x, c.y, CELL / 2 - 4);
-  addLetter(scene, point, letter, 0x000000);
-}
-
-function addLetter(scene: Phaser.Scene, point: GridPoint, letter: string, color: number): void {
-  const c = cellCenter(point);
-  scene.add
-    .text(c.x, c.y, letter, {
-      fontFamily: 'monospace',
-      fontSize: '14px',
-      color: `#${color.toString(16).padStart(6, '0')}`,
-    })
-    .setOrigin(0.5);
+  addCellLetter(scene, point, letter, 0x000000);
 }

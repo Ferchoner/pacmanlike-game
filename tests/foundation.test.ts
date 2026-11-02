@@ -22,9 +22,9 @@ describe('Constantes técnicas (CONTEXTO_MAESTRO)', () => {
 });
 
 describe('Escenas', () => {
-  it('existen las cinco escenas base con claves únicas', () => {
+  it('existen las escenas base (+ LevelComplete) con claves únicas', () => {
     const keys = Object.values(SceneKeys);
-    expect(keys).toEqual(['Boot', 'Preload', 'Menu', 'Game', 'GameOver']);
+    expect(keys).toEqual(['Boot', 'Preload', 'Menu', 'Game', 'GameOver', 'LevelComplete']);
     expect(new Set(keys).size).toBe(keys.length);
   });
 });
@@ -36,6 +36,8 @@ describe('Valores de ajuste provisionales', () => {
       playerSpeed: 160,
       playerBodySize: 22,
       cornerAssistPx: 12,
+      gemPickupSize: 16,
+      exitTriggerSize: 24,
       hunterSpeed: 120,
       invulnerabilitySeconds: 0.8,
       maxFrameSeconds: 0.05,
