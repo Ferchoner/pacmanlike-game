@@ -43,5 +43,9 @@ public/assets/        Recursos preparados para cargar (rutas en docs/03_recursos
 
 ## Estado
 
-Fase 1 (fundación): proyecto base y flujo de escenas con textos `TEMP`, sin mecánicas.
+- Fase 1 (fundación): proyecto base y flujo de escenas con textos `TEMP`.
+- Fase 2 (mundo y datos): el Nivel 1 se carga desde `src/data/levels/level1.json`, se valida
+  (`src/world/validateLevel.ts`) y se dibuja con formas `TEMP`. Si el nivel tuviera errores, la
+  escena de juego los muestra en pantalla en vez de dibujarlo. Todavía no hay movimiento.
+
 En el menú, ENTER inicia; en la escena de juego, ESC (atajo TEMP) lleva a Game Over; ENTER vuelve al menú.

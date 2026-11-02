@@ -1,14 +1,14 @@
 import Phaser from 'phaser';
-import { GRID, VIEW } from '../core/GameConstants';
 import { SceneKeys } from '../core/SceneKeys';
+import { LEVEL_1 } from '../data/levels';
 import { addTempLabel } from '../presentation/tempLabel';
+import { renderTempLevel } from '../presentation/TempLevelRenderer';
+import { LevelValidationError, loadLevel } from '../world/loadLevel';
 
 /**
- * Game: aquí vivirá la partida. Debe quedarse DELGADA: solo coordina módulos
- * (mundo, jugador, enemigos, sistemas). El mapa NO se escribirá aquí; se
- * cargará desde datos en la Fase 2.
- *
- * Hoy solo dibuja una rejilla TEMP de 24×18 celdas para ver el tamaño lógico.
+ * Game: aquí vive la partida. Se mantiene DELGADA: solo coordina módulos.
+ * - `world/` carga y valida el nivel desde datos (el mapa no está escrito aquí).
+ * - `presentation/` lo dibuja (hoy con placeholders TEMP).
  */
 export class GameScene extends Phaser.Scene {
   constructor() {
@@ -16,9 +16,13 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.drawTempGrid();
-    addTempLabel(this, VIEW.height / 2 - 12, 'GameScene vacía (Fase 1)');
-    addTempLabel(this, VIEW.height / 2 + 16, 'ESC: probar Game Over (TEMP)', 14);
+    try {
+      const { level, warnings } = loadLevel(LEVEL_1);
+      for (const w of warnings) console.warn(`[nivel ${level.id}] ${w.message}`);
+      renderTempLevel(this, level);
+    } catch (error) {
+      this.showLevelError(error);
+    }
 
     // TEMP: atajo solo para comprobar el flujo de escenas. Se quita en la Fase 6,
     // cuando el Game Over llegue por perder los 3 corazones.
@@ -27,17 +31,16 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  /** TEMP: rejilla de depuración (líneas finas), no es arte del juego. */
-  private drawTempGrid(): void {
-    const grid = this.add.graphics();
-    grid.lineStyle(1, 0x333333, 1);
-    for (let col = 0; col <= GRID.columns; col++) {
-      const x = col * GRID.cellSize;
-      grid.lineBetween(x, 0, x, VIEW.height);
-    }
-    for (let row = 0; row <= GRID.rows; row++) {
-      const y = row * GRID.cellSize;
-      grid.lineBetween(0, y, VIEW.width, y);
-    }
+  /**
+   * Si el nivel no es válido NO lo arreglamos ni lo dibujamos a medias:
+   * mostramos los problemas en pantalla para que una persona decida.
+   */
+  private showLevelError(error: unknown): void {
+    if (!(error instanceof LevelValidationError)) throw error;
+    console.error(error.message, error.issues);
+    addTempLabel(this, 40, 'Nivel inválido (TEMP)', 24);
+    error.issues.slice(0, 15).forEach((issue, i) => {
+      addTempLabel(this, 90 + i * 24, issue.message, 13);
+    });
   }
 }
