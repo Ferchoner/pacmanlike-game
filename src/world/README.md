@@ -9,6 +9,7 @@ Flujo: `data/levels/level1.json` → `parseMap` (lee el ASCII) → `validateLeve
 | `LevelTypes.ts` | Tipos: `GridPoint`, `LevelDefinition` (lo que hay en el JSON) y `Level` (lo que usa el juego). |
 | `parseMap.ts` | Leyenda del ASCII (`#` pared, `.` suelo, `P`, `H`, `T`, `E`, `g`) y lectura del mapa. |
 | `validateLevel.ts` | Dimensiones, borde, entidades vs tablas, gemas, waypoints, conectividad (BFS). Errores bloquean; avisos no. |
-| `gridSearch.ts` | BFS y utilidades de celdas. Se reutilizará para la navegación del Hunter (Fase 5). |
+| `gridSearch.ts` | BFS (¿qué es alcanzable?) y utilidades de celdas. |
+| `distanceField.ts` | BFS con distancias: cuántos pasos hay a un objetivo desde cada celda. Navegación de Hunter y Patrol (Fase 5). |
 | `gridMath.ts` | Conversión celda ↔ píxeles (celda = 32 px). |
 | `loadLevel.ts` | Valida y construye el `Level`. |

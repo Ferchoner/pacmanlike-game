@@ -39,8 +39,17 @@ describe('Valores de ajuste provisionales', () => {
       gemPickupSize: 16,
       exitTriggerSize: 24,
       hunterSpeed: 120,
+      hunterDetectionCells: 5,
+      hunterGiveUpCells: 8,
+      patrolSpeed: 80,
+      enemyBodySize: 22,
       invulnerabilitySeconds: 0.8,
       maxFrameSeconds: 0.05,
     });
+  });
+
+  it('los enemigos caben por los pasillos y la histéresis del Hunter tiene sentido', () => {
+    expect(GAME_TUNING.enemyBodySize).toBeLessThan(32);
+    expect(GAME_TUNING.hunterGiveUpCells).toBeGreaterThan(GAME_TUNING.hunterDetectionCells);
   });
 });

@@ -3,9 +3,11 @@ import { GRID } from '../core/GameConstants';
 import { SceneKeys } from '../core/SceneKeys';
 import { GAME_TUNING } from '../data/gameTuning';
 import { LEVEL_1 } from '../data/levels';
+import { EnemyGroup } from '../enemies/EnemyGroup';
 import { KeyboardPlayerInput } from '../player/KeyboardPlayerInput';
 import { Player } from '../player/Player';
 import { addTempLabel } from '../presentation/tempLabel';
+import { TempEnemyView } from '../presentation/TempEnemyView';
 import { TempExitView } from '../presentation/TempExitView';
 import { TempGemsView } from '../presentation/TempGemsView';
 import { TempHud } from '../presentation/TempHud';
@@ -19,10 +21,11 @@ import { LevelValidationError, loadLevel } from '../world/loadLevel';
  * Game: aquí vive la partida. Se mantiene DELGADA: solo coordina módulos.
  * - `world/` carga y valida el nivel desde datos (el mapa no está escrito aquí).
  * - `player/` decide a dónde se mueve el jugador (reglas, sin dibujar).
+ * - `enemies/` mueve a los Hunters y Patrols (reglas, sin dibujar).
  * - `systems/levelProgress` lleva las gemas, la puerta y el fin del nivel.
  * - `presentation/` lo dibuja (hoy con placeholders TEMP).
  *
- * Ciclo de cada fotograma: leer teclas → mover jugador → reglas de progreso
+ * Ciclo de cada fotograma: leer teclas → mover jugador → mover enemigos → reglas de progreso
  * → reaccionar a los eventos (vista y HUD) → copiar a la vista.
  */
 export class GameScene extends Phaser.Scene {
@@ -33,6 +36,8 @@ export class GameScene extends Phaser.Scene {
   private gemsView: TempGemsView | null = null;
   private exitView: TempExitView | null = null;
   private hud: TempHud | null = null;
+  private enemies: EnemyGroup | null = null;
+  private enemyViews: TempEnemyView[] = [];
 
   constructor() {
     super(SceneKeys.Game);
@@ -47,6 +52,8 @@ export class GameScene extends Phaser.Scene {
     this.gemsView = null;
     this.exitView = null;
     this.hud = null;
+    this.enemies = null;
+    this.enemyViews = [];
 
     try {
       const { level, warnings } = loadLevel(LEVEL_1);
@@ -75,10 +82,24 @@ export class GameScene extends Phaser.Scene {
         { cells: level.cells, cellSize: GRID.cellSize },
       );
       this.playerView = new TempPlayerView(this, this.player);
+
+      // Enemigos desde los datos del nivel; la vista de cada uno, aparte.
+      this.enemies = new EnemyGroup(level, {
+        cellSize: GRID.cellSize,
+        enemyBodySize: GAME_TUNING.enemyBodySize,
+        hunterSpeed: GAME_TUNING.hunterSpeed,
+        hunterDetectionCells: GAME_TUNING.hunterDetectionCells,
+        hunterGiveUpCells: GAME_TUNING.hunterGiveUpCells,
+        patrolSpeed: GAME_TUNING.patrolSpeed,
+      });
+      this.enemyViews = this.enemies.all.map((enemy) => new TempEnemyView(this, enemy));
       if (this.input.keyboard) {
         this.playerInput = new KeyboardPlayerInput(this.input.keyboard);
-        // TEMP (depuración): B muestra/oculta el cuerpo de colisión.
-        this.input.keyboard.on('keydown-B', () => this.playerView?.toggleHitbox());
+        // TEMP (depuración): B muestra/oculta los cuerpos de colisión.
+        this.input.keyboard.on('keydown-B', () => {
+          this.playerView?.toggleHitbox();
+          for (const view of this.enemyViews) view.toggleHitbox();
+        });
       }
     } catch (error) {
       this.showLevelError(error);
@@ -93,12 +114,19 @@ export class GameScene extends Phaser.Scene {
 
   /** `delta` llega en milisegundos; las reglas trabajan en segundos. */
   override update(_time: number, delta: number): void {
-    if (!this.player || !this.playerView || !this.playerInput || !this.progress) return;
+    if (!this.player || !this.playerView || !this.playerInput || !this.progress || !this.enemies) {
+      return;
+    }
     if (this.progress.isCompleted) return; // ya terminó: esperando el cambio de escena
     const dt = Math.min(delta / 1000, GAME_TUNING.maxFrameSeconds);
     this.player.update(this.playerInput.read(), dt);
+    this.enemies.update(dt, this.player.body);
     for (const event of this.progress.update(this.player.body)) this.onProgress(event);
     this.playerView.sync();
+
+    // Fase 5: el contacto solo se MUESTRA (borde blanco). Restar corazones es la Fase 6.
+    const touching = new Set(this.enemies.touching(this.player.body));
+    this.enemies.all.forEach((enemy, i) => this.enemyViews[i]?.sync(touching.has(enemy)));
   }
 
   /** Traduce eventos de reglas a cambios de presentación (y, en la Fase 8, sonidos). */
