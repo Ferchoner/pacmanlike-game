@@ -16,7 +16,6 @@ const TEMP_COLORS = {
   wall: 0x555566,
   gem: 0xffd23f,
   exitClosed: 0xcc3333,
-  player: 0x33cc66,
   hunter: 0xff4444,
   patrol: 0xff9933,
   patrolRoute: 0x996633,
@@ -60,9 +59,9 @@ export function renderTempLevel(scene: Phaser.Scene, level: Level): void {
   g.strokeRect(exit.x + 3, exit.y + 3, CELL - 6, CELL - 6);
   addLetter(scene, level.exit, 'E', TEMP_COLORS.exitClosed);
 
-  // Entidades: círculos con su letra del mapa ASCII. Son solo marcadores de
-  // posición inicial; el movimiento llega en las fases 3 y 5.
-  drawMarker(scene, g, level.playerStart, TEMP_COLORS.player, 'P');
+  // Enemigos: círculos con su letra del mapa ASCII. Son solo marcadores de
+  // posición inicial; su movimiento llega en la Fase 5. El jugador ya no se
+  // dibuja aquí: tiene su propia vista (TempPlayerView) porque se mueve.
   for (const h of level.hunters) drawMarker(scene, g, h, TEMP_COLORS.hunter, 'H');
   for (const p of level.patrols) drawMarker(scene, g, p.start, TEMP_COLORS.patrol, 'T');
 }

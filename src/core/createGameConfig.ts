@@ -24,12 +24,8 @@ export function createGameConfig(parent: string): Phaser.Types.Core.GameConfig {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    physics: {
-      // Arcade es la física simple de Phaser (cajas y círculos): basta para
-      // un laberinto. Se activará de verdad en la Fase 3.
-      default: 'arcade',
-      arcade: { debug: false },
-    },
+    // Sin motor de física: las paredes son celdas de una rejilla y la colisión
+    // la resuelve `systems/wallCollision.ts` (puro TypeScript, con pruebas).
     // La primera escena de la lista es la que arranca.
     scene: [BootScene, PreloadScene, MenuScene, GameScene, GameOverScene],
   };
