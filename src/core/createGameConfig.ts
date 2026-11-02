@@ -5,6 +5,7 @@ import { PreloadScene } from '../scenes/PreloadScene';
 import { MenuScene } from '../scenes/MenuScene';
 import { GameScene } from '../scenes/GameScene';
 import { GameOverScene } from '../scenes/GameOverScene';
+import { LevelCompleteScene } from '../scenes/LevelCompleteScene';
 
 /**
  * Construye la configuración de Phaser. Separarla de `main.ts` deja claro
@@ -27,6 +28,6 @@ export function createGameConfig(parent: string): Phaser.Types.Core.GameConfig {
     // Sin motor de física: las paredes son celdas de una rejilla y la colisión
     // la resuelve `systems/wallCollision.ts` (puro TypeScript, con pruebas).
     // La primera escena de la lista es la que arranca.
-    scene: [BootScene, PreloadScene, MenuScene, GameScene, GameOverScene],
+    scene: [BootScene, PreloadScene, MenuScene, GameScene, GameOverScene, LevelCompleteScene],
   };
 }

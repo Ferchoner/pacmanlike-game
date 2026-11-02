@@ -1,6 +1,7 @@
 import { cellCenter } from '../world/gridMath';
 import type { GridPoint } from '../world/LevelTypes';
 import { type DirectionInput, velocityFromInput } from '../systems/movement';
+import type { CenteredBox } from '../systems/overlap';
 import { moveAndCollide, type WallGrid } from '../systems/wallCollision';
 
 /** Hacia dónde mira el jugador. Lo usará la animación en la Fase 8. */
@@ -40,6 +41,11 @@ export class Player {
 
   get bodyHalf(): number {
     return this.config.bodySize / 2;
+  }
+
+  /** Cuerpo de colisión actual, para los sistemas de recogida y puerta. */
+  get body(): CenteredBox {
+    return { x: this.x, y: this.y, half: this.bodyHalf };
   }
 
   update(input: DirectionInput, dtSeconds: number): void {
