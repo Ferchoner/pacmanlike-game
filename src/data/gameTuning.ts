@@ -3,7 +3,7 @@
  *
  * Todos son PROVISIONALES según CONTEXTO_MAESTRO.md y están aquí, en un
  * solo lugar, para poder cambiarlos sin tocar la lógica. Los del jugador ya
- * se usan (Fase 3), los de gemas y puerta en la Fase 4; los de enemigos y daño se conectarán en las fases 5 y 6.
+ * se usan (Fase 3), los de gemas y puerta en la Fase 4; los de enemigos en la Fase 5; los de daño se conectarán en la Fase 6.
  *
  * Los datos propios de cada nivel (gemas totales, gemas requeridas, posiciones)
  * NO van aquí: viven en los datos del nivel (`src/data/levels/`).
@@ -37,8 +37,25 @@ export const GAME_TUNING = {
    * 24 px: hay que meterse en la celda de la puerta, no rozar la esquina.
    */
   exitTriggerSize: 24,
-  /** Velocidad del Hunter en px/s (provisional). */
+  /** Velocidad del Hunter en px/s (provisional, CONTEXTO_MAESTRO). Más lento que el jugador: se le puede escapar. */
   hunterSpeed: 120,
+  /**
+   * Rango de detección del Hunter, en PASOS POR PASILLO (provisional; pendiente
+   * en los docs). Con 5, el inicio es seguro: Hunter1 está a 7 pasos de (2,2).
+   */
+  hunterDetectionCells: 5,
+  /**
+   * Distancia (pasos) a la que el Hunter se rinde y vuelve a casa (provisional).
+   * Es mayor que la de detección a propósito ("histéresis"): ver Hunter.ts.
+   */
+  hunterGiveUpCells: 8,
+  /**
+   * Velocidad del Patrol en px/s (provisional; los docs no la fijan).
+   * Más lento que el Hunter: es un obstáculo que se esquiva leyendo su ruta.
+   */
+  patrolSpeed: 80,
+  /** Lado del cuerpo de colisión de los enemigos, px (provisional; < 32 como el del jugador). */
+  enemyBodySize: 22,
   /** Invulnerabilidad tras recibir daño, en segundos (provisional). */
   invulnerabilitySeconds: 0.8,
   /**

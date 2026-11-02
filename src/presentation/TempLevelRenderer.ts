@@ -1,8 +1,7 @@
 import type Phaser from 'phaser';
 import { GRID } from '../core/GameConstants';
-import type { GridPoint, Level } from '../world/LevelTypes';
+import type { Level } from '../world/LevelTypes';
 import { cellCenter, cellToWorld } from '../world/gridMath';
-import { addCellLetter } from './tempLabel';
 
 /**
  * TEMP: dibuja el nivel con formas geométricas simples para poder VER los datos.
@@ -15,8 +14,7 @@ import { addCellLetter } from './tempLabel';
 const TEMP_COLORS = {
   floor: 0x111111,
   wall: 0x555566,
-  hunter: 0xff4444,
-  patrol: 0xff9933,
+  hunterHome: 0x663333,
   patrolRoute: 0x996633,
 } as const;
 
@@ -49,22 +47,12 @@ export function renderTempLevel(scene: Phaser.Scene, level: Level): void {
   // (desaparecen / se abre), así que tienen sus propias vistas
   // (TempGemsView, TempExitView). Este archivo pinta solo lo que no cambia.
 
-  // Enemigos: círculos con su letra del mapa ASCII. Son solo marcadores de
-  // posición inicial; su movimiento llega en la Fase 5. El jugador ya no se
-  // dibuja aquí: tiene su propia vista (TempPlayerView) porque se mueve.
-  for (const h of level.hunters) drawMarker(scene, g, h, TEMP_COLORS.hunter, 'H');
-  for (const p of level.patrols) drawMarker(scene, g, p.start, TEMP_COLORS.patrol, 'T');
-}
-
-function drawMarker(
-  scene: Phaser.Scene,
-  g: Phaser.GameObjects.Graphics,
-  point: GridPoint,
-  color: number,
-  letter: string,
-): void {
-  const c = cellCenter(point);
-  g.fillStyle(color, 1);
-  g.fillCircle(c.x, c.y, CELL / 2 - 4);
-  addCellLetter(scene, point, letter, 0x000000);
+  // Enemigos: desde la Fase 5 se mueven y tienen su propia vista
+  // (TempEnemyView). Aquí solo queda un aro fino en la "casa" de cada Hunter,
+  // la celda a la que vuelve cuando deja de perseguir (ayuda a depurar).
+  g.lineStyle(1, TEMP_COLORS.hunterHome, 1);
+  for (const h of level.hunters) {
+    const c = cellCenter(h);
+    g.strokeCircle(c.x, c.y, CELL / 2 - 3);
+  }
 }
