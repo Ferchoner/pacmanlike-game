@@ -3,7 +3,8 @@
  *
  * Todos son PROVISIONALES según CONTEXTO_MAESTRO.md y están aquí, en un
  * solo lugar, para poder cambiarlos sin tocar la lógica. Los del jugador ya
- * se usan (Fase 3), los de gemas y puerta en la Fase 4; los de enemigos en la Fase 5; los de daño se conectarán en la Fase 6.
+ * se usan (Fase 3), los de gemas y puerta en la Fase 4; los de enemigos en la Fase 5
+ * y los de daño (corazones e invulnerabilidad) en la Fase 6.
  *
  * Los datos propios de cada nivel (gemas totales, gemas requeridas, posiciones)
  * NO van aquí: viven en los datos del nivel (`src/data/levels/`).

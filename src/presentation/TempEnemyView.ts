@@ -11,7 +11,7 @@ import type { Facing } from '../player/Player';
  * El color del Hunter muestra su estado para poder VER la máquina de estados:
  * granate = vigilando (idle), rojo = persiguiendo, rosa = volviendo a casa.
  * Con B se ve el cuerpo de colisión (magenta); el borde blanco indica que
- * ahora mismo toca al jugador (el daño llega en la Fase 6).
+ * ahora mismo toca al jugador (si no está invulnerable, eso le quita un corazón).
  */
 const VISUAL_RADIUS = 13;
 const PATROL_COLOR = 0xff9933;
