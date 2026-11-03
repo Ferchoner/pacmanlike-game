@@ -20,6 +20,7 @@ import { separation } from '../systems/overlap';
 import { PlayerHealth, type HealthEvent } from '../systems/playerHealth';
 import type { RunSummary } from '../systems/runSummary';
 import { LevelValidationError, loadLevel } from '../world/loadLevel';
+import { SHOW_DEV_TOOLS } from '../core/devTools';
 
 /**
  * Game: aquí vive la partida. Se mantiene DELGADA: solo coordina módulos.
@@ -118,11 +119,13 @@ export class GameScene extends Phaser.Scene {
       this.enemyViews = this.enemies.all.map((enemy) => createEnemyView(this, enemy));
       if (this.input.keyboard) {
         this.playerInput = new KeyboardPlayerInput(this.input.keyboard);
-        // TEMP (depuración): B muestra/oculta los cuerpos de colisión.
-        this.input.keyboard.on('keydown-B', () => {
-          this.playerView?.toggleHitbox();
-          for (const view of this.enemyViews) view.toggleHitbox();
-        });
+        // TEMP (depuración): B muestra/oculta los cuerpos de colisión. Solo en desarrollo.
+        if (SHOW_DEV_TOOLS) {
+          this.input.keyboard.on('keydown-B', () => {
+            this.playerView?.toggleHitbox();
+            for (const view of this.enemyViews) view.toggleHitbox();
+          });
+        }
       }
       this.audio.startMusic();
     } catch (error) {

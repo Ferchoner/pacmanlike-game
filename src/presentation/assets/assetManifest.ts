@@ -86,6 +86,8 @@ export interface ManifestEntry {
   readonly status: string;
   readonly path: string | null;
   readonly author_or_vendor: string | null;
+  /** De dónde se descargó o compró (página del recurso). Necesario para los créditos. */
+  readonly source_url?: string | null;
   readonly license: string | null;
   readonly load?: unknown;
 }

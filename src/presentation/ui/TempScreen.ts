@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import type { ScreenLine } from './screenText';
 import { TONE_STYLE, UI_FONT_FAMILY } from './uiTheme';
+import { SHOW_DEV_TOOLS } from '../../core/devTools';
 
 /**
  * TEMP: dibuja una pantalla de texto (menú, Game Over, nivel completado)
@@ -24,6 +25,8 @@ export function renderTempScreen(scene: Phaser.Scene, lines: readonly ScreenLine
       .setOrigin(0.5);
     y += heights[i]!;
   });
+  // Recordatorio para desarrollar; en el build publicado no se muestra.
+  if (!SHOW_DEV_TOOLS) return;
   scene.add
     .text(width / 2, height - 16, 'TEMP: UI provisional', {
       fontFamily: UI_FONT_FAMILY,

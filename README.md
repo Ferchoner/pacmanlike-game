@@ -8,7 +8,7 @@ La documentación de diseño, recursos y reglas de trabajo vive en [`docs/`](doc
 
 ## Requisitos
 
-- Node.js 20.19 o superior (probado con Node 22) y npm.
+- Node.js 22.18 o superior y npm (el script de empaquetado es TypeScript y Node lo ejecuta directamente).
 
 ## Comandos
 
@@ -21,6 +21,8 @@ La documentación de diseño, recursos y reglas de trabajo vive en [`docs/`](doc
 | `npm test` | Ejecuta las pruebas una vez. |
 | `npm run test:watch` | Ejecuta las pruebas cada vez que guardas un archivo. |
 | `npm run typecheck` | Solo revisa los tipos, sin generar build. |
+| `npm run package:itch` | Build + revisión de publicación; crea el .zip para itch.io en `release/` solo si no hay bloqueos. |
+| `npm run package:itch:prueba` | Igual, pero con bloqueos crea un .zip de PRUEBA (no publicar). |
 
 ## Estructura
 
@@ -37,6 +39,7 @@ src/
   presentation/       Placeholders TEMP; AnimationManager y AudioManager (Fase 8)
   data/               Valores de ajuste y datos de niveles
 tests/                Pruebas con Vitest
+tools/release/        Revisión de publicación y empaquetado para itch.io (Fase 9)
 assets/source/        Originales de los recursos externos (no se modifican)
 public/assets/        Recursos preparados para cargar (rutas en docs/03_recursos/manifest.json)
 ```
@@ -62,6 +65,10 @@ public/assets/        Recursos preparados para cargar (rutas en docs/03_recursos
   `AnimationManager` y `AudioManager` conectan estados y eventos con animaciones y sonidos. Sin
   recursos aprobados todo sigue en TEMP (y en silencio). Guía para integrar un archivo:
   [`docs/03_recursos/GUIA_INTEGRACION_RECURSOS.md`](docs/03_recursos/GUIA_INTEGRACION_RECURSOS.md).
+- Fase 9 (pruebas y paquete): `npm run package:itch` revisa el build y crea el .zip para itch.io.
+  Hoy **no es publicable** (arte temporal `temp-dev` y falta el audio P0). Guía:
+  [`docs/07_publicacion/PUBLICACION_ITCHIO.md`](docs/07_publicacion/PUBLICACION_ITCHIO.md);
+  resultados de las pruebas: [`CHECKLIST_PRUEBAS_FASE9.md`](docs/07_publicacion/CHECKLIST_PRUEBAS_FASE9.md).
 
-En el menú, ENTER inicia. En la escena de juego: flechas/WASD mueven y B (TEMP) muestra el cuerpo de
+En el menú, ENTER inicia. En la escena de juego: flechas/WASD mueven y B (TEMP, solo con `npm run dev`) muestra el cuerpo de
 colisión. En Game Over o nivel completado, ENTER vuelve al menú.

@@ -1,4 +1,5 @@
 import type { RunSummary } from '../../systems/runSummary';
+import { BETA_NOTICE, RELEASE_STAGE } from '../../core/release';
 
 /**
  * TEXTOS de la UI, como funciones PURAS (sin Phaser): reciben el estado y
@@ -26,6 +27,7 @@ export const MENU_LINES: readonly ScreenLine[] = [
   line('Tienes 3 corazones. Si los pierdes, vuelves a empezar.'),
   line('Moverse: WASD o flechas', 'hint'),
   line('ENTER, ESPACIO o clic para jugar', 'good'),
+  ...(RELEASE_STAGE === 'beta' ? BETA_NOTICE.map((text) => line(text, 'hint')) : []),
 ];
 
 export function gameOverLines(run: RunSummary): ScreenLine[] {

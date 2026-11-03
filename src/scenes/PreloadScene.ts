@@ -49,7 +49,7 @@ function reportAssets(): void {
     `[recursos] ${ready.length} cargables · ${missing.length} pendientes (${p0.length} P0) · lo pendiente usa TEMP`,
   );
   if (temporary.length > 0) {
-    console.warn(`[recursos] USO TEMPORAL (no publicar así): ${temporary.join(', ')}`);
+    console.warn(`[recursos] USO TEMPORAL (válido para la beta, no para la versión final): ${temporary.join(', ')}`);
   }
   if (missing.length > 0) console.table(missing);
 }
