@@ -76,4 +76,9 @@ export const GAME_TUNING = {
    * enorme y el jugador "saltaría". Con el tope, como mucho avanza esto.
    */
   maxFrameSeconds: 0.05,
+  /**
+   * Segundos en que Game Over y Nivel completado ignoran el teclado al abrirse
+   * (provisional). Si mueres pulsando ESPACIO, no te saltas la pantalla sin leerla.
+   */
+  screenInputDelaySeconds: 0.5,
 } as const;

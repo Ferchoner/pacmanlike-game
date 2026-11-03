@@ -48,6 +48,7 @@ describe('Valores de ajuste provisionales', () => {
       enemyHitFreezeSeconds: 0.5,
       invulnerabilitySeconds: 0.8,
       maxFrameSeconds: 0.05,
+      screenInputDelaySeconds: 0.5,
     });
   });
 

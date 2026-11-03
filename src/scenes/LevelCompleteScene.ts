@@ -1,31 +1,28 @@
 import Phaser from 'phaser';
+import { nextScene } from '../core/sceneFlow';
 import { SceneKeys } from '../core/SceneKeys';
-import { addTempLabel } from '../presentation/tempLabel';
-
-/** Datos que la partida le pasa a esta escena al terminar el nivel. */
-export interface LevelCompleteData {
-  readonly gems: number;
-  readonly totalGems: number;
-}
+import { GAME_TUNING } from '../data/gameTuning';
+import { levelCompleteLines } from '../presentation/ui/screenText';
+import { bindScreenControls, renderTempScreen } from '../presentation/ui/TempScreen';
+import { isRunSummary } from '../systems/runSummary';
+import { showMissingSummary } from './showMissingSummary';
 
 /**
- * Nivel completado (TEMP). El MVP solo tiene el Nivel 1, así que de aquí se
- * vuelve al menú. La pantalla final llega en la Fase 7.
+ * Nivel completado (TEMP). El MVP solo tiene el Nivel 1, así que desde aquí
+ * se juega otra vez o se vuelve al menú (con Nivel 2, cambiaría `sceneFlow`).
  */
 export class LevelCompleteScene extends Phaser.Scene {
   constructor() {
     super(SceneKeys.LevelComplete);
   }
 
-  create(data: Partial<LevelCompleteData>): void {
-    const { height } = this.scale;
-    addTempLabel(this, height / 2 - 40, '¡NIVEL COMPLETADO!', 36);
-    if (data.gems !== undefined && data.totalGems !== undefined) {
-      addTempLabel(this, height / 2 + 10, `Gemas: ${data.gems}/${data.totalGems}`);
-    }
-    addTempLabel(this, height / 2 + 50, 'Pulsa ENTER para volver al menú');
-    this.input.keyboard?.once('keydown-ENTER', () => {
-      this.scene.start(SceneKeys.Menu);
+  create(data: unknown): void {
+    if (isRunSummary(data)) renderTempScreen(this, levelCompleteLines(data));
+    else showMissingSummary(this, '¡NIVEL COMPLETADO!');
+    bindScreenControls(this, {
+      onConfirm: () => this.scene.start(nextScene(SceneKeys.LevelComplete, 'retry')),
+      onBack: () => this.scene.start(nextScene(SceneKeys.LevelComplete, 'menu')),
+      inputDelaySeconds: GAME_TUNING.screenInputDelaySeconds,
     });
   }
 }

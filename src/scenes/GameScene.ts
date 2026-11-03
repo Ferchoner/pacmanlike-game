@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GRID } from '../core/GameConstants';
+import { nextScene } from '../core/sceneFlow';
 import { SceneKeys } from '../core/SceneKeys';
 import { GAME_TUNING } from '../data/gameTuning';
 import { LEVEL_1 } from '../data/levels';
@@ -16,7 +17,7 @@ import { TempPlayerView } from '../presentation/TempPlayerView';
 import { LevelProgress, type ProgressEvent } from '../systems/levelProgress';
 import { separation } from '../systems/overlap';
 import { PlayerHealth, type HealthEvent } from '../systems/playerHealth';
-import type { LevelCompleteData } from './LevelCompleteScene';
+import type { RunSummary } from '../systems/runSummary';
 import { LevelValidationError, loadLevel } from '../world/loadLevel';
 
 /**
@@ -77,15 +78,13 @@ export class GameScene extends Phaser.Scene {
       this.gemsView = new TempGemsView(this, level.gems);
       this.exitView = new TempExitView(this, level.exit);
       this.hud = new TempHud(this);
-      this.hud.setGems(0, level.gemsRequired);
-      this.hud.setExitOpen(false);
 
       // Salud nueva en cada create(): morir y volver a jugar = 3 corazones.
       this.health = new PlayerHealth({
         startingHearts: GAME_TUNING.startingHearts,
         invulnerabilitySeconds: GAME_TUNING.invulnerabilitySeconds,
       });
-      this.hud.setHearts(this.health.hearts, this.health.maxHearts);
+      this.refreshHud();
 
       this.player = new Player(
         level.playerStart,
@@ -160,7 +159,7 @@ export class GameScene extends Phaser.Scene {
   private onHealth(event: HealthEvent, hitters: readonly Enemy[]): void {
     switch (event.type) {
       case 'damaged': {
-        this.hud?.setHearts(event.hearts, this.health!.maxHearts);
+        this.refreshHud();
         // El golpe "rebota": el jugador sale empujado, los enemigos que lo
         // tocaban se quedan inmóviles un momento y el Hunter vuelve a casa.
         const player = this.player!;
@@ -173,34 +172,58 @@ export class GameScene extends Phaser.Scene {
         // Morir reinicia TODA la run: no guardamos nada. La próxima partida
         // vuelve a llamar a create() y todo nace de cero (3 corazones, 0 gemas,
         // puerta cerrada, enemigos en su sitio).
-        this.ended = true;
-        this.scene.start(SceneKeys.GameOver);
+        this.endRun('died');
         break;
     }
   }
 
   /** Traduce eventos de reglas a cambios de presentación (y, en la Fase 8, sonidos). */
   private onProgress(event: ProgressEvent): void {
-    const progress = this.progress!;
     switch (event.type) {
       case 'gemCollected':
         this.gemsView?.hide(event.index);
-        this.hud?.setGems(event.count, progress.gemsRequired);
+        this.refreshHud();
         break;
       case 'exitOpened':
         this.exitView?.show('open');
-        this.hud?.setExitOpen(true);
+        this.refreshHud();
         break;
-      case 'levelCompleted': {
-        this.ended = true;
-        const data: LevelCompleteData = {
-          gems: progress.gems.count,
-          totalGems: progress.gems.total,
-        };
-        this.scene.start(SceneKeys.LevelComplete, data);
+      case 'levelCompleted':
+        this.endRun('won');
         break;
-      }
     }
+  }
+
+  /**
+   * El HUD se redibuja desde los sistemas REALES cada vez que algo cambia
+   * (gema, puerta, golpe). No guarda copias propias que puedan desincronizarse.
+   */
+  private refreshHud(): void {
+    const { hud, progress, health } = this;
+    if (!hud || !progress || !health) return;
+    hud.render({
+      gems: progress.gems.count,
+      gemsRequired: progress.gemsRequired,
+      hearts: health.hearts,
+      maxHearts: health.maxHearts,
+      exitOpen: progress.exitState === 'open',
+    });
+  }
+
+  /** Fin de la run: congela la simulación y pasa el resumen real a la pantalla final. */
+  private endRun(outcome: RunSummary['outcome']): void {
+    const progress = this.progress!;
+    const health = this.health!;
+    this.ended = true;
+    const summary: RunSummary = {
+      outcome,
+      gems: progress.gems.count,
+      totalGems: progress.gems.total,
+      gemsRequired: progress.gemsRequired,
+      hearts: health.hearts,
+      maxHearts: health.maxHearts,
+    };
+    this.scene.start(nextScene(SceneKeys.Game, outcome), summary);
   }
 
   /**
