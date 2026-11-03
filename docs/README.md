@@ -29,6 +29,7 @@ Paquete autónomo para Claude, ChatGPT u otra IA.
 -   `06_prompts_IA/PROMPTS_POR_FASE.md`
 -   `06_prompts_IA/REGLAS_DE_TRABAJO_IA.md`
 -   `07_publicacion/PUBLICACION_ITCHIO.md` y `CHECKLIST_PRUEBAS_FASE9.md`
+-   `08_niveles/GUIA_CREACION_NIVELES.md` (crear y editar niveles con Tiled)
 
 La matriz es una lista de necesidades, no significa que los recursos ya
 estén adquiridos. Los datos desconocidos permanecen pendientes.
