@@ -696,6 +696,45 @@
       "source_url": null,
       "license": null,
       "notes": "Licencia y fallback"
+    },
+    {
+      "id": "R-027",
+      "entity": "Hunter",
+      "type": "Spritesheet",
+      "description": "Idle",
+      "priority": "P1",
+      "quantity": "1",
+      "format": "PNG",
+      "dimensions": "Según proveedor",
+      "animation_or_event": "idle",
+      "status": "temp-dev",
+      "source_type": "mixed",
+      "path": "assets/hunter/Orc_Idle.png",
+      "author_or_vendor": null,
+      "source_url": null,
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Orc_Idle: 6 frames de 100×100, vista lateral. Se reproduce cuando el Hunter no se mueve (en casa o inmóvil tras golpear). ID añadido el 2026-11-03 a pedido de Fernando. FPS provisional.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "hunter-idle",
+        "frameWidth": 100,
+        "frameHeight": 100,
+        "actor": "hunter",
+        "animations": {
+          "idle-right": {
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "fps": 6,
+            "loop": true
+          }
+        }
+      }
     }
   ]
 }

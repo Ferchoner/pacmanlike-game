@@ -79,7 +79,7 @@ Campos opcionales de un spritesheet:
 | Recurso | Nombre | Notas |
 |---|---|---|
 | R-001…R-004 Jugador | `actor: "player"` | Animaciones `idle`, `walk`, `damage`, `death` (con o sin dirección). |
-| R-005/R-006 Hunter | `actor: "hunter"` | |
+| R-005/R-006/R-027 Hunter | `actor: "hunter"` | |
 | R-007/R-008 Patrol | `actor: "patrol"` | |
 | R-009 Suelo | frame `floor` (+ opcionales `floor-2`, `floor-3`, `floor-4`) | Las piezas del mapa deben estar en el mismo PNG. |
 | R-010 Paredes | frames `wall-top` y `wall-side` | `wall-side` = cara frontal, cuando hay suelo justo debajo. |
@@ -145,7 +145,7 @@ el juego los usa, la consola avisa `USO TEMPORAL (no publicar así)` y una prueb
 | ID | Archivo | Uso |
 |---|---|---|
 | R-001…R-004 | `player2/Soldier_Idle/Walk/Hurt/Death.png` | Jugador (frames de 100×100, personaje de ~20 px centrado, vista lateral) |
-| R-005 | `hunter/Orc_Walk.png` | Hunter |
+| R-005 / R-027 | `hunter/Orc_Walk.png` / `Orc_Idle.png` | Hunter (caminar / quieto; R-027 es un ID nuevo) |
 | R-007 / R-008 | `patrol/Blood Monster_A_Walk.png` / `_Idle.png` | Patrol |
 | R-009 / R-010 / R-013 / R-014 | `tiles.png` (tiles de **32×32**, índices de `tiles.txt`) | Suelo 102–105, pared 34 (arriba) y 35 (frente), puerta 274 (cerrada) y 275 (abierta) |
 | R-012 / R-015 | `Heart_Drop_Star_16x16.png` | Gema = gota azul (36, no hay gema real); corazones 3 (lleno) y 5 (vacío) |
@@ -154,7 +154,6 @@ Los FPS no venían documentados: son **provisionales** (idle 6, caminar 10, dañ
 y se ajustan cambiando un número en el manifest.
 
 No usados: `player/16x16 *-Sheet.png` (otro estilo, sin daño ni muerte; sus `.aseprite` están
-vacíos, 0 bytes), `hunter/Orc_Idle.png` (no hay ID para "Hunter idle" en la matriz),
-`autotiles.png` (agua y pantano), `Round_LBs_8x8.png` (barras de UI).
+vacíos, 0 bytes), `autotiles.png` (agua y pantano), `Round_LBs_8x8.png` (barras de UI).
 
 Sigue faltando: **todo el audio** (R-019…R-025), R-006, R-011, R-016…R-018, R-026.

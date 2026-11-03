@@ -33,7 +33,7 @@ describe('Manifest de recursos', () => {
   it('el manifest real del proyecto no tiene errores', () => {
     const report = readManifest(manifestJson as AssetManifest);
     expect(report.errors).toEqual([]);
-    expect(report.ready.length + report.missing.length).toBe(26);
+    expect(report.ready.length + report.missing.length).toBe(27);
   });
 
   it('hoy todo lo cargable es temporal: la Fase 9 debe dejar esta lista vacía', () => {
