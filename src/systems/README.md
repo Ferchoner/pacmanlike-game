@@ -11,3 +11,4 @@ No importan Phaser para poder probarlos con Vitest.
 | `gemCollection.ts` | Qué gemas se recogieron; cada una cuenta una sola vez. Devuelve los índices recogidos en este fotograma. |
 | `playerHealth.ts` | Corazones e invulnerabilidad: un contacto resta 1 corazón, luego 0.8 s sin daño; con 0, muerto. Devuelve eventos (`damaged`, `died`). |
 | `levelProgress.ts` | Máquina de estados de la puerta (cerrada → abierta con 20 gemas → nivel completado al tocarla). Devuelve eventos que la escena traduce a vista y HUD. |
+| `runSummary.ts` | Resumen real de cómo terminó la run (ganó/murió, gemas, corazones) que la partida pasa a la pantalla final, con una guarda de tipo. |
