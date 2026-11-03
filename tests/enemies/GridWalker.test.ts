@@ -37,3 +37,20 @@ describe('GridWalker', () => {
     expect({ x: w.x, y: w.y }).toEqual({ x: center(1), y: center(1) });
   });
 });
+
+describe('GridWalker.freeze', () => {
+  it('no avanza mientras está congelado y retoma su tramo después', () => {
+    const w = new GridWalker({ x: 2, y: 3 }, 100, 32);
+    w.advance(0.1, () => ({ x: 3, y: 3 })); // a mitad de tramo
+    w.freeze(0.3);
+    expect(w.isFrozen).toBe(true);
+    w.advance(0.2, () => ({ x: 3, y: 3 }));
+    expect(w.x).toBeCloseTo(center(2) + 10);
+    expect(w.moving).toBe(false);
+    w.advance(0.1, () => ({ x: 3, y: 3 })); // se acaba la congelación
+    expect(w.isFrozen).toBe(false);
+    w.advance(0.1, () => ({ x: 3, y: 3 }));
+    expect(w.x).toBeCloseTo(center(2) + 20);
+    expect(w.y).toBe(center(3)); // nunca se sale de la línea entre centros
+  });
+});

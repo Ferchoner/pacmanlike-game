@@ -15,6 +15,7 @@ export const TUNING: EnemyTuning = {
   hunterDetectionCells: GAME_TUNING.hunterDetectionCells,
   hunterGiveUpCells: GAME_TUNING.hunterGiveUpCells,
   patrolSpeed: GAME_TUNING.patrolSpeed,
+  enemyHitFreezeSeconds: GAME_TUNING.enemyHitFreezeSeconds,
 };
 
 /** Un enemigo en marcha va por la línea entre dos centros: su centro siempre está en suelo. */

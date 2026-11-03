@@ -14,6 +14,10 @@ export interface PlayerConfig {
   readonly bodySize: number;
   /** px; 0 = sin asistencia en esquinas. */
   readonly cornerAssistPx: number;
+  /** Distancia total del empujón al recibir un golpe, px (0 = sin empujón). */
+  readonly knockbackPx: number;
+  /** Duración del empujón, s. Durante él las teclas no mandan. */
+  readonly knockbackSeconds: number;
 }
 
 /**
@@ -28,6 +32,8 @@ export class Player {
   facing: Facing = 'down';
   /** true si en el último fotograma se desplazó de verdad. */
   moving = false;
+  /** Empujón en curso (px/s) y tiempo que le queda. */
+  private knockback = { x: 0, y: 0, secondsLeft: 0 };
 
   constructor(
     start: GridPoint,
@@ -48,21 +54,67 @@ export class Player {
     return { x: this.x, y: this.y, half: this.bodyHalf };
   }
 
+  get isKnockedBack(): boolean {
+    return this.knockback.secondsLeft > 0;
+  }
+
   update(input: DirectionInput, dtSeconds: number): void {
+    if (this.isKnockedBack) {
+      // Durante el empujón el golpe manda, no las teclas (si no, se anularía
+      // empujando hacia el enemigo). Choca con paredes como siempre.
+      const t = Math.min(dtSeconds, this.knockback.secondsLeft);
+      this.knockback.secondsLeft -= dtSeconds;
+      this.moveBy(this.knockback.x * t, this.knockback.y * t, 0);
+      return; // no cambia hacia dónde mira: retrocede "de espaldas"
+    }
     const velocity = velocityFromInput(input, this.config.speed);
-    const result = moveAndCollide(
-      this.walls,
-      { x: this.x, y: this.y },
-      { x: velocity.x * dtSeconds, y: velocity.y * dtSeconds },
-      this.bodyHalf,
-      this.config.cornerAssistPx,
-    );
+    this.moveBy(velocity.x * dtSeconds, velocity.y * dtSeconds, this.config.cornerAssistPx);
+    this.facing = facingFromInput(input, this.facing);
+  }
+
+  /**
+   * Golpe recibido desde (fromX, fromY): empujón alejándose, por el eje
+   * dominante (en pasillos de 1 celda, un empujón diagonal solo rozaría la pared).
+   */
+  applyKnockback(fromX: number, fromY: number): void {
+    const { knockbackPx, knockbackSeconds } = this.config;
+    if (knockbackPx <= 0 || knockbackSeconds <= 0) return;
+    let dx = this.x - fromX;
+    let dy = this.y - fromY;
+    if (dx === 0 && dy === 0) {
+      // Centros exactamente encima: retrocede contra hacia donde mira.
+      const back = FACING_BACK[this.facing];
+      dx = back.x;
+      dy = back.y;
+    }
+    const speed = knockbackPx / knockbackSeconds;
+    const horizontal = Math.abs(dx) >= Math.abs(dy);
+    this.knockback = {
+      x: horizontal ? Math.sign(dx) * speed : 0,
+      y: horizontal ? 0 : Math.sign(dy) * speed,
+      secondsLeft: knockbackSeconds,
+    };
+  }
+
+  /** Desplaza el cuerpo respetando paredes (lo usa también la separación de enemigos). */
+  pushBy(dx: number, dy: number): void {
+    this.moveBy(dx, dy, 0);
+  }
+
+  private moveBy(dx: number, dy: number, cornerAssistPx: number): void {
+    const result = moveAndCollide(this.walls, { x: this.x, y: this.y }, { x: dx, y: dy }, this.bodyHalf, cornerAssistPx);
     this.moving = result.x !== this.x || result.y !== this.y;
     this.x = result.x;
     this.y = result.y;
-    this.facing = facingFromInput(input, this.facing);
   }
 }
+
+const FACING_BACK: Record<Facing, { x: number; y: number }> = {
+  up: { x: 0, y: 1 },
+  down: { x: 0, y: -1 },
+  left: { x: 1, y: 0 },
+  right: { x: -1, y: 0 },
+};
 
 /**
  * Mira hacia donde se empuja (aunque haya pared). En diagonal conserva la

@@ -26,6 +26,12 @@ export interface HunterConfig {
  * - idle: quieto en su celda de inicio ("casa"), vigilando.
  * - chasing: baja por el mapa de distancias del jugador.
  * - returning: baja por el mapa de distancias de su casa.
+ *
+ * Dos reglas para que recibir un golpe no sea un ciclo frustrante (Fase 6):
+ * - Si el jugador está INVULNERABLE, los Hunters no lo ven: el que perseguía
+ *   pasa a `returning` y nadie lo detecta hasta que vuelva a ser vulnerable.
+ * - El Hunter que acaba de golpear "cumplió": `goHome()` lo manda a casa y
+ *   NO vuelve a detectar al jugador hasta llegar a ella.
  */
 export type HunterState = 'idle' | 'chasing' | 'returning';
 
@@ -43,6 +49,8 @@ export class Hunter {
   readonly home: GridPoint;
   private readonly walker: GridWalker;
   private readonly homeField: DistanceField;
+  /** true tras golpear al jugador: ignora al jugador hasta llegar a casa. */
+  private retreating = false;
 
   constructor(
     home: GridPoint,
@@ -73,15 +81,49 @@ export class Hunter {
     return { x: this.x, y: this.y, half: this.bodyHalf };
   }
 
-  /** `towardPlayer`: mapa de distancias hacia la celda del jugador (compartido por todos los Hunters). */
-  update(dtSeconds: number, towardPlayer: DistanceField): void {
-    this.walker.advance(dtSeconds, (cell) => this.chooseNext(cell, towardPlayer));
+  /** true mientras vuelve a casa tras golpear (no persigue aunque te vea). */
+  get isRetreating(): boolean {
+    return this.retreating;
+  }
+
+  /** Golpeó al jugador: vuelve a casa y no persigue hasta llegar. */
+  goHome(): void {
+    this.retreating = true;
+    if (this.state !== 'idle' || !this.isAtHome()) this.state = 'returning';
+  }
+
+  /**
+   * `towardPlayer`: mapa de distancias hacia la celda del jugador (compartido por todos los Hunters).
+   * `playerVisible`: false mientras el jugador es invulnerable (los Hunters lo pierden de vista).
+   */
+  update(dtSeconds: number, towardPlayer: DistanceField, playerVisible = true): void {
+    // Perderlo de vista es inmediato (no espera al centro de la celda): así
+    // el Hunter da media vuelta en cuanto el jugador recibe el golpe.
+    if (!playerVisible && this.state === 'chasing') this.state = 'returning';
+    this.walker.advance(dtSeconds, (cell) => this.chooseNext(cell, towardPlayer, playerVisible));
+  }
+
+  /** Se queda inmóvil `seconds` (tras golpear al jugador). */
+  freeze(seconds: number): void {
+    this.walker.freeze(seconds);
+  }
+
+  get isFrozen(): boolean {
+    return this.walker.isFrozen;
+  }
+
+  private isAtHome(): boolean {
+    return this.walker.target === null && samePoint(this.walker.cell, this.home);
   }
 
   /** Solo se decide en el centro de una celda: ahí se cambia de estado y de rumbo. */
-  private chooseNext(cell: GridPoint, towardPlayer: DistanceField): GridPoint | null {
-    this.state = nextHunterState(this.state, towardPlayer.distanceTo(cell), this.config);
+  private chooseNext(cell: GridPoint, towardPlayer: DistanceField, playerVisible: boolean): GridPoint | null {
+    // Si no puede verlo (invulnerable) o se está retirando, el jugador "está infinitamente lejos".
+    const canSee = playerVisible && !this.retreating;
+    const distance = canSee ? towardPlayer.distanceTo(cell) : Infinity;
+    this.state = nextHunterState(this.state, distance, this.config);
     if (this.state === 'returning' && samePoint(cell, this.home)) this.state = 'idle';
+    if (this.state === 'idle') this.retreating = false; // ya en casa: vuelve a vigilar
 
     switch (this.state) {
       case 'chasing':

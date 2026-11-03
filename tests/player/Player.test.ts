@@ -11,6 +11,8 @@ const config = {
   speed: GAME_TUNING.playerSpeed,
   bodySize: GAME_TUNING.playerBodySize,
   cornerAssistPx: GAME_TUNING.cornerAssistPx,
+  knockbackPx: GAME_TUNING.knockbackPx,
+  knockbackSeconds: GAME_TUNING.knockbackSeconds,
 };
 const walls = { cells: level.cells, cellSize: GRID.cellSize };
 const newPlayer = () => new Player(level.playerStart, config, walls);
@@ -74,5 +76,35 @@ describe('facingFromInput', () => {
   it('en diagonal conserva la anterior si sigue pulsada; si no, la horizontal', () => {
     expect(facingFromInput({ x: 1, y: 1 }, 'down')).toBe('down');
     expect(facingFromInput({ x: 1, y: 1 }, 'up')).toBe('right');
+  });
+});
+
+describe('Player: empujón al recibir un golpe (Fase 6)', () => {
+  it('sale empujado una celda (32 px) alejándose del enemigo, por el eje dominante', () => {
+    const p = newPlayer(); // (80,80), con suelo a la derecha
+    p.applyKnockback(p.x - 20, p.y - 5); // golpe desde la izquierda (y un poco arriba)
+    hold(p, { x: 0, y: 0 }, 0.3);
+    expect(p.x).toBeCloseTo(80 + GAME_TUNING.knockbackPx);
+    expect(p.y).toBe(80); // solo en X
+  });
+
+  it('durante el empujón las teclas no mandan; después sí', () => {
+    const p = newPlayer();
+    p.applyKnockback(p.x - 20, p.y);
+    p.update({ x: -1, y: 0 }, 1 / 60); // intenta volver hacia el enemigo
+    expect(p.isKnockedBack).toBe(true);
+    expect(p.x).toBeGreaterThan(80);
+    hold(p, { x: 0, y: 0 }, 0.2);
+    expect(p.isKnockedBack).toBe(false);
+    const x = p.x;
+    hold(p, { x: -1, y: 0 }, 0.1);
+    expect(p.x).toBeLessThan(x);
+  });
+
+  it('el empujón respeta las paredes', () => {
+    const p = newPlayer();
+    p.applyKnockback(p.x + 20, p.y); // golpe desde la derecha: empuja a la izquierda, hacia el borde
+    hold(p, { x: 0, y: 0 }, 0.3);
+    expect(p.x - HALF).toBeGreaterThanOrEqual(32); // la columna 0 es pared
   });
 });

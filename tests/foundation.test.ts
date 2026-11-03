@@ -43,6 +43,9 @@ describe('Valores de ajuste provisionales', () => {
       hunterGiveUpCells: 8,
       patrolSpeed: 80,
       enemyBodySize: 22,
+      knockbackPx: 32,
+      knockbackSeconds: 0.15,
+      enemyHitFreezeSeconds: 0.5,
       invulnerabilitySeconds: 0.8,
       maxFrameSeconds: 0.05,
     });

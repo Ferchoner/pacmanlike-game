@@ -3,7 +3,7 @@ import { GRID } from '../core/GameConstants';
 import { SceneKeys } from '../core/SceneKeys';
 import { GAME_TUNING } from '../data/gameTuning';
 import { LEVEL_1 } from '../data/levels';
-import { EnemyGroup } from '../enemies/EnemyGroup';
+import { EnemyGroup, type Enemy } from '../enemies/EnemyGroup';
 import { KeyboardPlayerInput } from '../player/KeyboardPlayerInput';
 import { Player } from '../player/Player';
 import { addTempLabel } from '../presentation/tempLabel';
@@ -14,6 +14,7 @@ import { TempHud } from '../presentation/TempHud';
 import { renderTempLevel } from '../presentation/TempLevelRenderer';
 import { TempPlayerView } from '../presentation/TempPlayerView';
 import { LevelProgress, type ProgressEvent } from '../systems/levelProgress';
+import { separation } from '../systems/overlap';
 import { PlayerHealth, type HealthEvent } from '../systems/playerHealth';
 import type { LevelCompleteData } from './LevelCompleteScene';
 import { LevelValidationError, loadLevel } from '../world/loadLevel';
@@ -92,6 +93,8 @@ export class GameScene extends Phaser.Scene {
           speed: GAME_TUNING.playerSpeed,
           bodySize: GAME_TUNING.playerBodySize,
           cornerAssistPx: GAME_TUNING.cornerAssistPx,
+          knockbackPx: GAME_TUNING.knockbackPx,
+          knockbackSeconds: GAME_TUNING.knockbackSeconds,
         },
         { cells: level.cells, cellSize: GRID.cellSize },
       );
@@ -105,6 +108,7 @@ export class GameScene extends Phaser.Scene {
         hunterDetectionCells: GAME_TUNING.hunterDetectionCells,
         hunterGiveUpCells: GAME_TUNING.hunterGiveUpCells,
         patrolSpeed: GAME_TUNING.patrolSpeed,
+        enemyHitFreezeSeconds: GAME_TUNING.enemyHitFreezeSeconds,
       });
       this.enemyViews = this.enemies.all.map((enemy) => new TempEnemyView(this, enemy));
       if (this.input.keyboard) {
@@ -127,27 +131,44 @@ export class GameScene extends Phaser.Scene {
     if (this.ended) return; // ya terminó: esperando el cambio de escena
     const dt = Math.min(delta / 1000, GAME_TUNING.maxFrameSeconds);
     player.update(playerInput.read(), dt);
-    enemies.update(dt, player.body);
+    // Invulnerable = invisible para los Hunters: te da tiempo a escapar tras un golpe.
+    enemies.update(dt, player.body, !health.isInvulnerable);
 
     // Progreso ANTES que daño: si en el mismo fotograma tocas la puerta abierta
     // y un enemigo, ganas. Llegar a la salida es lo último que hiciste "bien".
     for (const event of progress.update(player.body)) this.onProgress(event);
     if (this.ended) return;
 
-    const touching = new Set(enemies.touching(player.body));
-    for (const event of health.update(dt, touching.size > 0)) this.onHealth(event);
+    const touching = enemies.touching(player.body);
+    for (const event of health.update(dt, touching.length > 0)) this.onHealth(event, touching);
+    if (this.ended) return;
+
+    // Cuerpos sólidos: jugador y enemigos no se atraviesan. El enemigo va por
+    // la rejilla y no se le puede empujar, así que se aparta al jugador.
+    for (const enemy of touching) {
+      const push = separation(player.body, enemy.body);
+      player.pushBy(push.x, push.y);
+    }
 
     playerView.setInvulnerable(health.invulnerableSecondsLeft);
     playerView.sync();
-    enemies.all.forEach((enemy, i) => this.enemyViews[i]?.sync(touching.has(enemy)));
+    const touchingSet = new Set(touching);
+    enemies.all.forEach((enemy, i) => this.enemyViews[i]?.sync(touchingSet.has(enemy)));
   }
 
   /** Traduce eventos de daño a HUD y, al morir, al Game Over (Fase 8: SFX). */
-  private onHealth(event: HealthEvent): void {
+  private onHealth(event: HealthEvent, hitters: readonly Enemy[]): void {
     switch (event.type) {
-      case 'damaged':
+      case 'damaged': {
         this.hud?.setHearts(event.hearts, this.health!.maxHearts);
+        // El golpe "rebota": el jugador sale empujado, los enemigos que lo
+        // tocaban se quedan inmóviles un momento y el Hunter vuelve a casa.
+        const player = this.player!;
+        const from = hitters[0]!;
+        player.applyKnockback(from.x, from.y);
+        this.enemies?.onPlayerHit(hitters);
         break;
+      }
       case 'died':
         // Morir reinicia TODA la run: no guardamos nada. La próxima partida
         // vuelve a llamar a create() y todo nace de cero (3 corazones, 0 gemas,
