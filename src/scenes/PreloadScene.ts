@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { SceneKeys } from '../core/SceneKeys';
 import { registerAnimations } from '../presentation/AnimationManager';
 import { queueAssets } from '../presentation/AssetLoader';
-import { ASSET_REPORT } from '../presentation/assets/gameAssets';
+import { ART_SCALE, ASSET_REPORT } from '../presentation/assets/gameAssets';
 import { addTempLabel } from '../presentation/tempLabel';
 
 /**
@@ -33,7 +33,7 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create(): void {
-    registerAnimations(this, ASSET_REPORT.ready);
+    registerAnimations(this, ASSET_REPORT.ready, ART_SCALE);
     reportAssets();
     this.scene.start(SceneKeys.Menu);
   }
@@ -44,8 +44,12 @@ function reportAssets(): void {
   const { ready, missing, errors } = ASSET_REPORT;
   for (const e of errors) console.error(`[manifest] ${e.id}: ${e.message}`);
   const p0 = missing.filter((m) => m.priority === 'P0');
+  const temporary = ready.filter((r) => r.temporary).map((r) => r.id);
   console.info(
-    `[recursos] ${ready.length} aprobados · ${missing.length} pendientes (${p0.length} P0) · se usan placeholders TEMP`,
+    `[recursos] ${ready.length} cargables · ${missing.length} pendientes (${p0.length} P0) · lo pendiente usa TEMP`,
   );
+  if (temporary.length > 0) {
+    console.warn(`[recursos] USO TEMPORAL (no publicar así): ${temporary.join(', ')}`);
+  }
   if (missing.length > 0) console.table(missing);
 }

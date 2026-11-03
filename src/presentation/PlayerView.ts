@@ -1,9 +1,9 @@
 import type Phaser from 'phaser';
 import { GAME_TUNING } from '../data/gameTuning';
 import type { Player } from '../player/Player';
-import { animationsOf } from './AnimationManager';
+import { actorInfo } from './AnimationManager';
 import { animationSeconds } from './assets/animationChoice';
-import { TextureKeys } from './assets/assetKeys';
+import { Actors } from './assets/assetKeys';
 import { SpriteActor } from './SpriteActor';
 import { TempPlayerView } from './TempPlayerView';
 
@@ -20,9 +20,9 @@ const HITBOX_COLOR = 0xff00ff;
 const BLINK_PERIOD_S = 0.1;
 const BLINK_DIM_ALPHA = 0.25;
 
-/** Sprite si el spritesheet del jugador (R-001…R-004) se cargó; si no, TEMP. */
+/** Sprite si las animaciones del jugador (R-001…R-004) se cargaron; si no, TEMP. */
 export function createPlayerView(scene: Phaser.Scene, player: Player): PlayerView {
-  return scene.textures.exists(TextureKeys.player)
+  return actorInfo(Actors.player)
     ? new SpritePlayerView(scene, player)
     : new TempPlayerView(scene, player);
 }
@@ -34,7 +34,7 @@ class SpritePlayerView implements PlayerView {
   private dying = false;
 
   constructor(scene: Phaser.Scene, private readonly player: Player) {
-    this.actor = new SpriteActor(scene, TextureKeys.player, 6);
+    this.actor = new SpriteActor(scene, Actors.player, 6);
     this.hitbox = scene.add.graphics().setDepth(20).setVisible(false);
     const half = player.bodyHalf;
     this.hitbox.lineStyle(1, HITBOX_COLOR, 1).strokeRect(-half, -half, half * 2, half * 2);
@@ -53,7 +53,7 @@ class SpritePlayerView implements PlayerView {
   playDeath(scene: Phaser.Scene): number {
     this.dying = true;
     this.actor.sprite.setAlpha(1);
-    const death = animationsOf(TextureKeys.player).get('death');
+    const death = actorInfo(Actors.player)?.animations.get('death')?.spec;
     if (death) {
       // R-004: la secuencia dura EXACTAMENTE lo que dura su animación.
       this.actor.playOnce('death');

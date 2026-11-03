@@ -1,11 +1,10 @@
 import type Phaser from 'phaser';
 import type { Facing } from '../player/Player';
-import { animationsOf } from './AnimationManager';
-import { animKey, chooseAnimation } from './assets/animationChoice';
-import { ART_SCALE, loadSpecFor } from './assets/gameAssets';
+import { actorInfo } from './AnimationManager';
+import { animKey, chooseAnimation, type AnimationChoice } from './assets/animationChoice';
 
 /**
- * Un personaje dibujado con su spritesheet externo (jugador o enemigo).
+ * Un personaje dibujado con sus spritesheets externos (jugador o enemigo).
  *
  * Recibe el ESTADO (dirección, si se mueve, acción especial) y elige la
  * animación; no decide nada de reglas. Es la otra mitad de "separar gameplay
@@ -15,16 +14,21 @@ export class SpriteActor {
   readonly sprite: Phaser.GameObjects.Sprite;
   private readonly names: ReadonlySet<string>;
   private current = '';
+  /**
+   * Último lado al que miró (izquierda/derecha). Los sheets de vista lateral
+   * no tienen arriba/abajo: al subir o bajar se sigue mirando a ese lado.
+   */
+  private lastSide: Facing = 'right';
 
-  constructor(scene: Phaser.Scene, private readonly textureKey: string, depth: number) {
-    const spec = loadSpecFor(textureKey);
-    const origin = spec && spec.kind !== 'audio' ? spec.origin : undefined;
+  constructor(scene: Phaser.Scene, private readonly actor: string, depth: number) {
+    const info = actorInfo(actor);
+    if (!info) throw new Error(`SpriteActor: "${actor}" no tiene animaciones cargadas`);
     this.sprite = scene.add
-      .sprite(0, 0, textureKey, 0)
-      .setScale(ART_SCALE)
-      .setOrigin(origin?.x ?? 0.5, origin?.y ?? 0.5)
+      .sprite(0, 0, info.firstTexture, 0)
+      .setScale(info.scale)
+      .setOrigin(info.origin?.x ?? 0.5, info.origin?.y ?? 0.5)
       .setDepth(depth);
-    this.names = new Set(animationsOf(textureKey).keys());
+    this.names = new Set(info.animations.keys());
   }
 
   has(name: string): boolean {
@@ -37,21 +41,27 @@ export class SpriteActor {
    * mejor eso que un personaje que "camina en el sitio".
    */
   show(action: string, facing: Facing): void {
-    const choice = chooseAnimation(this.names, action, facing);
+    if (facing === 'left' || facing === 'right') this.lastSide = facing;
+    const choice = this.choose(action, facing);
     const still = !choice && action === 'idle';
-    const pick = choice ?? (still ? chooseAnimation(this.names, 'walk', facing) : null);
+    const pick = choice ?? (still ? this.choose('walk', facing) : null);
     if (!pick) return; // sin animaciones: se ve el frame 0 de la textura
     const id = `${pick.name}|${pick.flipX}|${still}`;
     if (id === this.current) return;
     this.current = id;
     this.sprite.setFlipX(pick.flipX);
-    this.sprite.play(animKey(this.textureKey, pick.name));
+    this.sprite.play(animKey(this.actor, pick.name));
     if (still) this.sprite.anims.stop();
   }
 
   /** Reproduce una animación de una sola pasada (muerte) y olvida el estado previo. */
   playOnce(name: string): void {
     this.current = name;
-    this.sprite.play(animKey(this.textureKey, name));
+    this.sprite.play(animKey(this.actor, name));
+  }
+
+  /** Dirección exacta; si no existe (sheet lateral subiendo), el último lado. */
+  private choose(action: string, facing: Facing): AnimationChoice | null {
+    return chooseAnimation(this.names, action, facing) ?? chooseAnimation(this.names, action, this.lastSide);
   }
 }

@@ -14,7 +14,7 @@ import { createExitView, createGemsView, type ExitView, type GemsView } from '..
 import { createPlayerView, type PlayerView } from '../presentation/PlayerView';
 import { addTempLabel } from '../presentation/tempLabel';
 import { TempHud } from '../presentation/TempHud';
-import { renderTempLevel } from '../presentation/TempLevelRenderer';
+import { renderLevel } from '../presentation/LevelView';
 import { LevelProgress, type ProgressEvent } from '../systems/levelProgress';
 import { separation } from '../systems/overlap';
 import { PlayerHealth, type HealthEvent } from '../systems/playerHealth';
@@ -73,7 +73,7 @@ export class GameScene extends Phaser.Scene {
     try {
       const { level, warnings } = loadLevel(LEVEL_1);
       for (const w of warnings) console.warn(`[nivel ${level.id}] ${w.message}`);
-      renderTempLevel(this, level);
+      renderLevel(this, level);
 
       // Estado nuevo en cada create(): volver a jugar = 0 gemas y puerta cerrada.
       this.progress = new LevelProgress(level, {

@@ -1,8 +1,9 @@
 import type Phaser from 'phaser';
 import { hudText, type HudState, type ScreenLine } from './ui/screenText';
 import { HUD_FONT_SIZE, TONE_STYLE, UI_FONT_FAMILY } from './ui/uiTheme';
-import { TextureKeys } from './assets/assetKeys';
-import { ART_SCALE } from './assets/gameAssets';
+import { Frames } from './assets/assetKeys';
+import type { FrameRef } from './assets/gameAssets';
+import { loadedFrame } from './PickupViews';
 
 /**
  * TEMP: HUD de texto en la fila superior (que es pared en el mapa, así no
@@ -21,7 +22,7 @@ export class TempHud {
   private readonly exit: Phaser.GameObjects.Text;
   /** Iconos de corazón (uno por corazón máximo), solo si hay arte R-015. */
   private heartIcons: Phaser.GameObjects.Image[] | null = null;
-  private readonly useHeartArt: boolean;
+  private readonly heartArt: { full: FrameRef; empty: FrameRef } | null;
 
   constructor(private readonly scene: Phaser.Scene) {
     const style = { fontFamily: UI_FONT_FAMILY, fontSize: `${HUD_FONT_SIZE}px`, color: '#ffffff' };
@@ -29,9 +30,10 @@ export class TempHud {
     this.gems = scene.add.text(8, 7, '', style).setDepth(10);
     this.hearts = scene.add.text(width / 2, 7, '', style).setOrigin(0.5, 0).setDepth(10);
     this.exit = scene.add.text(width - 8, 7, '', style).setOrigin(1, 0).setDepth(10);
-    this.useHeartArt =
-      scene.textures.exists(TextureKeys.heartFull) && scene.textures.exists(TextureKeys.heartEmpty);
-    this.hearts.setVisible(!this.useHeartArt);
+    const full = loadedFrame(scene, Frames.heartFull);
+    const empty = loadedFrame(scene, Frames.heartEmpty);
+    this.heartArt = full && empty ? { full, empty } : null;
+    this.hearts.setVisible(!this.heartArt);
   }
 
   /** Redibuja todo el HUD a partir del estado real. Barato: son tres textos. */
@@ -40,22 +42,26 @@ export class TempHud {
     apply(this.gems, text.gems);
     apply(this.hearts, text.hearts);
     apply(this.exit, text.exit);
-    if (this.useHeartArt) this.renderHeartIcons(state.hearts, state.maxHearts);
+    if (this.heartArt) this.renderHeartIcons(this.heartArt, state.hearts, state.maxHearts);
   }
 
   /** Corazones llenos a la izquierda y vacíos a la derecha, centrados en la fila del HUD. */
-  private renderHeartIcons(hearts: number, maxHearts: number): void {
+  private renderHeartIcons(art: { full: FrameRef; empty: FrameRef }, hearts: number, maxHearts: number): void {
     if (!this.heartIcons) {
-      const size = 16 * ART_SCALE;
+      const { full } = art;
+      const size = this.scene.textures.getFrame(full.key, full.frame).width * full.scale;
       const startX = this.scene.scale.width / 2 - ((maxHearts - 1) * (size + 4)) / 2;
       this.heartIcons = Array.from({ length: maxHearts }, (_, i) =>
         this.scene.add
-          .image(startX + i * (size + 4), 16, TextureKeys.heartFull)
-          .setScale(ART_SCALE)
+          .image(startX + i * (size + 4), 16, full.key, full.frame)
+          .setScale(full.scale)
           .setDepth(10),
       );
     }
-    this.heartIcons.forEach((icon, i) => icon.setTexture(i < hearts ? TextureKeys.heartFull : TextureKeys.heartEmpty));
+    this.heartIcons.forEach((icon, i) => {
+      const ref = i < hearts ? art.full : art.empty;
+      icon.setTexture(ref.key, ref.frame);
+    });
   }
 }
 

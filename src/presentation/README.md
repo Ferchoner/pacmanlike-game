@@ -14,6 +14,7 @@ Desde la Fase 8 cada vista tiene dos versiones: la de **arte externo** (si el re
 | `AnimationManager.ts` | Crea las animaciones desde las fichas y avisa si los índices no existen en la imagen. |
 | `AudioManager.ts` / `phaserAudio.ts` | Único sitio que reproduce sonido: evento → SFX, música; si falta, silencio. |
 | `PlayerView.ts`, `EnemyView.ts`, `PickupViews.ts`, `SpriteActor.ts` | Vistas con sprite y sus fábricas. |
+| `LevelView.ts` / `levelTiles.ts` | Mapa con tileset (Tilemap de Phaser); qué pieza va en cada celda (puro, con pruebas). |
 
 
 | Archivo (todos TEMP) | Para qué |

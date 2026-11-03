@@ -27,13 +27,34 @@
       "format": "PNG",
       "dimensions": "Según proveedor",
       "animation_or_event": "idle",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/player2/Soldier_Idle.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Puede integrarse en sheet principal"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Soldier_Idle: 6 frames de 100×100 (personaje ~18×21 px centrado), mira a la derecha. FPS provisional.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "player-idle",
+        "frameWidth": 100,
+        "frameHeight": 100,
+        "actor": "player",
+        "animations": {
+          "idle-right": {
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "fps": 6,
+            "loop": true
+          }
+        }
+      }
     },
     {
       "id": "R-002",
@@ -45,13 +66,36 @@
       "format": "PNG",
       "dimensions": "Según proveedor",
       "animation_or_event": "walk 4 direcciones; diagonal opcional",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/player2/Soldier_Walk.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Confirmar filas/direcciones"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Soldier_Walk: 8 frames de 100×100, solo vista lateral (izquierda = volteado). FPS provisional.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "player-walk",
+        "frameWidth": 100,
+        "frameHeight": 100,
+        "actor": "player",
+        "animations": {
+          "walk-right": {
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "fps": 10,
+            "loop": true
+          }
+        }
+      }
     },
     {
       "id": "R-003",
@@ -63,13 +107,32 @@
       "format": "PNG",
       "dimensions": "Según proveedor",
       "animation_or_event": "damage/hit",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/player2/Soldier_Hurt.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Puede formar parte del sheet principal"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Soldier_Hurt: 4 frames de 100×100. FPS provisional.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "player-hurt",
+        "frameWidth": 100,
+        "frameHeight": 100,
+        "actor": "player",
+        "animations": {
+          "damage-right": {
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "fps": 12,
+            "loop": false
+          }
+        }
+      }
     },
     {
       "id": "R-004",
@@ -81,13 +144,32 @@
       "format": "PNG",
       "dimensions": "Según proveedor",
       "animation_or_event": "death",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/player2/Soldier_Death.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Puede formar parte del sheet principal"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Soldier_Death: 4 frames de 100×100; a 4 FPS la secuencia de muerte dura 1 s. FPS provisional.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "player-death",
+        "frameWidth": 100,
+        "frameHeight": 100,
+        "actor": "player",
+        "animations": {
+          "death": {
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "fps": 4,
+            "loop": false
+          }
+        }
+      }
     },
     {
       "id": "R-005",
@@ -99,13 +181,36 @@
       "format": "PNG",
       "dimensions": "Según proveedor",
       "animation_or_event": "walk/chase",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/hunter/Orc_Walk.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "IA controla persecución"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Orc_Walk: 8 frames de 100×100, vista lateral. Orc_Idle.png también existe pero no tiene ID en la matriz. FPS provisional.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "hunter-walk",
+        "frameWidth": 100,
+        "frameHeight": 100,
+        "actor": "hunter",
+        "animations": {
+          "walk-right": {
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "fps": 10,
+            "loop": true
+          }
+        }
+      }
     },
     {
       "id": "R-006",
@@ -135,13 +240,36 @@
       "format": "PNG",
       "dimensions": "Según proveedor",
       "animation_or_event": "walk direccional",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/patrol/Blood Monster_A_Walk.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "IA controla waypoints"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Blood Monster_A_Walk: 8 frames de 100×100. FPS provisional.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "patrol-walk",
+        "frameWidth": 100,
+        "frameHeight": 100,
+        "actor": "patrol",
+        "animations": {
+          "walk-right": {
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "fps": 10,
+            "loop": true
+          }
+        }
+      }
     },
     {
       "id": "R-008",
@@ -153,13 +281,34 @@
       "format": "PNG",
       "dimensions": "Según proveedor",
       "animation_or_event": "idle",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/patrol/Blood Monster_A_Idle.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Opcional"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Blood Monster_A_Idle: 6 frames de 100×100. FPS provisional.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "patrol-idle",
+        "frameWidth": 100,
+        "frameHeight": 100,
+        "actor": "patrol",
+        "animations": {
+          "idle-right": {
+            "frames": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "fps": 6,
+            "loop": true
+          }
+        }
+      }
     },
     {
       "id": "R-009",
@@ -171,13 +320,26 @@
       "format": "PNG",
       "dimensions": "Tiles 16×16",
       "animation_or_event": "N/A",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/tiles.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Variaciones visuales"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "tiles.png: tiles de 32×32 (no 16×16), 17×26. Índices según tiles.txt: 7.a–7.d = 102–105.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "dungeon",
+        "frameWidth": 32,
+        "frameHeight": 32,
+        "scale": 1,
+        "namedFrames": {
+          "floor": 102,
+          "floor-2": 103,
+          "floor-3": 104,
+          "floor-4": 105
+        }
+      }
     },
     {
       "id": "R-010",
@@ -189,13 +351,24 @@
       "format": "PNG",
       "dimensions": "Tiles 16×16",
       "animation_or_event": "N/A",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/tiles.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Rectas, esquinas, uniones y extremos"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "tiles.png: 3.a stone brick wall (top) = 34, 3.b (side 1) = 35. Solo arriba y frente: sin esquinas.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "dungeon",
+        "frameWidth": 32,
+        "frameHeight": 32,
+        "scale": 1,
+        "namedFrames": {
+          "wall-top": 34,
+          "wall-side": 35
+        }
+      }
     },
     {
       "id": "R-011",
@@ -225,13 +398,22 @@
       "format": "PNG",
       "dimensions": "16×16 o múltiplos",
       "animation_or_event": "shine opcional",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/Heart_Drop_Star_16x16.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Puede ser estática"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Heart_Drop_Star_16x16: no hay gema; se usa la gota azul (frame 36) como sustituta.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "icons",
+        "frameWidth": 16,
+        "frameHeight": 16,
+        "namedFrames": {
+          "gem": 36
+        }
+      }
     },
     {
       "id": "R-013",
@@ -243,13 +425,23 @@
       "format": "PNG",
       "dimensions": "Según proveedor",
       "animation_or_event": "locked",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/tiles.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Salida bloqueada"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "tiles.png: 17.c framed door 1 (shut) = 274.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "dungeon",
+        "frameWidth": 32,
+        "frameHeight": 32,
+        "scale": 1,
+        "namedFrames": {
+          "exit-closed": 274
+        }
+      }
     },
     {
       "id": "R-014",
@@ -261,13 +453,23 @@
       "format": "PNG",
       "dimensions": "Según proveedor",
       "animation_or_event": "open/unlocked",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/tiles.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Se activa con 20 gemas"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "tiles.png: 17.d framed door 1 (open) = 275.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "dungeon",
+        "frameWidth": 32,
+        "frameHeight": 32,
+        "scale": 1,
+        "namedFrames": {
+          "exit-open": 275
+        }
+      }
     },
     {
       "id": "R-015",
@@ -279,13 +481,23 @@
       "format": "PNG",
       "dimensions": "16×16 o múltiplos",
       "animation_or_event": "N/A",
-      "status": "pending",
+      "status": "temp-dev",
       "source_type": "mixed",
-      "path": null,
+      "path": "assets/Heart_Drop_Star_16x16.png",
       "author_or_vendor": null,
       "source_url": null,
-      "license": null,
-      "notes": "Tres corazones"
+      "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
+      "notes": "Heart_Drop_Star_16x16: corazón rojo con borde lleno = 3, vacío = 5.",
+      "load": {
+        "kind": "spritesheet",
+        "key": "icons",
+        "frameWidth": 16,
+        "frameHeight": 16,
+        "namedFrames": {
+          "heart-full": 3,
+          "heart-empty": 5
+        }
+      }
     },
     {
       "id": "R-016",

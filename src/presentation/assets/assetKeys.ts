@@ -1,23 +1,38 @@
 /**
- * Claves que el CÓDIGO espera encontrar en `load.key` del manifest.
+ * Nombres que el CÓDIGO espera encontrar en el manifest.
  *
  * Es el "contrato" entre los datos y el juego: el manifest dice dónde está
  * el archivo y cómo se corta; aquí se dice qué papel cumple en el juego.
- * Si una clave no está cargada, la vista correspondiente usa su TEMP.
+ * Si un nombre no está cargado, la vista correspondiente usa su TEMP.
  */
-export const TextureKeys = {
-  /** R-001…R-004: un spritesheet con idle, walk, damage y death (las 4 entradas comparten clave y archivo). */
+
+/** Personajes animados (`load.actor`, o la `key` si no hay actor). */
+export const Actors = {
+  /** R-001…R-004: idle, walk, damage, death (pueden ir en uno o varios PNG). */
   player: 'player',
   /** R-005 (y R-006 si llega). */
   hunter: 'hunter',
-  /** R-007 (y R-008 si llega). */
+  /** R-007 (y R-008). */
   patrol: 'patrol',
-  /** R-012. Imagen o spritesheet (si es sheet, puede tener animación `shine`). */
+} as const;
+
+/**
+ * Frames sueltos con nombre (`load.namedFrames` de un spritesheet, o una
+ * imagen cuya `key` sea este nombre).
+ */
+export const Frames = {
+  /** R-009: suelo; las variantes son opcionales y se reparten por el mapa. */
+  floor: 'floor',
+  floorVariants: ['floor-2', 'floor-3', 'floor-4'],
+  /** R-010: pared vista desde arriba y cara frontal (pared con suelo debajo). */
+  wallTop: 'wall-top',
+  wallSide: 'wall-side',
+  /** R-012. */
   gem: 'gem',
   /** R-013 / R-014. */
   exitClosed: 'exit-closed',
   exitOpen: 'exit-open',
-  /** R-015: dos imágenes (o dos frames de un sheet; ver docs). */
+  /** R-015. */
   heartFull: 'heart-full',
   heartEmpty: 'heart-empty',
 } as const;

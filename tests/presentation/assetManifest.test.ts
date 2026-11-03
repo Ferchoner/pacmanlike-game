@@ -30,18 +30,42 @@ function manifestWith(...assets: ManifestEntry[]): AssetManifest {
 }
 
 describe('Manifest de recursos', () => {
-  it('el manifest real del proyecto no tiene errores y todo sigue pendiente', () => {
+  it('el manifest real del proyecto no tiene errores', () => {
     const report = readManifest(manifestJson as AssetManifest);
     expect(report.errors).toEqual([]);
-    expect(report.ready).toEqual([]);
-    expect(report.missing).toHaveLength(26);
+    expect(report.ready.length + report.missing.length).toBe(26);
+  });
+
+  it('hoy todo lo cargable es temporal: la Fase 9 debe dejar esta lista vacía', () => {
+    const report = readManifest(manifestJson as AssetManifest);
+    expect(report.ready.every((r) => r.temporary)).toBe(true);
+  });
+
+  it('"temp-dev" se carga sin autor, pero marcado como temporal', () => {
+    const report = readManifest(manifestWith(approved({ status: 'temp-dev', author_or_vendor: null })));
+    expect(report.errors).toEqual([]);
+    expect(report.ready[0]?.temporary).toBe(true);
+  });
+
+  it('"approved" sí exige autor', () => {
+    expect(readManifest(manifestWith(approved({ author_or_vendor: null }))).ready).toEqual([]);
+  });
+
+  it('valida los frames con nombre y la escala', () => {
+    const sheet = approved({
+      path: 'assets/tiles.png',
+      load: { kind: 'spritesheet', key: 'dungeon', frameWidth: 32, frameHeight: 32, scale: 0, namedFrames: { floor: -1 } },
+    });
+    const messages = readManifest(manifestWith(sheet)).errors.map((e) => e.message);
+    expect(messages.some((m) => m.includes('scale'))).toBe(true);
+    expect(messages.some((m) => m.includes('"floor"'))).toBe(true);
   });
 
   it('una entrada aprobada y completa queda lista para cargar', () => {
     const report = readManifest(manifestWith(approved()));
     expect(report.errors).toEqual([]);
     expect(report.ready).toEqual([
-      { id: 'R-020', path: 'assets/audio/gem.ogg', load: { kind: 'audio', key: 'gem:collected', volume: 0.8 } },
+      { id: 'R-020', temporary: false, path: 'assets/audio/gem.ogg', load: { kind: 'audio', key: 'gem:collected', volume: 0.8 } },
     ]);
   });
 

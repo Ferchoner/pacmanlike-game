@@ -9,10 +9,14 @@
  * cargar. Así se prueba con Vitest y un error en el manifest se detecta en
  * las pruebas, no jugando.
  *
- * Regla clave: solo se carga un recurso con `status: "approved"`. Aprobado
- * significa que pasó el checklist de recepción (docs/05_control): tiene
- * archivo, autor y licencia registrados y una ficha técnica (`load`). Lo que
- * no está aprobado sigue con su placeholder TEMP.
+ * Regla clave: solo se cargan dos estados.
+ * - `"approved"`: pasó el checklist de recepción (docs/05_control): archivo,
+ *   autor y licencia registrados y ficha técnica (`load`).
+ * - `"temp-dev"`: recurso gratuito usado SOLO para desarrollar mientras llega
+ *   el definitivo (decisión de Fernando, 2026-11-03). Necesita ficha y una
+ *   nota de licencia, pero el autor puede faltar. Bloquea la publicación:
+ *   la Fase 9 debe dejar cero `temp-dev`.
+ * Lo demás sigue con su placeholder TEMP.
  */
 
 /** Una animación de un spritesheet, tal como la documenta su ficha técnica. */
@@ -30,7 +34,7 @@ export interface AnimationSpec {
  * adivinando: cada número sale de la documentación del proveedor.
  */
 export type AssetLoadSpec =
-  | { readonly kind: 'image'; readonly key: string; readonly origin?: Origin }
+  | { readonly kind: 'image'; readonly key: string; readonly origin?: Origin; readonly scale?: number }
   | {
       readonly kind: 'spritesheet';
       readonly key: string;
@@ -39,7 +43,24 @@ export type AssetLoadSpec =
       readonly margin?: number;
       readonly spacing?: number;
       readonly origin?: Origin;
+      /**
+       * Escala entera de dibujo. Por defecto la del manifest (×2, arte de 16 px);
+       * un tileset de 32 px por celda va a ×1.
+       */
+      readonly scale?: number;
+      /**
+       * Personaje al que pertenecen sus animaciones (`player`, `hunter`…). Así
+       * un personaje puede repartir sus animaciones en varios PNG (uno para
+       * caminar, otro para morir). Por defecto, la propia `key`.
+       */
+      readonly actor?: string;
       readonly animations?: Readonly<Record<string, AnimationSpec>>;
+      /**
+       * Frames sueltos con nombre (`wall-top`, `exit-open`, `heart-full`…),
+       * para sheets que juntan muchas piezas. Los índices salen de la
+       * documentación del recurso (p. ej. tiles.txt).
+       */
+      readonly namedFrames?: Readonly<Record<string, number>>;
     }
   | {
       readonly kind: 'audio';
@@ -77,6 +98,8 @@ export interface AssetManifest {
 /** Un recurso listo para encolar en el loader. */
 export interface ReadyAsset {
   readonly id: string;
+  /** true si es `temp-dev`: sirve para desarrollar, no para publicar. */
+  readonly temporary: boolean;
   /** Ruta relativa a `public/` (p. ej. `assets/audio/gem.ogg`). */
   readonly path: string;
   readonly load: AssetLoadSpec;
@@ -118,14 +141,14 @@ export function readManifest(manifest: AssetManifest): ManifestReport {
 
   for (const entry of manifest.assets) {
     const what = `${entry.entity} · ${entry.description}`;
-    if (entry.status !== 'approved') {
+    if (entry.status !== 'approved' && entry.status !== 'temp-dev') {
       missing.push({ id: entry.id, priority: entry.priority, what, reason: `estado "${entry.status}"` });
       continue;
     }
     const problems = checkApproved(entry);
     if (problems.length > 0 || !isLoadSpec(entry.load) || entry.path === null) {
       for (const message of problems) errors.push({ id: entry.id, message });
-      missing.push({ id: entry.id, priority: entry.priority, what, reason: 'aprobado pero con errores' });
+      missing.push({ id: entry.id, priority: entry.priority, what, reason: `${entry.status} pero con errores` });
       continue;
     }
     const load = entry.load;
@@ -139,23 +162,25 @@ export function readManifest(manifest: AssetManifest): ManifestReport {
       continue;
     }
     pathByKey.set(load.key, entry.path);
-    ready.push({ id: entry.id, path: entry.path, load });
+    ready.push({ id: entry.id, temporary: entry.status === 'temp-dev', path: entry.path, load });
   }
   return { ready, missing, errors };
 }
 
-/** Lista de problemas de una entrada aprobada (vacía = se puede cargar). */
+/** Lista de problemas de una entrada cargable (vacía = se puede cargar). */
 function checkApproved(entry: ManifestEntry): string[] {
   const problems: string[] = [];
-  if (!entry.path) problems.push('aprobado sin "path"');
-  if (!entry.license) problems.push('aprobado sin "license" (no se integra nada sin licencia)');
-  if (!entry.author_or_vendor) problems.push('aprobado sin "author_or_vendor"');
+  const st = entry.status;
+  if (!entry.path) problems.push(`${st} sin "path"`);
+  if (!entry.license) problems.push(`${st} sin "license" (no se integra nada sin nota de licencia)`);
+  // Un recurso temporal puede no tener autor identificado; uno definitivo, no.
+  if (st === 'approved' && !entry.author_or_vendor) problems.push('approved sin "author_or_vendor"');
   if (entry.path && !isSafePublicPath(entry.path)) {
     problems.push(`"path" debe ir dentro de public/assets/ (p. ej. "assets/audio/x.ogg"): ${entry.path}`);
   }
   const load = entry.load;
   if (load === undefined || load === null) {
-    problems.push('aprobado sin ficha técnica "load" (tipo, clave, frames…)');
+    problems.push(`${st} sin ficha técnica "load" (tipo, clave, frames…)`);
     return problems;
   }
   problems.push(...checkLoadSpec(load));
@@ -178,6 +203,7 @@ function checkLoadSpec(load: unknown): string[] {
   const l = load as Record<string, unknown>;
   const problems: string[] = [];
   if (typeof l.key !== 'string' || l.key.length === 0) problems.push('"load.key" vacío');
+  if (l.scale !== undefined && !isPositiveInt(l.scale)) problems.push('"load.scale" debe ser un entero > 0');
   switch (l.kind) {
     case 'image':
       break;
@@ -196,6 +222,21 @@ function checkLoadSpec(load: unknown): string[] {
           problems.push('"load.animations" debe ser un objeto');
         } else {
           for (const [name, spec] of Object.entries(anims)) problems.push(...checkAnimation(name, spec));
+        }
+      }
+      if (l.actor !== undefined && (typeof l.actor !== 'string' || l.actor.length === 0)) {
+        problems.push('"load.actor" debe ser un texto');
+      }
+      const named = l.namedFrames;
+      if (named !== undefined) {
+        if (typeof named !== 'object' || named === null) {
+          problems.push('"load.namedFrames" debe ser un objeto');
+        } else {
+          for (const [name, frame] of Object.entries(named)) {
+            if (!(Number.isInteger(frame) && (frame as number) >= 0)) {
+              problems.push(`frame con nombre "${name}" debe ser un índice ≥ 0`);
+            }
+          }
         }
       }
       break;
