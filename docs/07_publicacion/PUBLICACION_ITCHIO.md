@@ -1,9 +1,11 @@
 # Publicación en itch.io (Fase 9)
 
-> **Estado al 2026-11-03: NO publicable.** Hay 14 recursos `temp-dev` (arte gratuito sin licencia
-> registrada) y faltan 5 recursos P0 (R-016 icono del contador de gemas y los SFX R-020…R-023).
-> `npm run package:itch` lo comprueba y se niega a crear el paquete final mientras sea así.
-> Publicar es decisión de Fernando: este documento prepara el camino, no publica nada.
+> **Estado al 2026-11-03.** La versión **final** no es publicable: hay 14 recursos `temp-dev` y
+> faltan 5 recursos P0 (R-016 y los SFX R-020…R-023). Fernando decidió publicar antes una
+> **beta 0.1.0-beta.1** con el arte temporal de uso gratuito, aclarando que no es un producto
+> terminado y que ese arte no es nuestro (ver sección 6). La beta solo está bloqueada por una cosa:
+> falta registrar de dónde salió cada recurso (`source_url`) y revisar su licencia.
+> Subir a itch.io lo hace Fernando: los scripts solo crean el .zip.
 
 ## 1. Cómo funciona un juego HTML5 en itch.io
 
@@ -24,6 +26,7 @@ la raíz y itch.io lo muestra dentro de un `<iframe>` (una página dentro de su 
 | Comando | Qué hace |
 |---|---|
 | `npm run package:itch` | Build + revisión. Si no hay bloqueos, crea `release/pac-big-man-v<versión>-html5.zip`. Si los hay, los lista y termina con error. |
+| `npm run package:itch:beta` | Versión **beta**: el arte temporal y el audio que falta pasan a aviso, pero cada recurso `temp-dev` necesita `source_url`. |
 | `npm run package:itch:prueba` | Igual, pero con bloqueos crea `release/…-PRUEBA-NO-PUBLICAR.zip` para probar en local o en un borrador privado. |
 
 Requiere Node 22.18 o superior: el script está en TypeScript (`tools/release/packageItch.ts`) y Node
@@ -83,3 +86,35 @@ descargarlo); hazlo solo cuando el paso 3 esté completo.
 - **Audio.** Hoy no hay audio (`AudioManager` funciona en silencio). Cuando llegue, Phaser lo
   desbloquea con la primera tecla o clic; como el menú siempre pide ENTER o clic, no hace falta nada
   extra.
+
+## 6. Versión beta con arte temporal (decisión de Fernando, 2026-11-03)
+
+Qué cambia en la beta:
+
+- El menú muestra dos líneas: "Versión BETA: no es un producto terminado." y "Arte temporal de
+  terceros, de uso gratuito (ver créditos)." Vienen de `src/core/release.ts`; al cambiar
+  `RELEASE_STAGE` a `'final'` desaparecen.
+- El .zip incluye `CREDITOS.txt`, generado desde el manifest: archivo, autor, origen y licencia de
+  cada recurso externo que el juego carga.
+- `package.json` lleva la versión `0.1.0-beta.1`.
+
+**Un matiz importante sobre "no redistribuir".** Un juego HTML5 en itch.io funciona descargando los
+PNG al navegador de cada jugador, así que publicar el juego sí distribuye esos archivos *dentro del
+juego*. Eso es lo normal y casi todas las licencias de assets gratuitos lo permiten ("puedes usarlos
+en tus juegos"). Lo que suelen prohibir es redistribuir el pack suelto o revenderlo. Por eso:
+
+1. Para cada pack hay que anotar en el manifest `source_url` (la página de descarga) y, en
+   `license`, lo que dice esa página (por ejemplo "CC0", "uso libre en juegos, crédito opcional").
+   No se inventa: si la página no dice nada, se anota "sin licencia indicada" y Fernando decide.
+2. Si alguna licencia exige atribución, ya queda en `CREDITOS.txt`; conviene repetirla en la
+   descripción de la página de itch.io.
+3. En itch.io, subir el .zip solo como **jugable en el navegador**, sin ofrecerlo como descarga.
+
+Texto sugerido para la página de itch.io:
+
+> **PAC-BIG-MAN (beta 0.1.0)** — Esta es una versión beta de prueba: no es un producto terminado y
+> todavía no tiene sonido. El arte es temporal: son recursos gratuitos creados por terceros, que no
+> son nuestros y se sustituirán en la versión final. Créditos: [lista de CREDITOS.txt].
+
+Para publicar la beta: `npm run package:itch:beta` → subir el .zip a un proyecto en **Draft** →
+probarlo ahí → cambiarlo a **Public** cuando estés conforme.

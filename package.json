@@ -1,7 +1,7 @@
 {
   "name": "pac-big-man",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.0-beta.1",
   "description": "PAC-BIG-MAN: juego 2D arcade de laberinto (Phaser 4 + TypeScript + Vite)",
   "type": "module",
   "scripts": {
@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "package:itch": "npm run build && node tools/release/packageItch.ts",
-    "package:itch:prueba": "npm run build && node tools/release/packageItch.ts --prueba"
+    "package:itch:prueba": "npm run build && node tools/release/packageItch.ts --prueba",
+    "package:itch:beta": "npm run build && node tools/release/packageItch.ts --beta"
   },
   "dependencies": {
     "phaser": "^4.2.1"

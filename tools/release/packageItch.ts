@@ -6,6 +6,11 @@
  *   npm run package:itch:prueba   → igual, pero con bloqueos crea un .zip de PRUEBA
  *                                   (nombre "NO-PUBLICAR") para probar en local o en un
  *                                   borrador privado de itch.io
+ *   npm run package:itch:beta     → versión BETA: admite el arte temporal y el audio que
+ *                                   falta, pero exige el origen (source_url) de cada recurso
+ *                                   temporal para los créditos
+ *
+ * Dentro del .zip siempre va CREDITOS.txt, generado desde el manifest.
  *
  * Node ejecuta este archivo .ts directamente (Node 22.18+ quita los tipos al
  * vuelo). Por eso los imports llevan la extensión `.ts`.
@@ -16,13 +21,14 @@ import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'n
 import { join, relative, sep } from 'node:path';
 import { zipSync, type Zippable } from 'fflate';
 import type { AssetManifest } from '../../src/presentation/assets/assetManifest.ts';
-import { canPublish, checkRelease, megabytes, type BuildFile } from './releaseCheck.ts';
+import { canPublish, checkRelease, creditsText, megabytes, type BuildFile, type ReleaseMode } from './releaseCheck.ts';
 
 const ROOT = process.cwd();
 const DIST = join(ROOT, 'dist');
 const PUBLIC = join(ROOT, 'public');
 const OUT_DIR = join(ROOT, 'release');
 const isTest = process.argv.includes('--prueba');
+const mode: ReleaseMode = process.argv.includes('--beta') ? 'beta' : 'final';
 
 /** Lista recursiva de archivos, con rutas relativas y separador `/` (también en Windows). */
 function listFiles(dir: string): string[] {
@@ -59,12 +65,13 @@ function main(): number {
 
   const report = checkRelease({
     manifest,
+    mode,
     distFiles,
     publicFiles: listFiles(PUBLIC).map(toPosix),
     indexHtml,
   });
 
-  console.log('\n=== Revisión de publicación para itch.io ===\n');
+  console.log(`\n=== Revisión de publicación para itch.io (modo ${mode}) ===\n`);
   console.log(`Archivos en el .zip: ${report.include.length} · ${megabytes(report.totalBytes)} sin comprimir`);
   if (report.warnings.length > 0) {
     console.log('\nAVISOS (se puede publicar, pero revisa):');
@@ -87,6 +94,7 @@ function main(): number {
   for (const file of report.include) {
     zippable[file.path] = readFileSync(join(DIST, file.path));
   }
+  zippable['CREDITOS.txt'] = new TextEncoder().encode(creditsText(manifest, mode, version));
   // level 9 = compresión máxima; el .zip se crea una vez y se descarga muchas.
   const zip = zipSync(zippable, { level: 9 });
   mkdirSync(OUT_DIR, { recursive: true });

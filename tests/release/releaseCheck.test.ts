@@ -6,6 +6,7 @@ import {
   absoluteReferences,
   canPublish,
   checkRelease,
+  creditsText,
   type BuildFile,
   type ReleaseInput,
 } from '../../tools/release/releaseCheck';
@@ -123,5 +124,39 @@ describe('Revisión de publicación (Fase 9)', () => {
     const big = (i: number): BuildFile => ({ path: `b${i}.bin`, bytes: 150 * 1024 * 1024 });
     const total = checkRelease(input({ distFiles: [...input().distFiles, big(1), big(2), big(3), big(4)] }));
     expect(total.blockers.join()).toContain('500 MB');
+  });
+
+  describe('modo beta (decisión de Fernando, 2026-11-03)', () => {
+    const temp = (overrides: Partial<ManifestEntry> = {}) =>
+      entry({ status: 'temp-dev', author_or_vendor: null, source_url: 'https://example.itch.io/pack', ...overrides });
+
+    it('admite recursos temp-dev con origen y P0 que faltan, como avisos', () => {
+      const pendingP0 = entry({ id: 'R-901', status: 'pending', path: null, author_or_vendor: null, license: null });
+      const report = checkRelease(input({ mode: 'beta', manifest: manifest(temp(), pendingP0) }));
+      expect(report.blockers).toEqual([]);
+      expect(report.warnings.join()).toContain('temp-dev');
+      expect(report.warnings.join()).toContain('R-901');
+    });
+
+    it('un temp-dev sin source_url bloquea: sin origen no hay créditos', () => {
+      const report = checkRelease(input({ mode: 'beta', manifest: manifest(temp({ source_url: null })) }));
+      expect(report.blockers.join()).toContain('source_url');
+    });
+
+    it('el modo final sigue sin admitir temp-dev', () => {
+      expect(canPublish(checkRelease(input({ manifest: manifest(temp()) })))).toBe(false);
+    });
+
+    it('los créditos salen del manifest, un bloque por archivo, con el aviso de beta', () => {
+      const text = creditsText(
+        manifest(temp({ id: 'R-009' }), temp({ id: 'R-010' }), entry({ id: 'R-020', status: 'pending' })),
+        'beta',
+        '0.1.0-beta.1',
+      );
+      expect(text).toContain('VERSIÓN BETA');
+      expect(text).toContain('gem.png (R-009, R-010)');
+      expect(text).toContain('Origen: https://example.itch.io/pack');
+      expect(text).not.toContain('R-020');
+    });
   });
 });
