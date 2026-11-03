@@ -51,7 +51,9 @@ public/assets/        Recursos preparados para cargar (rutas en docs/03_recursos
   paredes (`src/systems/`). Velocidad, tamaño del cuerpo de colisión y asistencia en esquinas son
   configurables en `src/data/gameTuning.ts`.
 - Fase 6 (daño y reinicio): tocar un enemigo resta un corazón (`src/systems/playerHealth.ts`),
-  luego 0.8 s de invulnerabilidad (el jugador parpadea). Con 0 corazones llega el Game Over y la
+  luego 0.8 s de invulnerabilidad (el jugador parpadea). Al golpe el jugador sale
+  empujado una celda, el enemigo se queda inmóvil 0.5 s y no se solapan; mientras eres invulnerable
+  los Hunters te pierden de vista, y el Hunter que te golpeó vuelve a casa antes de perseguir otra vez. Con 0 corazones llega el Game Over y la
   siguiente partida empieza de cero.
 
 En el menú, ENTER inicia. En la escena de juego: flechas/WASD mueven y B (TEMP) muestra el cuerpo de

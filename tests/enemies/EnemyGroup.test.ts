@@ -30,3 +30,27 @@ describe('EnemyGroup', () => {
     }
   });
 });
+
+describe('EnemyGroup.onPlayerHit (Fase 6)', () => {
+  it('los que golpean se quedan inmóviles y el Hunter se retira a casa', () => {
+    const group = new EnemyGroup(level, TUNING);
+    const [hunter] = group.hunters;
+    const [patrol] = group.patrols;
+    group.onPlayerHit([hunter!, patrol!]);
+    expect(hunter!.isFrozen).toBe(true);
+    expect(hunter!.isRetreating).toBe(true);
+    expect(patrol!.isFrozen).toBe(true);
+    expect(group.hunters[1]!.isFrozen).toBe(false);
+  });
+
+  it('el Patrol congelado no se mueve durante enemyHitFreezeSeconds', () => {
+    const group = new EnemyGroup(level, TUNING);
+    const far = { ...centerOf(level.playerStart), half: 11 };
+    group.update(0.2, far);
+    const patrol = group.patrols[0]!;
+    const before = { x: patrol.x, y: patrol.y };
+    group.onPlayerHit([patrol]);
+    for (let t = 0; t < TUNING.enemyHitFreezeSeconds - 0.02; t += 1 / 60) group.update(1 / 60, far);
+    expect({ x: patrol.x, y: patrol.y }).toEqual(before);
+  });
+});

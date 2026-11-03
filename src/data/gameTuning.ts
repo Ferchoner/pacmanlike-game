@@ -57,6 +57,17 @@ export const GAME_TUNING = {
   patrolSpeed: 80,
   /** Lado del cuerpo de colisión de los enemigos, px (provisional; < 32 como el del jugador). */
   enemyBodySize: 22,
+  /**
+   * Empujón al recibir un golpe (provisional): distancia total en px y duración.
+   * 32 px en 0.15 s = una celda, rápido (≈213 px/s, más que correr).
+   */
+  knockbackPx: 32,
+  knockbackSeconds: 0.15,
+  /**
+   * Segundos que el enemigo que golpea se queda INMÓVIL (provisional). No
+   * retrocede: así nunca se descoloca de la rejilla. El jugador sí sale empujado.
+   */
+  enemyHitFreezeSeconds: 0.5,
   /** Invulnerabilidad tras recibir daño, en segundos (provisional). */
   invulnerabilitySeconds: 0.8,
   /**

@@ -77,3 +77,62 @@ describe('Hunter del Nivel 1', () => {
     expect(moved).toBeCloseTo(TUNING.hunterSpeed * 0.1);
   });
 });
+
+describe('Hunter tras golpear (Fase 6)', () => {
+  const near = { x: 4, y: 3 }; // a 5 pasos de casa: lo detecta
+
+  it('si el jugador es invulnerable, lo pierde de vista al instante y vuelve a casa', () => {
+    const h = new Hunter(hunter1Home, level.cells, config);
+    run(h, near, 0.5);
+    expect(h.state).toBe('chasing');
+    const field = towards(near);
+    h.update(1 / 60, field, false);
+    expect(h.state).toBe('returning');
+    for (let i = 0; i < 300; i++) {
+      h.update(1 / 60, field, false);
+      expect(h.state).not.toBe('chasing');
+    }
+    expect(h.state).toBe('idle');
+    expect({ x: h.x, y: h.y }).toEqual(centerOf(hunter1Home));
+  });
+
+  it('vigilando, no detecta a un jugador invulnerable aunque esté cerca', () => {
+    const h = new Hunter(hunter1Home, level.cells, config);
+    const field = towards(near);
+    for (let i = 0; i < 120; i++) h.update(1 / 60, field, false);
+    expect(h.state).toBe('idle');
+    h.update(1 / 60, field, true); // vuelve a ser vulnerable: ahora sí
+    expect(h.state).toBe('chasing');
+  });
+
+  it('goHome: vuelve a casa sin perseguir aunque el jugador siga cerca y visible', () => {
+    const h = new Hunter(hunter1Home, level.cells, config);
+    run(h, near, 3); // lo alcanza
+    h.goHome();
+    expect(h.isRetreating).toBe(true);
+    const field = towards(near);
+    let reachedHome = false;
+    for (let i = 0; i < 600 && !reachedHome; i++) {
+      h.update(1 / 60, field, true);
+      if (h.state === 'idle' || !h.isRetreating) reachedHome = true;
+      else expect(h.state).toBe('returning');
+    }
+    expect(reachedHome).toBe(true);
+    expect({ x: h.x, y: h.y }).toEqual(centerOf(hunter1Home));
+    // Ya en casa vuelve a vigilar con normalidad: el jugador cercano se detecta.
+    h.update(1 / 60, field, true);
+    expect(h.state).toBe('chasing');
+  });
+
+  it('freeze: se queda inmóvil el tiempo indicado y luego sigue', () => {
+    const h = new Hunter(hunter1Home, level.cells, config);
+    run(h, near, 0.2);
+    const before = { x: h.x, y: h.y };
+    h.freeze(0.5);
+    run(h, near, 0.45);
+    expect({ x: h.x, y: h.y }).toEqual(before);
+    expect(h.moving).toBe(false);
+    run(h, near, 0.2);
+    expect({ x: h.x, y: h.y }).not.toEqual(before);
+  });
+});

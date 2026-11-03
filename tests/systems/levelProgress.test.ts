@@ -107,6 +107,8 @@ describe('Integración: el jugador caminando recoge gemas', () => {
         speed: GAME_TUNING.playerSpeed,
         bodySize: GAME_TUNING.playerBodySize,
         cornerAssistPx: GAME_TUNING.cornerAssistPx,
+        knockbackPx: GAME_TUNING.knockbackPx,
+        knockbackSeconds: GAME_TUNING.knockbackSeconds,
       },
       { cells: level.cells, cellSize: GRID.cellSize },
     );

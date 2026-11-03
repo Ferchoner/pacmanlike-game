@@ -30,6 +30,8 @@ export class GridWalker {
   facing: Facing = 'down';
   /** true si en el último `advance` se desplazó. */
   moving = false;
+  /** Segundos que le quedan inmóvil (0 = libre). */
+  private frozenLeft = 0;
 
   constructor(
     start: GridPoint,
@@ -48,6 +50,11 @@ export class GridWalker {
    * fotograma parado en cada centro, y la rapidez es exactamente `speed`.
    */
   advance(dtSeconds: number, chooseNext: ChooseNextCell): void {
+    if (this.frozenLeft > 0) {
+      this.frozenLeft = Math.max(0, this.frozenLeft - dtSeconds);
+      this.moving = false;
+      return;
+    }
     let budget = this.speed * dtSeconds;
     const startX = this.x;
     const startY = this.y;
@@ -76,6 +83,19 @@ export class GridWalker {
       }
     }
     this.moving = this.x !== startX || this.y !== startY;
+  }
+
+  /**
+   * Se queda inmóvil `seconds` (tras golpear al jugador). Si estaba entre dos
+   * celdas, se queda en su tramo y al terminar sigue desde ahí: nunca sale de
+   * la línea entre centros, así que no se descoloca de la rejilla.
+   */
+  freeze(seconds: number): void {
+    this.frozenLeft = Math.max(this.frozenLeft, seconds);
+  }
+
+  get isFrozen(): boolean {
+    return this.frozenLeft > 0;
   }
 }
 

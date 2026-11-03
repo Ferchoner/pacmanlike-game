@@ -60,6 +60,15 @@ export class Patrol {
     return this.fields[this.targetIndex]!.target;
   }
 
+  /** Se queda inmóvil `seconds` (tras golpear al jugador). */
+  freeze(seconds: number): void {
+    this.walker.freeze(seconds);
+  }
+
+  get isFrozen(): boolean {
+    return this.walker.isFrozen;
+  }
+
   update(dtSeconds: number): void {
     this.walker.advance(dtSeconds, (cell) => this.chooseNext(cell));
   }
