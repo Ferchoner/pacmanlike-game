@@ -13,6 +13,9 @@ import type { Facing, Player } from '../player/Player';
 const VISUAL_RADIUS = 14;
 const COLOR = 0x33cc66;
 const HITBOX_COLOR = 0xff00ff;
+/** Parpadeo TEMP durante la invulnerabilidad: cada cuánto alterna, y la opacidad "apagada". */
+const BLINK_PERIOD_S = 0.1;
+const BLINK_DIM_ALPHA = 0.25;
 
 const FACING_VECTOR: Record<Facing, { x: number; y: number }> = {
   up: { x: 0, y: -1 },
@@ -35,6 +38,17 @@ export class TempPlayerView {
     this.showHitbox = !this.showHitbox;
     this.lastFacing = null; // fuerza redibujar
     this.sync();
+  }
+
+  /**
+   * Parpadeo mientras dura la invulnerabilidad: es la forma clásica de decir
+   * "ahora no te pueden dañar". Se calcula desde el tiempo RESTANTE del sistema
+   * de daño, así la vista no lleva su propio reloj y nunca se desincroniza.
+   * No se vuelve invisible del todo: el jugador siempre debe verse a sí mismo.
+   */
+  setInvulnerable(secondsLeft: number): void {
+    const dim = secondsLeft > 0 && Math.floor(secondsLeft / BLINK_PERIOD_S) % 2 === 0;
+    this.graphics.setAlpha(dim ? BLINK_DIM_ALPHA : 1);
   }
 
   /** Copia la posición del modelo a la vista. Se llama cada fotograma. */

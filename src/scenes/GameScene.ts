@@ -14,6 +14,7 @@ import { TempHud } from '../presentation/TempHud';
 import { renderTempLevel } from '../presentation/TempLevelRenderer';
 import { TempPlayerView } from '../presentation/TempPlayerView';
 import { LevelProgress, type ProgressEvent } from '../systems/levelProgress';
+import { PlayerHealth, type HealthEvent } from '../systems/playerHealth';
 import type { LevelCompleteData } from './LevelCompleteScene';
 import { LevelValidationError, loadLevel } from '../world/loadLevel';
 
@@ -23,10 +24,11 @@ import { LevelValidationError, loadLevel } from '../world/loadLevel';
  * - `player/` decide a dónde se mueve el jugador (reglas, sin dibujar).
  * - `enemies/` mueve a los Hunters y Patrols (reglas, sin dibujar).
  * - `systems/levelProgress` lleva las gemas, la puerta y el fin del nivel.
+ * - `systems/playerHealth` lleva los corazones, la invulnerabilidad y la muerte.
  * - `presentation/` lo dibuja (hoy con placeholders TEMP).
  *
  * Ciclo de cada fotograma: leer teclas → mover jugador → mover enemigos → reglas de progreso
- * → reaccionar a los eventos (vista y HUD) → copiar a la vista.
+ * → reglas de daño → reaccionar a los eventos (vista, HUD, escenas) → copiar a la vista.
  */
 export class GameScene extends Phaser.Scene {
   private player: Player | null = null;
@@ -38,6 +40,9 @@ export class GameScene extends Phaser.Scene {
   private hud: TempHud | null = null;
   private enemies: EnemyGroup | null = null;
   private enemyViews: TempEnemyView[] = [];
+  private health: PlayerHealth | null = null;
+  /** true en cuanto la partida termina (ganar o morir): se deja de simular. */
+  private ended = false;
 
   constructor() {
     super(SceneKeys.Game);
@@ -54,6 +59,8 @@ export class GameScene extends Phaser.Scene {
     this.hud = null;
     this.enemies = null;
     this.enemyViews = [];
+    this.health = null;
+    this.ended = false;
 
     try {
       const { level, warnings } = loadLevel(LEVEL_1);
@@ -71,6 +78,13 @@ export class GameScene extends Phaser.Scene {
       this.hud = new TempHud(this);
       this.hud.setGems(0, level.gemsRequired);
       this.hud.setExitOpen(false);
+
+      // Salud nueva en cada create(): morir y volver a jugar = 3 corazones.
+      this.health = new PlayerHealth({
+        startingHearts: GAME_TUNING.startingHearts,
+        invulnerabilitySeconds: GAME_TUNING.invulnerabilitySeconds,
+      });
+      this.hud.setHearts(this.health.hearts, this.health.maxHearts);
 
       this.player = new Player(
         level.playerStart,
@@ -104,29 +118,44 @@ export class GameScene extends Phaser.Scene {
     } catch (error) {
       this.showLevelError(error);
     }
-
-    // TEMP: atajo solo para comprobar el flujo de escenas. Se quita en la Fase 6,
-    // cuando el Game Over llegue por perder los 3 corazones.
-    this.input.keyboard?.once('keydown-ESC', () => {
-      this.scene.start(SceneKeys.GameOver);
-    });
   }
 
   /** `delta` llega en milisegundos; las reglas trabajan en segundos. */
   override update(_time: number, delta: number): void {
-    if (!this.player || !this.playerView || !this.playerInput || !this.progress || !this.enemies) {
-      return;
-    }
-    if (this.progress.isCompleted) return; // ya terminó: esperando el cambio de escena
+    const { player, playerView, playerInput, progress, enemies, health } = this;
+    if (!player || !playerView || !playerInput || !progress || !enemies || !health) return;
+    if (this.ended) return; // ya terminó: esperando el cambio de escena
     const dt = Math.min(delta / 1000, GAME_TUNING.maxFrameSeconds);
-    this.player.update(this.playerInput.read(), dt);
-    this.enemies.update(dt, this.player.body);
-    for (const event of this.progress.update(this.player.body)) this.onProgress(event);
-    this.playerView.sync();
+    player.update(playerInput.read(), dt);
+    enemies.update(dt, player.body);
 
-    // Fase 5: el contacto solo se MUESTRA (borde blanco). Restar corazones es la Fase 6.
-    const touching = new Set(this.enemies.touching(this.player.body));
-    this.enemies.all.forEach((enemy, i) => this.enemyViews[i]?.sync(touching.has(enemy)));
+    // Progreso ANTES que daño: si en el mismo fotograma tocas la puerta abierta
+    // y un enemigo, ganas. Llegar a la salida es lo último que hiciste "bien".
+    for (const event of progress.update(player.body)) this.onProgress(event);
+    if (this.ended) return;
+
+    const touching = new Set(enemies.touching(player.body));
+    for (const event of health.update(dt, touching.size > 0)) this.onHealth(event);
+
+    playerView.setInvulnerable(health.invulnerableSecondsLeft);
+    playerView.sync();
+    enemies.all.forEach((enemy, i) => this.enemyViews[i]?.sync(touching.has(enemy)));
+  }
+
+  /** Traduce eventos de daño a HUD y, al morir, al Game Over (Fase 8: SFX). */
+  private onHealth(event: HealthEvent): void {
+    switch (event.type) {
+      case 'damaged':
+        this.hud?.setHearts(event.hearts, this.health!.maxHearts);
+        break;
+      case 'died':
+        // Morir reinicia TODA la run: no guardamos nada. La próxima partida
+        // vuelve a llamar a create() y todo nace de cero (3 corazones, 0 gemas,
+        // puerta cerrada, enemigos en su sitio).
+        this.ended = true;
+        this.scene.start(SceneKeys.GameOver);
+        break;
+    }
   }
 
   /** Traduce eventos de reglas a cambios de presentación (y, en la Fase 8, sonidos). */
@@ -142,6 +171,7 @@ export class GameScene extends Phaser.Scene {
         this.hud?.setExitOpen(true);
         break;
       case 'levelCompleted': {
+        this.ended = true;
         const data: LevelCompleteData = {
           gems: progress.gems.count,
           totalGems: progress.gems.total,

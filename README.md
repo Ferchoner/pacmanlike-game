@@ -50,6 +50,9 @@ public/assets/        Recursos preparados para cargar (rutas en docs/03_recursos
 - Fase 3 (jugador): movimiento continuo con flechas o WASD, diagonal normalizada y colisión con
   paredes (`src/systems/`). Velocidad, tamaño del cuerpo de colisión y asistencia en esquinas son
   configurables en `src/data/gameTuning.ts`.
+- Fase 6 (daño y reinicio): tocar un enemigo resta un corazón (`src/systems/playerHealth.ts`),
+  luego 0.8 s de invulnerabilidad (el jugador parpadea). Con 0 corazones llega el Game Over y la
+  siguiente partida empieza de cero.
 
-En el menú, ENTER inicia. En la escena de juego: flechas/WASD mueven, B (TEMP) muestra el cuerpo de
-colisión y ESC (atajo TEMP) lleva a Game Over; ENTER vuelve al menú.
+En el menú, ENTER inicia. En la escena de juego: flechas/WASD mueven y B (TEMP) muestra el cuerpo de
+colisión. En Game Over o nivel completado, ENTER vuelve al menú.

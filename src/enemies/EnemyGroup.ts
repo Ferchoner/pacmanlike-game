@@ -20,7 +20,7 @@ export interface EnemyTuning {
 /**
  * Todos los enemigos de un nivel, creados desde los datos del nivel (no
  * escritos a mano en la escena). La escena solo llama a `update` cada
- * fotograma y pregunta `touching` (lo usará el daño en la Fase 6).
+ * fotograma y pregunta `touching` (lo usa el sistema de daño).
  */
 export class EnemyGroup {
   readonly hunters: readonly Hunter[];
