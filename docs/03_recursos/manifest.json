@@ -404,14 +404,14 @@
       "author_or_vendor": null,
       "source_url": null,
       "license": "Gratuito; licencia no registrada. Uso TEMPORAL solo para desarrollo (decisión de Fernando, 2026-11-03). Sustituir antes de publicar.",
-      "notes": "Heart_Drop_Star_16x16: no hay gema; se usa la gota azul (frame 36) como sustituta.",
+      "notes": "Heart_Drop_Star_16x16: no hay gema; Fernando eligió (2026-11-03) la estrella amarilla completa sin borde blanco = frame 72.",
       "load": {
         "kind": "spritesheet",
         "key": "icons",
         "frameWidth": 16,
         "frameHeight": 16,
         "namedFrames": {
-          "gem": 36
+          "gem": 72
         }
       }
     },

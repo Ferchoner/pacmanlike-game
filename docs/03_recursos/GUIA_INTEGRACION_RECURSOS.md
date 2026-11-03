@@ -148,7 +148,7 @@ el juego los usa, la consola avisa `USO TEMPORAL (no publicar así)` y una prueb
 | R-005 / R-027 | `hunter/Orc_Walk.png` / `Orc_Idle.png` | Hunter (caminar / quieto; R-027 es un ID nuevo) |
 | R-007 / R-008 | `patrol/Blood Monster_A_Walk.png` / `_Idle.png` | Patrol |
 | R-009 / R-010 / R-013 / R-014 | `tiles.png` (tiles de **32×32**, índices de `tiles.txt`) | Suelo 102–105, pared 34 (arriba) y 35 (frente), puerta 274 (cerrada) y 275 (abierta) |
-| R-012 / R-015 | `Heart_Drop_Star_16x16.png` | Gema = gota azul (36, no hay gema real); corazones 3 (lleno) y 5 (vacío) |
+| R-012 / R-015 | `Heart_Drop_Star_16x16.png` | Gema = estrella amarilla completa sin borde (72, elegida por Fernando; no hay gema real); corazones 3 (lleno) y 5 (vacío) |
 
 Los FPS no venían documentados: son **provisionales** (idle 6, caminar 10, daño 12, muerte 4)
 y se ajustan cambiando un número en el manifest.
