@@ -31,10 +31,6 @@ export class SpriteActor {
     this.names = new Set(info.animations.keys());
   }
 
-  has(name: string): boolean {
-    return this.names.has(name);
-  }
-
   /**
    * Muestra `action` hacia `facing` ('walk', 'idle', 'damage'…). Si no hay
    * animación de reposo, se queda quieto en el primer frame de caminar:
@@ -54,10 +50,21 @@ export class SpriteActor {
     if (still) this.sprite.anims.stop();
   }
 
-  /** Reproduce una animación de una sola pasada (muerte) y olvida el estado previo. */
-  playOnce(name: string): void {
-    this.current = name;
-    this.sprite.play(animKey(this.actor, name));
+  /**
+   * Reproduce `action` UNA vez hacia `facing` (golpe, muerte) y avisa al
+   * terminar. Devuelve false si el personaje no tiene esa animación.
+   * Mientras dura, quien llama no debe pedir `show` (si no, la cortaría).
+   */
+  playOnce(action: string, facing: Facing, onDone?: () => void): boolean {
+    if (facing === 'left' || facing === 'right') this.lastSide = facing;
+    const pick = this.choose(action, facing);
+    if (!pick) return false;
+    this.current = `once:${pick.name}`;
+    this.sprite.setFlipX(pick.flipX);
+    this.sprite.play(animKey(this.actor, pick.name));
+    // 'animationcomplete' solo llega si termina sola, no si otra la interrumpe.
+    if (onDone) this.sprite.once('animationcomplete', onDone);
+    return true;
   }
 
   /** Dirección exacta; si no existe (sheet lateral subiendo), el último lado. */

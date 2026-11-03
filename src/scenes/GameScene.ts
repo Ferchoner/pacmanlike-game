@@ -168,6 +168,7 @@ export class GameScene extends Phaser.Scene {
       case 'damaged': {
         this.refreshHud();
         this.audio?.play('player:damaged');
+        this.playerView?.playHurt();
         // El golpe "rebota": el jugador sale empujado, los enemigos que lo
         // tocaban se quedan inmóviles un momento y el Hunter vuelve a casa.
         const player = this.player!;

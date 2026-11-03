@@ -53,6 +53,9 @@ export class TempPlayerView implements PlayerView {
     this.graphics.setAlpha(dim ? BLINK_DIM_ALPHA : 1);
   }
 
+  /** TEMP: sin animación de golpe; el parpadeo de invulnerabilidad ya lo indica. */
+  playHurt(): void {}
+
   /**
    * TEMP: "animación" de muerte provisional: el círculo se encoge y se
    * desvanece. NO es arte: es un marcador técnico que ocupa el hueco de la

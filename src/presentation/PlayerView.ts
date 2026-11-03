@@ -11,6 +11,8 @@ import { TempPlayerView } from './TempPlayerView';
 export interface PlayerView {
   toggleHitbox(): void;
   setInvulnerable(secondsLeft: number): void;
+  /** Golpe recibido (perdió un corazón): animación de daño si existe. */
+  playHurt(): void;
   /** Empieza la secuencia de muerte y devuelve cuánto dura, en segundos. */
   playDeath(scene: Phaser.Scene): number;
   sync(): void;
@@ -32,6 +34,8 @@ class SpritePlayerView implements PlayerView {
   private readonly actor: SpriteActor;
   private readonly hitbox: Phaser.GameObjects.Graphics;
   private dying = false;
+  /** true mientras se ve la animación de golpe completa (R-003). */
+  private hurting = false;
 
   constructor(scene: Phaser.Scene, private readonly player: Player) {
     this.actor = new SpriteActor(scene, Actors.player, 6);
@@ -50,13 +54,24 @@ class SpritePlayerView implements PlayerView {
     this.actor.sprite.setAlpha(dim ? BLINK_DIM_ALPHA : 1);
   }
 
+  /**
+   * R-003: la animación de golpe se ve ENTERA, aunque el empujón (0.15 s)
+   * termine antes. Si no, con 4 frames a 12 FPS solo se verían 1 o 2.
+   */
+  playHurt(): void {
+    if (this.dying) return;
+    this.hurting = this.actor.playOnce('damage', this.player.facing, () => {
+      this.hurting = false;
+    });
+  }
+
   playDeath(scene: Phaser.Scene): number {
     this.dying = true;
     this.actor.sprite.setAlpha(1);
     const death = actorInfo(Actors.player)?.animations.get('death')?.spec;
     if (death) {
       // R-004: la secuencia dura EXACTAMENTE lo que dura su animación.
-      this.actor.playOnce('death');
+      this.actor.playOnce('death', this.player.facing);
       return animationSeconds(death);
     }
     // Hay sprite pero aún no animación de muerte: desvanecido TEMP.
@@ -69,9 +84,7 @@ class SpritePlayerView implements PlayerView {
     const { player, actor } = this;
     actor.sprite.setPosition(player.x, player.y);
     this.hitbox.setPosition(player.x, player.y);
-    if (this.dying) return;
-    // R-003 (damage) durante el empujón, si existe; si no, sigue caminando/quieto.
-    const action = player.isKnockedBack && actor.has('damage') ? 'damage' : player.moving ? 'walk' : 'idle';
-    actor.show(action, player.facing);
+    if (this.dying || this.hurting) return; // no cortar una animación de una sola pasada
+    actor.show(player.moving ? 'walk' : 'idle', player.facing);
   }
 }
