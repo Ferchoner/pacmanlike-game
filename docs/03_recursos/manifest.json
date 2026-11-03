@@ -245,7 +245,7 @@
       "path": "assets/patrol/Blood Monster_A_Walk.png",
       "author_or_vendor": "Zerie",
       "source_url": "https://zerie.itch.io/tiny-rpg-character-asset-pack-02",
-      "license": "Tiny RPG Character Asset Pack 02 (Zerie). La página no se pudo leer el 2026-11-03; Fernando indica que es de uso gratuito. Licencia PENDIENTE DE VERIFICAR. Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
+      "license": "Tiny RPG Character Asset Pack 02 (Zerie). Según su página (texto copiado por Fernando el 2026-11-03): uso en videojuegos personales y comerciales; se puede editar; no se puede redistribuir, revender ni volver a subir el asset (modificado o no); no para entrenamiento de IA ni proyectos NFT; crédito apreciado pero no obligatorio. Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
       "notes": "Blood Monster_A_Walk: 8 frames de 100×100. FPS provisional.",
       "load": {
         "kind": "spritesheet",
@@ -286,7 +286,7 @@
       "path": "assets/patrol/Blood Monster_A_Idle.png",
       "author_or_vendor": "Zerie",
       "source_url": "https://zerie.itch.io/tiny-rpg-character-asset-pack-02",
-      "license": "Tiny RPG Character Asset Pack 02 (Zerie). La página no se pudo leer el 2026-11-03; Fernando indica que es de uso gratuito. Licencia PENDIENTE DE VERIFICAR. Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
+      "license": "Tiny RPG Character Asset Pack 02 (Zerie). Según su página (texto copiado por Fernando el 2026-11-03): uso en videojuegos personales y comerciales; se puede editar; no se puede redistribuir, revender ni volver a subir el asset (modificado o no); no para entrenamiento de IA ni proyectos NFT; crédito apreciado pero no obligatorio. Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
       "notes": "Blood Monster_A_Idle: 6 frames de 100×100. FPS provisional.",
       "load": {
         "kind": "spritesheet",
