@@ -1,10 +1,12 @@
 import type Phaser from 'phaser';
+import { GAME_TUNING } from '../data/gameTuning';
 import type { Facing, Player } from '../player/Player';
+import type { PlayerView } from './PlayerView';
 
 /**
  * TEMP: representación provisional del jugador (círculo verde + muesca que
- * indica hacia dónde mira). Se sustituirá por el spritesheet externo en la
- * Fase 8; la lógica (`Player`) no cambiará.
+ * indica hacia dónde mira). Se usa mientras el spritesheet externo del
+ * jugador (R-001…R-004) no esté aprobado; ver `PlayerView.ts`.
  *
  * A propósito el círculo (28 px) es MÁS GRANDE que el cuerpo de colisión
  * (22 px): lo que se ve y lo que choca son cosas distintas. Con B se muestra
@@ -24,7 +26,7 @@ const FACING_VECTOR: Record<Facing, { x: number; y: number }> = {
   right: { x: 1, y: 0 },
 };
 
-export class TempPlayerView {
+export class TempPlayerView implements PlayerView {
   private readonly graphics: Phaser.GameObjects.Graphics;
   private showHitbox = false;
   private lastFacing: Facing | null = null;
@@ -51,12 +53,16 @@ export class TempPlayerView {
     this.graphics.setAlpha(dim ? BLINK_DIM_ALPHA : 1);
   }
 
+  /** TEMP: sin animación de golpe; el parpadeo de invulnerabilidad ya lo indica. */
+  playHurt(): void {}
+
   /**
    * TEMP: "animación" de muerte provisional: el círculo se encoge y se
-   * desvanece. NO es arte: es un marcador técnico que ocupa el hueco donde
-   * irá la animación externa R-004 (`death`) en la Fase 8.
+   * desvanece. NO es arte: es un marcador técnico que ocupa el hueco de la
+   * animación externa R-004 (`death`). Dura `deathSequenceSeconds`.
    */
-  playDeathTemp(scene: Phaser.Scene, seconds: number): void {
+  playDeath(scene: Phaser.Scene): number {
+    const seconds = GAME_TUNING.deathSequenceSeconds;
     this.graphics.setAlpha(1); // por si murió en mitad del parpadeo
     scene.tweens.add({
       targets: this.graphics,
@@ -65,6 +71,7 @@ export class TempPlayerView {
       duration: seconds * 1000,
       ease: 'Quad.easeIn',
     });
+    return seconds;
   }
 
   /** Copia la posición del modelo a la vista. Se llama cada fotograma. */

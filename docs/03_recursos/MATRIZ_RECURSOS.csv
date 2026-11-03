@@ -25,3 +25,4 @@ R-023,Audio,SFX,Desbloqueo puerta,P0,1,OGG/WAV,N/A,exit:unlocked,Pendiente,Mixto
 R-024,Audio,SFX,Victoria/salida,P1,1,OGG/WAV,N/A,level:completed,Pendiente,Mixto,,,One-shot
 R-025,Audio,SFX,Enemigos/ambiente,P2,Variable,OGG/WAV,N/A,según recurso,Pendiente,Mixto,,,Opcional
 R-026,Fuentes,Tipografía,Fuente UI,P2,1,WOFF2/WOFF/TTF,N/A,N/A,Pendiente,Mixto,,,Licencia y fallback
+R-027,Hunter,Spritesheet,Idle,P1,1,PNG,Según proveedor,idle,Uso temporal,Mixto,,,Añadido 2026-11-03 (Orc_Idle temporal)
