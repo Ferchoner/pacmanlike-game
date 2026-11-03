@@ -51,6 +51,22 @@ export class TempPlayerView {
     this.graphics.setAlpha(dim ? BLINK_DIM_ALPHA : 1);
   }
 
+  /**
+   * TEMP: "animación" de muerte provisional: el círculo se encoge y se
+   * desvanece. NO es arte: es un marcador técnico que ocupa el hueco donde
+   * irá la animación externa R-004 (`death`) en la Fase 8.
+   */
+  playDeathTemp(scene: Phaser.Scene, seconds: number): void {
+    this.graphics.setAlpha(1); // por si murió en mitad del parpadeo
+    scene.tweens.add({
+      targets: this.graphics,
+      alpha: 0,
+      scale: 0.2,
+      duration: seconds * 1000,
+      ease: 'Quad.easeIn',
+    });
+  }
+
   /** Copia la posición del modelo a la vista. Se llama cada fotograma. */
   sync(): void {
     this.graphics.setPosition(this.player.x, this.player.y);

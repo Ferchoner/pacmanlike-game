@@ -172,7 +172,12 @@ export class GameScene extends Phaser.Scene {
         // Morir reinicia TODA la run: no guardamos nada. La próxima partida
         // vuelve a llamar a create() y todo nace de cero (3 corazones, 0 gemas,
         // puerta cerrada, enemigos en su sitio).
-        this.endRun('died');
+        // Antes del Game Over, una pausa para VER morir al jugador: el mundo se
+        // congela (ended = true) y se reproduce la secuencia de muerte. Así el
+        // jugador entiende qué pasó en vez de cambiar de pantalla de golpe.
+        // Fase 8: aquí sonará el SFX R-022 y se verá la animación R-004.
+        this.playerView?.playDeathTemp(this, GAME_TUNING.deathSequenceSeconds);
+        this.endRun('died', GAME_TUNING.deathSequenceSeconds);
         break;
     }
   }
@@ -210,8 +215,11 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  /** Fin de la run: congela la simulación y pasa el resumen real a la pantalla final. */
-  private endRun(outcome: RunSummary['outcome']): void {
+  /**
+   * Fin de la run: congela la simulación al instante y, tras `delaySeconds`
+   * (la secuencia de muerte), pasa el resumen real a la pantalla final.
+   */
+  private endRun(outcome: RunSummary['outcome'], delaySeconds = 0): void {
     const progress = this.progress!;
     const health = this.health!;
     this.ended = true;
@@ -223,7 +231,11 @@ export class GameScene extends Phaser.Scene {
       hearts: health.hearts,
       maxHearts: health.maxHearts,
     };
-    this.scene.start(nextScene(SceneKeys.Game, outcome), summary);
+    const go = () => this.scene.start(nextScene(SceneKeys.Game, outcome), summary);
+    // El reloj de ESTA escena ya corre (llevamos jugando un rato), así que su
+    // temporizador es fiable; y si la escena se cierra antes, se cancela solo.
+    if (delaySeconds > 0) this.time.delayedCall(delaySeconds * 1000, go);
+    else go();
   }
 
   /**

@@ -49,6 +49,7 @@ describe('Valores de ajuste provisionales', () => {
       invulnerabilitySeconds: 0.8,
       maxFrameSeconds: 0.05,
       screenInputDelaySeconds: 0.5,
+      deathSequenceSeconds: 1.2,
     });
   });
 

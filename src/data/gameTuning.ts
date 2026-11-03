@@ -81,4 +81,11 @@ export const GAME_TUNING = {
    * (provisional). Si mueres pulsando ESPACIO, no te saltas la pantalla sin leerla.
    */
   screenInputDelaySeconds: 0.5,
+  /**
+   * Duración de la secuencia de muerte, en segundos (provisional): el mundo se
+   * congela y se ve morir al jugador ANTES del Game Over. Hoy es un desvanecido
+   * TEMP; cuando llegue la animación externa (R-004, evento `death`) y su SFX
+   * (R-022, `player:died`), este valor saldrá de sus frames y FPS reales.
+   */
+  deathSequenceSeconds: 1.2,
 } as const;
