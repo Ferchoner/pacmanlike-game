@@ -7,13 +7,14 @@ import { LEVEL_1 } from '../data/levels';
 import { EnemyGroup, type Enemy } from '../enemies/EnemyGroup';
 import { KeyboardPlayerInput } from '../player/KeyboardPlayerInput';
 import { Player } from '../player/Player';
+import type { AudioManager } from '../presentation/AudioManager';
+import { createEnemyView, type EnemyView } from '../presentation/EnemyView';
+import { createAudioManager } from '../presentation/phaserAudio';
+import { createExitView, createGemsView, type ExitView, type GemsView } from '../presentation/PickupViews';
+import { createPlayerView, type PlayerView } from '../presentation/PlayerView';
 import { addTempLabel } from '../presentation/tempLabel';
-import { TempEnemyView } from '../presentation/TempEnemyView';
-import { TempExitView } from '../presentation/TempExitView';
-import { TempGemsView } from '../presentation/TempGemsView';
 import { TempHud } from '../presentation/TempHud';
 import { renderTempLevel } from '../presentation/TempLevelRenderer';
-import { TempPlayerView } from '../presentation/TempPlayerView';
 import { LevelProgress, type ProgressEvent } from '../systems/levelProgress';
 import { separation } from '../systems/overlap';
 import { PlayerHealth, type HealthEvent } from '../systems/playerHealth';
@@ -27,21 +28,23 @@ import { LevelValidationError, loadLevel } from '../world/loadLevel';
  * - `enemies/` mueve a los Hunters y Patrols (reglas, sin dibujar).
  * - `systems/levelProgress` lleva las gemas, la puerta y el fin del nivel.
  * - `systems/playerHealth` lleva los corazones, la invulnerabilidad y la muerte.
- * - `presentation/` lo dibuja (hoy con placeholders TEMP).
+ * - `presentation/` lo dibuja y lo hace sonar: arte externo del manifest si
+ *   está aprobado, placeholders TEMP si no (la escena no distingue).
  *
  * Ciclo de cada fotograma: leer teclas → mover jugador → mover enemigos → reglas de progreso
  * → reglas de daño → reaccionar a los eventos (vista, HUD, escenas) → copiar a la vista.
  */
 export class GameScene extends Phaser.Scene {
   private player: Player | null = null;
-  private playerView: TempPlayerView | null = null;
+  private playerView: PlayerView | null = null;
   private playerInput: KeyboardPlayerInput | null = null;
   private progress: LevelProgress | null = null;
-  private gemsView: TempGemsView | null = null;
-  private exitView: TempExitView | null = null;
+  private gemsView: GemsView | null = null;
+  private exitView: ExitView | null = null;
   private hud: TempHud | null = null;
   private enemies: EnemyGroup | null = null;
-  private enemyViews: TempEnemyView[] = [];
+  private enemyViews: EnemyView[] = [];
+  private audio: AudioManager | null = null;
   private health: PlayerHealth | null = null;
   /** true en cuanto la partida termina (ganar o morir): se deja de simular. */
   private ended = false;
@@ -63,6 +66,9 @@ export class GameScene extends Phaser.Scene {
     this.enemyViews = [];
     this.health = null;
     this.ended = false;
+    this.audio = createAudioManager(this);
+    // Al salir de la escena (ganar, morir) la música se corta.
+    this.events.once('shutdown', () => this.audio?.stopMusic());
 
     try {
       const { level, warnings } = loadLevel(LEVEL_1);
@@ -75,8 +81,8 @@ export class GameScene extends Phaser.Scene {
         exitTriggerSize: GAME_TUNING.exitTriggerSize,
         cellSize: GRID.cellSize,
       });
-      this.gemsView = new TempGemsView(this, level.gems);
-      this.exitView = new TempExitView(this, level.exit);
+      this.gemsView = createGemsView(this, level.gems);
+      this.exitView = createExitView(this, level.exit);
       this.hud = new TempHud(this);
 
       // Salud nueva en cada create(): morir y volver a jugar = 3 corazones.
@@ -97,7 +103,7 @@ export class GameScene extends Phaser.Scene {
         },
         { cells: level.cells, cellSize: GRID.cellSize },
       );
-      this.playerView = new TempPlayerView(this, this.player);
+      this.playerView = createPlayerView(this, this.player);
 
       // Enemigos desde los datos del nivel; la vista de cada uno, aparte.
       this.enemies = new EnemyGroup(level, {
@@ -109,7 +115,7 @@ export class GameScene extends Phaser.Scene {
         patrolSpeed: GAME_TUNING.patrolSpeed,
         enemyHitFreezeSeconds: GAME_TUNING.enemyHitFreezeSeconds,
       });
-      this.enemyViews = this.enemies.all.map((enemy) => new TempEnemyView(this, enemy));
+      this.enemyViews = this.enemies.all.map((enemy) => createEnemyView(this, enemy));
       if (this.input.keyboard) {
         this.playerInput = new KeyboardPlayerInput(this.input.keyboard);
         // TEMP (depuración): B muestra/oculta los cuerpos de colisión.
@@ -118,6 +124,7 @@ export class GameScene extends Phaser.Scene {
           for (const view of this.enemyViews) view.toggleHitbox();
         });
       }
+      this.audio.startMusic();
     } catch (error) {
       this.showLevelError(error);
     }
@@ -155,11 +162,12 @@ export class GameScene extends Phaser.Scene {
     enemies.all.forEach((enemy, i) => this.enemyViews[i]?.sync(touchingSet.has(enemy)));
   }
 
-  /** Traduce eventos de daño a HUD y, al morir, al Game Over (Fase 8: SFX). */
+  /** Traduce eventos de daño a HUD, sonido y, al morir, al Game Over. */
   private onHealth(event: HealthEvent, hitters: readonly Enemy[]): void {
     switch (event.type) {
       case 'damaged': {
         this.refreshHud();
+        this.audio?.play('player:damaged');
         // El golpe "rebota": el jugador sale empujado, los enemigos que lo
         // tocaban se quedan inmóviles un momento y el Hunter vuelve a casa.
         const player = this.player!;
@@ -175,25 +183,31 @@ export class GameScene extends Phaser.Scene {
         // Antes del Game Over, una pausa para VER morir al jugador: el mundo se
         // congela (ended = true) y se reproduce la secuencia de muerte. Así el
         // jugador entiende qué pasó en vez de cambiar de pantalla de golpe.
-        // Fase 8: aquí sonará el SFX R-022 y se verá la animación R-004.
-        this.playerView?.playDeathTemp(this, GAME_TUNING.deathSequenceSeconds);
-        this.endRun('died', GAME_TUNING.deathSequenceSeconds);
+        // La duración la decide la VISTA: la de la animación R-004 si existe,
+        // o la provisional `deathSequenceSeconds` con el desvanecido TEMP.
+        this.audio?.stopMusic();
+        this.audio?.play('player:died');
+        this.endRun('died', this.playerView?.playDeath(this) ?? GAME_TUNING.deathSequenceSeconds);
         break;
     }
   }
 
-  /** Traduce eventos de reglas a cambios de presentación (y, en la Fase 8, sonidos). */
+  /** Traduce eventos de reglas a cambios de presentación y sonidos. */
   private onProgress(event: ProgressEvent): void {
     switch (event.type) {
       case 'gemCollected':
         this.gemsView?.hide(event.index);
         this.refreshHud();
+        this.audio?.play('gem:collected');
         break;
       case 'exitOpened':
         this.exitView?.show('open');
         this.refreshHud();
+        this.audio?.play('exit:unlocked');
         break;
       case 'levelCompleted':
+        this.audio?.stopMusic();
+        this.audio?.play('level:completed');
         this.endRun('won');
         break;
     }

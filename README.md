@@ -56,5 +56,12 @@ public/assets/        Recursos preparados para cargar (rutas en docs/03_recursos
   los Hunters te pierden de vista, y el Hunter que te golpeó vuelve a casa antes de perseguir otra vez. Con 0 corazones llega el Game Over y la
   siguiente partida empieza de cero.
 
+- Fase 7 (UI y escenas): menú, HUD, Game Over y Nivel completado con el estado real, y secuencia
+  de muerte antes del Game Over.
+- Fase 8 (recursos externos): Preload carga lo aprobado en `docs/03_recursos/manifest.json`;
+  `AnimationManager` y `AudioManager` conectan estados y eventos con animaciones y sonidos. Sin
+  recursos aprobados todo sigue en TEMP (y en silencio). Guía para integrar un archivo:
+  [`docs/03_recursos/GUIA_INTEGRACION_RECURSOS.md`](docs/03_recursos/GUIA_INTEGRACION_RECURSOS.md).
+
 En el menú, ENTER inicia. En la escena de juego: flechas/WASD mueven y B (TEMP) muestra el cuerpo de
 colisión. En Game Over o nivel completado, ENTER vuelve al menú.

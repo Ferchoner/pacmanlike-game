@@ -1,6 +1,20 @@
 # presentation
 
-Todo lo visual y sonoro: placeholders `TEMP` hoy; `AnimationManager` y `AudioManager` en la Fase 8. La lógica del juego no depende de esta carpeta.
+Todo lo visual y sonoro. La lógica del juego no depende de esta carpeta.
+
+Desde la Fase 8 cada vista tiene dos versiones: la de **arte externo** (si el recurso está aprobado en `docs/03_recursos/manifest.json` y se cargó) y la **TEMP**. Una fábrica (`createPlayerView`, `createEnemyView`, `createGemsView`, `createExitView`) elige; la escena no distingue. Cómo integrar un recurso: `docs/03_recursos/GUIA_INTEGRACION_RECURSOS.md`.
+
+| Archivo (Fase 8) | Para qué |
+|---|---|
+| `assets/assetManifest.ts` | Lee y valida el manifest (puro, con pruebas): listos, faltantes y errores. Solo carga lo `approved` con licencia. |
+| `assets/gameAssets.ts` | El manifest real ya revisado y la escala del pixel art (×2). |
+| `assets/assetKeys.ts` | Qué clave espera el código para cada papel (jugador, gema, SFX…). |
+| `assets/animationChoice.ts` | Elegir animación por acción y dirección, y medir su duración (puro, con pruebas). |
+| `AssetLoader.ts` | Encola los recursos aprobados en Preload; si uno falla, se avisa y queda TEMP. |
+| `AnimationManager.ts` | Crea las animaciones desde las fichas y avisa si los índices no existen en la imagen. |
+| `AudioManager.ts` / `phaserAudio.ts` | Único sitio que reproduce sonido: evento → SFX, música; si falta, silencio. |
+| `PlayerView.ts`, `EnemyView.ts`, `PickupViews.ts`, `SpriteActor.ts` | Vistas con sprite y sus fábricas. |
+
 
 | Archivo (todos TEMP) | Para qué |
 |---|---|

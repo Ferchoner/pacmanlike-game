@@ -2,6 +2,7 @@ import type Phaser from 'phaser';
 import type { Enemy } from '../enemies/EnemyGroup';
 import type { HunterState } from '../enemies/Hunter';
 import type { Facing } from '../player/Player';
+import type { EnemyView } from './EnemyView';
 
 /**
  * TEMP: representación provisional de un enemigo (círculo de color con su
@@ -30,7 +31,7 @@ const FACING_VECTOR: Record<Facing, { x: number; y: number }> = {
   right: { x: 1, y: 0 },
 };
 
-export class TempEnemyView {
+export class TempEnemyView implements EnemyView {
   private readonly graphics: Phaser.GameObjects.Graphics;
   private readonly letter: Phaser.GameObjects.Text;
   private showHitbox = false;

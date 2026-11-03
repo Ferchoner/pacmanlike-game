@@ -83,9 +83,9 @@ export const GAME_TUNING = {
   screenInputDelaySeconds: 0.5,
   /**
    * Duración de la secuencia de muerte, en segundos (provisional): el mundo se
-   * congela y se ve morir al jugador ANTES del Game Over. Hoy es un desvanecido
-   * TEMP; cuando llegue la animación externa (R-004, evento `death`) y su SFX
-   * (R-022, `player:died`), este valor saldrá de sus frames y FPS reales.
+   * congela y se ve morir al jugador ANTES del Game Over. Solo se usa con el
+   * desvanecido TEMP: si la animación externa R-004 (`death`) está aprobada, la
+   * duración sale de sus frames / FPS reales (ver presentation/PlayerView.ts).
    */
   deathSequenceSeconds: 1.2,
 } as const;
