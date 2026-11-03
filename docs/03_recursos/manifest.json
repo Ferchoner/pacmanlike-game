@@ -325,7 +325,7 @@
       "path": "assets/tiles.png",
       "author_or_vendor": "Seth",
       "source_url": "https://sethbb.itch.io/32rogues",
-      "license": "32rogues (Seth). Según su página (consultada 2026-11-03): uso comercial y no comercial, salvo proyectos NFT/blockchain o de IA generativa/aprendizaje automático; se puede modificar; no se puede redistribuir ni revender; crédito no necesario pero apreciado. Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
+      "license": "32rogues (Seth). Según su página (consultada 2026-11-03): uso comercial y no comercial, salvo proyectos NFT/blockchain o de IA generativa/aprendizaje automático; se puede modificar; no se puede redistribuir ni revender; crédito no necesario pero apreciado. Nota del equipo: entendemos que la restricción se refiere a proyectos de IA generativa de imágenes o de entrenamiento de modelos; en este juego el arte no se generó, entrenó ni modificó con IA (la IA solo se usó como asistente de programación). Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
       "notes": "tiles.png: tiles de 32×32 (no 16×16), 17×26. Índices según tiles.txt: 7.a–7.d = 102–105.",
       "load": {
         "kind": "spritesheet",
@@ -356,7 +356,7 @@
       "path": "assets/tiles.png",
       "author_or_vendor": "Seth",
       "source_url": "https://sethbb.itch.io/32rogues",
-      "license": "32rogues (Seth). Según su página (consultada 2026-11-03): uso comercial y no comercial, salvo proyectos NFT/blockchain o de IA generativa/aprendizaje automático; se puede modificar; no se puede redistribuir ni revender; crédito no necesario pero apreciado. Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
+      "license": "32rogues (Seth). Según su página (consultada 2026-11-03): uso comercial y no comercial, salvo proyectos NFT/blockchain o de IA generativa/aprendizaje automático; se puede modificar; no se puede redistribuir ni revender; crédito no necesario pero apreciado. Nota del equipo: entendemos que la restricción se refiere a proyectos de IA generativa de imágenes o de entrenamiento de modelos; en este juego el arte no se generó, entrenó ni modificó con IA (la IA solo se usó como asistente de programación). Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
       "notes": "tiles.png: 3.a stone brick wall (top) = 34, 3.b (side 1) = 35. Solo arriba y frente: sin esquinas.",
       "load": {
         "kind": "spritesheet",
@@ -430,7 +430,7 @@
       "path": "assets/tiles.png",
       "author_or_vendor": "Seth",
       "source_url": "https://sethbb.itch.io/32rogues",
-      "license": "32rogues (Seth). Según su página (consultada 2026-11-03): uso comercial y no comercial, salvo proyectos NFT/blockchain o de IA generativa/aprendizaje automático; se puede modificar; no se puede redistribuir ni revender; crédito no necesario pero apreciado. Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
+      "license": "32rogues (Seth). Según su página (consultada 2026-11-03): uso comercial y no comercial, salvo proyectos NFT/blockchain o de IA generativa/aprendizaje automático; se puede modificar; no se puede redistribuir ni revender; crédito no necesario pero apreciado. Nota del equipo: entendemos que la restricción se refiere a proyectos de IA generativa de imágenes o de entrenamiento de modelos; en este juego el arte no se generó, entrenó ni modificó con IA (la IA solo se usó como asistente de programación). Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
       "notes": "tiles.png: 17.c framed door 1 (shut) = 274.",
       "load": {
         "kind": "spritesheet",
@@ -458,7 +458,7 @@
       "path": "assets/tiles.png",
       "author_or_vendor": "Seth",
       "source_url": "https://sethbb.itch.io/32rogues",
-      "license": "32rogues (Seth). Según su página (consultada 2026-11-03): uso comercial y no comercial, salvo proyectos NFT/blockchain o de IA generativa/aprendizaje automático; se puede modificar; no se puede redistribuir ni revender; crédito no necesario pero apreciado. Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
+      "license": "32rogues (Seth). Según su página (consultada 2026-11-03): uso comercial y no comercial, salvo proyectos NFT/blockchain o de IA generativa/aprendizaje automático; se puede modificar; no se puede redistribuir ni revender; crédito no necesario pero apreciado. Nota del equipo: entendemos que la restricción se refiere a proyectos de IA generativa de imágenes o de entrenamiento de modelos; en este juego el arte no se generó, entrenó ni modificó con IA (la IA solo se usó como asistente de programación). Uso TEMPORAL: beta autorizada por Fernando (2026-11-03); sustituir en la versión final.",
       "notes": "tiles.png: 17.d framed door 1 (open) = 275.",
       "load": {
         "kind": "spritesheet",
