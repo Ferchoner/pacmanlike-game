@@ -147,14 +147,14 @@ describe('Revisión de publicación (Fase 9)', () => {
       expect(canPublish(checkRelease(input({ manifest: manifest(temp()) })))).toBe(false);
     });
 
-    it('los créditos salen del manifest, un bloque por archivo, con el aviso de beta', () => {
+    it('los créditos salen del manifest, un bloque por pack, con el aviso de beta', () => {
       const text = creditsText(
         manifest(temp({ id: 'R-009' }), temp({ id: 'R-010' }), entry({ id: 'R-020', status: 'pending' })),
         'beta',
         '0.1.0-beta.1',
       );
       expect(text).toContain('VERSIÓN BETA');
-      expect(text).toContain('gem.png (R-009, R-010)');
+      expect(text).toContain('Archivos: gem.png (R-009, R-010)');
       expect(text).toContain('Origen: https://example.itch.io/pack');
       expect(text).not.toContain('R-020');
     });

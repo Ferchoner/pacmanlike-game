@@ -169,11 +169,12 @@ export function megabytes(bytes: number): string {
  */
 export function creditsText(manifest: AssetManifest, mode: ReleaseMode, version: string): string {
   const used = manifest.assets.filter((entry) => entry.status === 'approved' || entry.status === 'temp-dev');
-  // Varias entradas comparten archivo (tiles.png cubre suelo, pared y puerta): un crédito por archivo.
-  const byPath = new Map<string, ManifestEntry[]>();
+  // Un crédito por pack (misma página de origen); sin origen, uno por archivo.
+  const groups = new Map<string, ManifestEntry[]>();
   for (const entry of used) {
     if (!entry.path) continue;
-    byPath.set(entry.path, [...(byPath.get(entry.path) ?? []), entry]);
+    const key = entry.source_url ?? entry.path;
+    groups.set(key, [...(groups.get(key) ?? []), entry]);
   }
   const lines: string[] = [`PAC-BIG-MAN ${version}`, ''];
   if (mode === 'beta') {
@@ -185,15 +186,17 @@ export function creditsText(manifest: AssetManifest, mode: ReleaseMode, version:
     );
   }
   lines.push('Programación y diseño: Fernando Hernandez Argueta', '', 'Recursos externos:');
-  for (const [path, entries] of byPath) {
+  for (const entries of groups.values()) {
     const first = entries[0]!;
+    const files = [...new Set(entries.map((e) => e.path!.replace(/^assets\//, '')))];
     lines.push(
-      `- ${path.replace(/^assets\//, '')} (${entries.map((e) => e.id).join(', ')})`,
-      `  Autor: ${first.author_or_vendor ?? 'ver origen'}`,
+      `- Autor: ${first.author_or_vendor ?? 'ver origen'}`,
       `  Origen: ${first.source_url ?? 'sin registrar'}`,
+      `  Archivos: ${files.join(', ')} (${entries.map((e) => e.id).join(', ')})`,
       `  Licencia: ${first.license ?? 'sin registrar'}`,
+      '',
     );
   }
-  lines.push('', 'Motor: Phaser (MIT License) · https://phaser.io', '');
+  lines.push('Motor: Phaser (MIT License) · https://phaser.io', '');
   return lines.join('\n');
 }
