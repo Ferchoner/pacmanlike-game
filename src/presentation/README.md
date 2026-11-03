@@ -21,7 +21,7 @@ Desde la Fase 8 cada vista tiene dos versiones: la de **arte externo** (si el re
 |---|---|
 | `TempLevelRenderer.ts` | Lo que no cambia: suelo, paredes, ruta del Patrol y la "casa" de cada Hunter. |
 | `TempEnemyView.ts` | Cada enemigo (círculo + letra); el color del Hunter indica su estado y el borde blanco, contacto con el jugador. |
-| `TempPlayerView.ts` | El jugador (círculo + dirección); parpadea durante la invulnerabilidad; B muestra el hitbox. |
+| `TempPlayerView.ts` | El jugador (círculo + dirección); parpadea durante la invulnerabilidad; B muestra el hitbox (solo en desarrollo). |
 | `TempGemsView.ts` | Una forma por gema, para ocultar solo la recogida. |
 | `TempExitView.ts` | Puerta cerrada (marco rojo) / abierta (verde). |
 | `TempHud.ts` | "Gemas: N/20", "Corazones: N/3" y "Puerta: faltan N" / "¡Puerta abierta!". Se redibuja desde los sistemas reales. |

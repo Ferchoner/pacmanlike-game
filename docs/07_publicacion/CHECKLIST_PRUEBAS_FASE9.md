@@ -48,10 +48,10 @@ Para probar exactamente el .zip, súbelo como proyecto **Draft** (privado) a itc
 - ⬜ Pantalla completa con el botón de itch.io y volver.
 - ⬜ Cuando llegue el audio: que suene tras el primer ENTER, y que no se dupliquen sonidos.
 
-## Decisiones pendientes para Fernando antes de publicar
+## Decisiones de Fernando (2026-11-03)
 
-- **Textos TEMP visibles.** "TEMP: UI provisional" al pie de los menús y la tecla B que muestra el
-  hitbox. Son herramientas de desarrollo: ¿se quitan para la versión publicada? (Propuesta: ocultarlos
-  automáticamente en el build de producción.)
-- **Escalado en pantalla completa.** ¿Se acepta la escala no entera, o prefieres escala entera
-  (×1, ×2…) con bordes negros más anchos? Cambia cómo se ve, por eso es tu decisión.
+- **Herramientas de desarrollo ocultas en producción.** El pie "TEMP: UI provisional" y la tecla B
+  (hitbox) solo existen con `npm run dev`; en `npm run build` desaparecen (`src/core/devTools.ts`).
+  Comprobado: el texto ya no está en el JS del build.
+- **Escalado en pantalla completa: se acepta la escala no entera** de `Scale.FIT`. En el embed de
+  768×576 sigue siendo ×1 exacta.

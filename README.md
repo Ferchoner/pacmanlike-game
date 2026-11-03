@@ -70,5 +70,5 @@ public/assets/        Recursos preparados para cargar (rutas en docs/03_recursos
   [`docs/07_publicacion/PUBLICACION_ITCHIO.md`](docs/07_publicacion/PUBLICACION_ITCHIO.md);
   resultados de las pruebas: [`CHECKLIST_PRUEBAS_FASE9.md`](docs/07_publicacion/CHECKLIST_PRUEBAS_FASE9.md).
 
-En el menú, ENTER inicia. En la escena de juego: flechas/WASD mueven y B (TEMP) muestra el cuerpo de
+En el menú, ENTER inicia. En la escena de juego: flechas/WASD mueven y B (TEMP, solo con `npm run dev`) muestra el cuerpo de
 colisión. En Game Over o nivel completado, ENTER vuelve al menú.

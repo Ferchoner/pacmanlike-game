@@ -48,8 +48,8 @@ La revisión (`tools/release/releaseCheck.ts`, con pruebas en `tests/release/`) 
 2. Integrar los recursos P0 que faltan: R-016 (icono del contador de gemas) y los SFX R-020 a R-023.
 3. Si alguna licencia exige atribución, preparar el texto de créditos (para la página de itch.io y,
    si se decide, una pantalla de créditos en el juego: eso sería alcance nuevo y necesita aprobación).
-4. Quitar o decidir sobre lo marcado `TEMP` en pantalla (textos "TEMP: UI provisional", tecla B del
-   hitbox). Ver `CHECKLIST_PRUEBAS_FASE9.md`.
+4. Revisar que no quede nada marcado `TEMP` en pantalla. El pie "TEMP: UI provisional" y la tecla B
+   del hitbox ya se ocultan solos en el build de producción (`src/core/devTools.ts`).
 5. Subir `version` en `package.json` si corresponde y ejecutar `npm test` y `npm run package:itch`
    sin bloqueos.
 6. Repasar el checklist de pruebas manuales en un navegador real (Chrome y Firefox como mínimo).
@@ -78,8 +78,8 @@ descargarlo); hazlo solo cuando el paso 3 esté completo.
   (`autoFocus`, activado por defecto). Si la persona hace clic fuera del juego, las teclas dejan de
   llegar hasta que vuelve a hacer clic dentro. Es el comportamiento normal de itch.io.
 - **Escalado.** `Scale.FIT` mantiene la proporción 4:3. En fullscreen la escala no es entera (por
-  ejemplo 1.875 en 1920×1080), así que algunos píxeles se ven un poco más anchos que otros. En el
-  embed a 768×576 la escala es exactamente 1.
+  ejemplo 1.875 en 1920×1080), así que algunos píxeles se ven un poco más anchos que otros; Fernando
+  lo aceptó el 2026-11-03. En el embed a 768×576 la escala es exactamente 1.
 - **Audio.** Hoy no hay audio (`AudioManager` funciona en silencio). Cuando llegue, Phaser lo
   desbloquea con la primera tecla o clic; como el menú siempre pide ENTER o clic, no hace falta nada
   extra.
