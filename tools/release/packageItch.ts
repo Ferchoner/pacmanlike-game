@@ -20,6 +20,7 @@
 import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { zipSync, type Zippable } from 'fflate';
+import { GAME_SLUG } from '../../src/core/release.ts';
 import type { AssetManifest } from '../../src/presentation/assets/assetManifest.ts';
 import { canPublish, checkRelease, creditsText, megabytes, type BuildFile, type ReleaseMode } from './releaseCheck.ts';
 
@@ -89,7 +90,7 @@ function main(): number {
   }
 
   const version = (JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as { version: string }).version;
-  const name = publishable ? `pac-big-man-v${version}-html5.zip` : `pac-big-man-v${version}-PRUEBA-NO-PUBLICAR.zip`;
+  const name = publishable ? `${GAME_SLUG}-v${version}-html5.zip` : `${GAME_SLUG}-v${version}-PRUEBA-NO-PUBLICAR.zip`;
   const zippable: Zippable = {};
   for (const file of report.include) {
     zippable[file.path] = readFileSync(join(DIST, file.path));

@@ -25,7 +25,7 @@ la raíz y itch.io lo muestra dentro de un `<iframe>` (una página dentro de su 
 
 | Comando | Qué hace |
 |---|---|
-| `npm run package:itch` | Build + revisión. Si no hay bloqueos, crea `release/pac-big-man-v<versión>-html5.zip`. Si los hay, los lista y termina con error. |
+| `npm run package:itch` | Build + revisión. Si no hay bloqueos, crea `release/search-and-run-v<versión>-html5.zip`. Si los hay, los lista y termina con error. |
 | `npm run package:itch:beta` | Versión **beta**: el arte temporal y el audio que falta pasan a aviso, pero cada recurso `temp-dev` necesita `source_url`. |
 | `npm run package:itch:prueba` | Igual, pero con bloqueos crea `release/…-PRUEBA-NO-PUBLICAR.zip` para probar en local o en un borrador privado. |
 
