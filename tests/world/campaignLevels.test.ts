@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { COMIENZO_MAZMORRAS, LEVELS } from '../../src/data/levels';
 import { validateLevel } from '../../src/world/validateLevel';
+import { gemSurplusWarning } from '../../src/world/levelDesignRules';
 
 describe('Niveles de la campaña', () => {
   it('el primer nivel es "Comienzo de las mazmorras" (diseño de Fernando)', () => {
@@ -18,9 +19,7 @@ describe('Niveles de la campaña', () => {
 
   it('en cada nivel sobran entre 5 y 8 gemas (regla de Fernando, 2026-11-04)', () => {
     for (const level of LEVELS) {
-      const sobran = level.declared.gems.length - level.gemsRequired;
-      expect(sobran, level.id).toBeGreaterThanOrEqual(5);
-      expect(sobran, level.id).toBeLessThanOrEqual(8);
+      expect(gemSurplusWarning(level), level.id).toBeNull();
     }
   });
 

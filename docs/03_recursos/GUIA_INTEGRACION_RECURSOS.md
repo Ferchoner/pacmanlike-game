@@ -158,6 +158,8 @@ Los FPS no venían documentados: son **provisionales** (idle 6, caminar 10, dañ
 y se ajustan cambiando un número en el manifest.
 
 No usados: `player/16x16 *-Sheet.png` (otro estilo, sin daño ni muerte; sus `.aseprite` están
-vacíos, 0 bytes), `autotiles.png` (agua y pantano), `Round_LBs_8x8.png` (barras de UI).
+vacíos, 0 bytes), `autotiles.png` (agua y pantano), `Round_LBs_8x8.png` (barras de UI). Solo están
+en `assets/source/`: desde el 2026-11-04 no se copian a `public/`, porque lo que hay en `public/` va
+al build. `tiles.txt` (índices de `tiles.png`) también vive solo en `assets/source/`.
 
 Sigue faltando: **todo el audio** (R-019…R-025), R-006, R-011, R-016…R-018, R-026.

@@ -160,6 +160,7 @@ El comando también acepta niveles escritos a mano: `npm run level:check -- src/
 | `EXIT_UNREACHABLE` | La salida queda encerrada. | Abre un pasillo hasta ella. |
 | `NOT_ENOUGH_REACHABLE_GEMS` | No se alcanzan suficientes gemas. | Baja `gemasRequeridas` o abre pasillos. |
 | `WAYPOINT_PATH_BLOCKED` | La ruta de un Patrol cruza una pared. | Mueve los vértices de la polilínea. |
+| `GEM_SURPLUS` (aviso) | No sobran entre 5 y 8 gemas (regla de diseño de Fernando). El nivel se puede jugar. | Ajusta `gemasRequeridas` al rango que indica el mensaje, o añade o quita gemas. |
 
 Las coordenadas de los mensajes son **(columna, fila)** de celda, empezando en (0,0) arriba a la
 izquierda. En Tiled la celda bajo el ratón aparece en la barra de estado inferior.
@@ -182,7 +183,7 @@ izquierda. En Tiled la celda bajo el ratón aparece en la barra de estado inferi
    cada nivel: así un cambio en un mapa nunca pasa desapercibido.
 
 2. Arranca el juego en modo desarrollo (`npm run dev`) y abre la URL con `?nivel=<id>`, por ejemplo
-   `http://localhost:5173/?nivel=catacumbas`. La run empieza en ese nivel y, al completarlo, sigue con
+   `http://localhost:5173/?nivel=catacumbas`. La partida empieza en ese nivel y, al completarlo, sigue con
    el siguiente de la campaña. Ese parámetro **solo funciona en desarrollo**; la versión publicada
    siempre empieza en el Nivel 1.
 3. Si algo falla, depende de en qué paso:
