@@ -153,9 +153,11 @@ y anotar el PR.
 
 Interfaz y textos:
 
--   [ ] Menú: dos líneas de texto ("Reúne las gemas que pide cada
-    nivel…" y "Tienes 3 corazones para toda la aventura…") son más
-    anchas que la pantalla de 768 px y se cortan por los lados.
+-   [x] Menú: dos líneas de texto ("Reúne las gemas que pide cada
+    nivel…" y "Tienes 3 corazones para toda la aventura…") eran más
+    anchas que la pantalla de 768 px y se cortaban por los lados.
+    Corregido: las pantallas de texto parten las líneas largas con 32 px
+    de margen.
 -   [ ] HUD sin fondo: el texto ("Nivel 1/3 Gemas…", "Puerta: faltan
     N") y los corazones se dibujan directamente sobre la fila de
     ladrillos de arriba. Se lee, pero con poco contraste, sobre todo el
