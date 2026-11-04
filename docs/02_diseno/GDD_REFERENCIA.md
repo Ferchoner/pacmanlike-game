@@ -1,4 +1,7 @@
-# PAC-BIG-MAN --- GDD de referencia v0.1
+# Search and Run --- GDD de referencia v0.2
+
+> v0.2 (2026-11-04): nombre del juego y campaña de 3 niveles. Lo demás
+> sigue como en la v0.1, cuando el juego se llamaba "PAC-BIG-MAN".
 
 ## Visión y pilares
 
@@ -15,9 +18,11 @@ arma, armadura ni Dash en Nivel 1. Velocidad pendiente de balance.
 
 ## Gemas y salida
 
-Gemas de recogida única. HUD muestra recolectadas/20. Hay 25 y se
-requieren 20. Cinco son opcionales. La puerta inicia cerrada, se abre al
-llegar a 20 y el nivel solo termina cuando el jugador la toca.
+Gemas de recogida única. Cada nivel define cuántas hay y cuántas se
+requieren; sobran entre 5 y 8 (regla de Fernando, 2026-11-04). El HUD
+muestra recogidas/requeridas del nivel. La puerta inicia cerrada, se abre
+al llegar a las requeridas y el nivel solo termina cuando el jugador la
+toca.
 
 ## Enemigos
 
@@ -28,13 +33,25 @@ Ambos dañan por contacto.
 ## Daño y muerte
 
 Contacto válido resta un corazón. Invulnerabilidad posterior propuesta
-de 0.8 s, provisional. A cero corazones: Game Over y reinicio completo
-desde Nivel 1, 3 corazones, 0 gemas y puerta cerrada.
+de 0.8 s, provisional. Los corazones se arrastran entre niveles sin
+curarse. A cero corazones: Game Over y reinicio completo desde el primer
+nivel de la campaña, 3 corazones, 0 gemas y puerta cerrada.
 
-## Nivel 1
+## Campaña (aprobada 2026-11-04)
 
-"El Primer Laberinto": 24×18 celdas lógicas de 32 px, 25 gemas, 20
-requeridas, 2 Hunters, 1 Patrol y una salida.
+Tres niveles de 24×18 celdas lógicas de 32 px, dibujados en Tiled
+(`tiled/mapas/`), y una pantalla de Victoria al salir del último:
+
+| Orden | Nivel | Gemas | Requeridas | Hunters | Patrol |
+|---|---|---|---|---|---|
+| 1 | Comienzo de las mazmorras | 30 | 25 | 2 | 2 |
+| 2 | Las Catacumbas | 35 | 28 | 3 | 3 |
+| 3 | La Sala del Guardián | 40 | 33 | 4 | 3 |
+
+El Nivel 1 original, "El Primer Laberinto" (Blueprint v0.1: 25 gemas, 20
+requeridas, 2 Hunters, 1 Patrol), queda como referencia histórica y ya no
+está en la campaña. Una campaña de varios niveles no es "mundos
+múltiples": todos comparten reglas, enemigos y ambientación.
 
 ## Fuera del MVP
 

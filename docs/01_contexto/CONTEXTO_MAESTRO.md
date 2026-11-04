@@ -1,4 +1,7 @@
-# PAC-BIG-MAN --- Contexto maestro
+# Search and Run --- Contexto maestro
+
+> Nombre público decidido por Fernando el 2026-11-04. El nombre de trabajo
+> original era "PAC-BIG-MAN"; algunos documentos históricos lo conservan.
 
 ## Identidad y objetivo
 
@@ -49,6 +52,13 @@ protegidos de otras obras.
     Todos los mapas viven en Tiled (`tiled/mapas/`). El primer nivel es
     el rediseño de Fernando del Nivel 1; el Blueprint v0.1 de abajo queda
     como referencia histórica y ya no está en la campaña.
+-   Nombre del juego: **Search and Run** (Fernando, 2026-11-04), en el
+    menú, en el build, en los créditos y en itch.io.
+-   Fase de mantenimiento antes de publicar otra versión (Fernando,
+    2026-11-04): de momento no se publica; faltan detalles del juego.
+-   La matriz de recursos se mantiene a mano (Fernando, 2026-11-04). Una
+    prueba (`tests/presentation/resourceMatrix.test.ts`) avisa si no
+    coincide con el manifest en IDs, prioridad o estado.
 
 ## Recursos externos: decisión obligatoria
 
@@ -119,9 +129,20 @@ monolítica.
 
 ## Pendientes
 
-Cámara fija o seguimiento; densidad final y balance; paquetes de arte;
-dimensiones exactas de sprites; secuencias/FPS; mezcla de audio; valores
-definitivos de velocidad, detección e invulnerabilidad.
+Estado al 2026-11-04:
+
+-   Arte definitivo: hoy hay 14 recursos de uso temporal (`temp-dev`,
+    válidos para la beta, no para la versión final).
+-   Audio: no hay ninguno. Faltan los SFX P0 R-020 (gema), R-021 (daño),
+    R-022 (muerte) y R-023 (puerta), y el icono del contador de gemas
+    R-016.
+-   FPS de las animaciones: provisionales (idle 6, walk 10, daño 12,
+    muerte 4) hasta tener el arte definitivo.
+-   Balance: valores definitivos de velocidad, detección e
+    invulnerabilidad; densidad de enemigos y gemas por nivel.
+-   Mezcla de audio, cuando llegue el audio.
+-   Cámara: hoy fija (el mapa cabe en 768×576); revisar si un nivel
+    futuro es más grande.
 
 ## Principio rector
 

@@ -4,6 +4,14 @@ Resultado de las pruebas del 2026-11-03 sobre el paquete de PRUEBA
 (`npm run package:itch:prueba`), descomprimido y servido dentro de un `<iframe>` de 768×576 que
 imita la página de itch.io, con Chromium sin GPU (Playwright).
 
+> **Actualización 2026-11-04 (fase de mantenimiento).** Lo de abajo es el resultado del
+> 2026-11-03, con un solo nivel. Hoy, sobre la campaña de 3 niveles: `npm run typecheck` sin
+> errores, `npm test` con 27 archivos y 227 pruebas en verde, build correcto (JS 1,45 MB, 380 kB
+> gzip), los 4 mapas de `tiled/mapas/` válidos con `level:check` y prueba de humo en Chromium sin
+> errores. Desde ahora la CI de GitHub (`.github/workflows/ci.yml`) repite lo automático en cada
+> PR. **Las pruebas manuales siguen pendientes** y conviene hacerlas con la campaña completa
+> antes de la próxima publicación.
+
 Leyenda: ✅ comprobado · ⚠️ comprobado con observaciones · ⬜ pendiente (manual, en navegador real).
 
 ## Automático (lo repite `npm test` o `npm run package:itch`)
@@ -41,7 +49,7 @@ Lo más sencillo: `npm run build` y luego `npm run preview` (sirve `dist/` en ht
 Para probar exactamente el .zip, súbelo como proyecto **Draft** (privado) a itch.io.
 
 - ⬜ Chrome y Firefox: el juego carga, ENTER/ESPACIO/clic inician.
-- ⬜ Completar el nivel (20 gemas → tocar la puerta) y ver "Nivel completado".
+- ⬜ Completar cada nivel (gemas requeridas → tocar la puerta), pasar al siguiente y llegar a la Victoria tras el nivel 3.
 - ⬜ Morir y comprobar el reinicio completo.
 - ⬜ Rendimiento: en Chrome, F12 → *Performance* o *Rendering → Frame rendering stats*. Esperado:
   60 FPS estables (o la frecuencia de tu monitor).

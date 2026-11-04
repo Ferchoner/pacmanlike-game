@@ -1,5 +1,11 @@
 # Nivel 1 --- El Primer Laberinto
 
+> **Histórico (2026-11-04).** Esta es la especificación del Blueprint v0.1,
+> que ya no está en la campaña. El primer nivel jugable es "Comienzo de las
+> mazmorras" (rediseño de Fernando, `tiled/mapas/comienzo_mazmorras.json`:
+> 30 gemas, 25 requeridas, 2 Hunters y 2 Patrol). Ver la campaña en
+> `GDD_REFERENCIA.md`. Los datos de abajo no se modifican.
+
 -   Grid: 24×18 celdas.
 -   Celda lógica: 32×32 px; mapa 768×576 px.
 -   Tiles visuales base: 16×16 px, 2×2 por celda.

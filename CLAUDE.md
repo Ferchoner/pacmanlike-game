@@ -1,4 +1,4 @@
-# CLAUDE.md — PAC-BIG-MAN
+# CLAUDE.md — Search and Run
 
 Guía para Claude (y cualquier IA) que trabaje en este repositorio. **Responde siempre en español.**
 El responsable está aprendiendo desarrollo de videojuegos: explica las decisiones de forma didáctica;
@@ -6,9 +6,10 @@ eres copiloto y tutor, no sustituto de sus decisiones.
 
 ## Qué es
 
-Juego 2D top-down arcade de laberinto, fantasía medieval, un jugador. Un guerrero sin ataque recoge
-gemas, evita monstruos (Hunter y Patrol) y escapa por una puerta que se desbloquea con 20 de 25 gemas.
-Objetivo: un juego pequeño, completo y publicable en itch.io.
+**Search and Run** (nombre de trabajo original: PAC-BIG-MAN). Juego 2D top-down arcade de laberinto,
+fantasía medieval, un jugador. Un guerrero sin ataque recoge gemas, evita monstruos (Hunter y Patrol)
+y escapa por una puerta que se desbloquea con las gemas requeridas de cada nivel. Campaña de 3 niveles
+y pantalla de Victoria. Objetivo: un juego pequeño, completo y publicable en itch.io.
 
 ## Stack
 
@@ -24,6 +25,8 @@ Toda la documentación vive en `docs/`. Si algo aquí contradice `docs/`, gana `
 - `docs/03_recursos/CONTRATO_TECNICO_RECURSOS_v0.2.md`, `MATRIZ_RECURSOS.csv/.xlsx`, `manifest.json`.
 - `docs/05_control/` — checklist de recepción y registro de licencias.
 - `docs/06_prompts_IA/REGLAS_DE_TRABAJO_IA.md` y `PROMPTS_POR_FASE.md` (fases 0–9).
+- `docs/07_publicacion/` — publicación en itch.io y checklist de pruebas.
+- `docs/08_niveles/GUIA_CREACION_NIVELES.md` — cómo crear niveles con Tiled.
 
 ## Reglas no negociables
 
@@ -46,11 +49,15 @@ Toda la documentación vive en `docs/`. Si algo aquí contradice `docs/`, gana `
 - Separar gameplay de presentación; evitar una `GameScene` monolítica; módulos pequeños.
 - Separar tamaño visual del sprite y cuerpo de colisión (los pasillos miden 1 celda = 32 px).
 
-## Valores clave del Nivel 1
+## Valores clave
 
-Grid 24×18, celda lógica 32×32 px (768×576), tiles visuales 16×16 (2×2 por celda). 25 gemas,
-20 requeridas; tocar la puerta abierta completa el nivel. 3 corazones; morir reinicia toda la run.
+Grid 24×18, celda lógica 32×32 px (768×576), tiles visuales 16×16 (2×2 por celda). Campaña
+(`src/data/levels/index.ts`): Comienzo de las mazmorras (30/25 gemas), Las Catacumbas (35/28) y
+La Sala del Guardián (40/33); en cada nivel sobran entre 5 y 8 gemas. Tocar la puerta abierta
+completa el nivel. 3 corazones para toda la run, sin curarse entre niveles; morir reinicia la run
+desde el primer nivel.
 Provisionales (deben ser configurables): jugador 160 px/s, Hunter 120 px/s, invulnerabilidad 0.8 s.
+El Nivel 1 original (Blueprint v0.1, `level1.json`: 25/20) es solo referencia histórica.
 
 ## Forma de trabajar
 
@@ -59,7 +66,10 @@ Provisionales (deben ser configurables): jugador 160 px/s, Hunter 120 px/s, invu
 - Para funcionalidades grandes usa el flujo spec-driven: `/spec` crea la spec en `specs/` y
   `/spec-impl` implementa una spec con estado Aprobado.
 - Antes de declarar una fase terminada: ejecuta build y pruebas, e informa archivos modificados,
-  resultados, riesgos y siguiente paso.
+  resultados, riesgos y siguiente paso. La CI de GitHub (`.github/workflows/ci.yml`) lo repite en cada PR.
+- Al cerrar una fase, revisa qué documentos de `docs/` y el `README.md` quedaron desfasados.
+- La matriz de recursos (.csv y .xlsx) se mantiene **a mano**; si cambias un estado en el manifest,
+  cambia también la matriz (`tests/presentation/resourceMatrix.test.ts` lo comprueba).
 
 ## Comandos
 
@@ -70,6 +80,9 @@ Provisionales (deben ser configurables): jugador 160 px/s, Hunter 120 px/s, invu
 - `npm run typecheck` — solo comprobación de tipos.
 - `npm run level:check -- <archivo.json>` — traduce (si es de Tiled) y valida un nivel desde la terminal.
 - `npm run level:export-nivel1` — regenera `tiled/mapas/nivel1_referencia.json` (copia de referencia).
+- `npm run package:itch` / `:beta` / `:prueba` — build + revisión de publicación + .zip para itch.io.
+  Publicar lo hace Fernando, solo con su permiso.
 
 Niveles nuevos: se dibujan en Tiled (`tiled/`) siguiendo `docs/08_niveles/GUIA_CREACION_NIVELES.md`.
-El Nivel 1 aprobado se sigue cargando desde `src/data/levels/level1.json`.
+Todos los niveles de la campaña viven en `tiled/mapas/`; `src/data/levels/level1.json` (Blueprint v0.1)
+solo se conserva como referencia y para las pruebas del traductor.

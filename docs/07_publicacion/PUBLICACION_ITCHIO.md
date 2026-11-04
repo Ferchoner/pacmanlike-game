@@ -1,10 +1,18 @@
 # Publicación en itch.io (Fase 9)
 
-> **Estado al 2026-11-03.** La versión **final** no es publicable: hay 14 recursos `temp-dev` y
-> faltan 5 recursos P0 (R-016 y los SFX R-020…R-023). Fernando decidió publicar antes una
-> **beta 0.1.0-beta.1** con el arte temporal de uso gratuito, aclarando que no es un producto
-> terminado y que ese arte no es nuestro (ver sección 6). La beta solo está bloqueada por una cosa:
-> falta registrar de dónde salió cada recurso (`source_url`) y revisar su licencia.
+> **Estado al 2026-11-04.**
+>
+> - En itch.io está la **beta 0.1.0-beta.1**, subida por Fernando el 2026-11-03 como
+>   [Search and Run](https://ferchoner77.itch.io/search-and-run). Es la versión de **un solo
+>   nivel** (el Blueprint v0.1): se generó antes de la campaña de 3 niveles.
+> - El juego pasó a llamarse **Search and Run** en todas partes (menú, `index.html`, `CREDITOS.txt`
+>   y nombre del .zip: `search-and-run-v<versión>-…zip`).
+> - **De momento no se publica otra versión** (Fernando, 2026-11-04): faltan detalles del juego.
+>   Cuando se publique la campaña, conviene subir antes la versión de `package.json` (por ejemplo
+>   a `0.2.0-beta.1`) para no tener dos juegos distintos con el mismo número.
+> - La versión **final** sigue sin ser publicable: 14 recursos `temp-dev` y faltan 5 P0 (R-016 y
+>   los SFX R-020…R-023).
+>
 > Subir a itch.io lo hace Fernando: los scripts solo crean el .zip.
 
 ## 1. Cómo funciona un juego HTML5 en itch.io
@@ -112,7 +120,7 @@ en tus juegos"). Lo que suelen prohibir es redistribuir el pack suelto o revende
 
 Texto sugerido para la página de itch.io:
 
-> **PAC-BIG-MAN (beta 0.1.0)** — Esta es una versión beta de prueba: no es un producto terminado y
+> **Search and Run (beta)** — Esta es una versión beta de prueba: no es un producto terminado y
 > todavía no tiene sonido. El arte es temporal: son recursos gratuitos creados por terceros, que no
 > son nuestros y se sustituirán en la versión final. Créditos: [lista de CREDITOS.txt].
 
