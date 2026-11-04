@@ -47,8 +47,8 @@ La revisión (`tools/release/releaseCheck.ts`, con pruebas en `tests/release/`) 
   límites de itch.io superados.
 - **Avisos** (se puede publicar): recursos P1/P2 que faltan y archivos de `public/` que el manifest
   no usa. Esos archivos **no se meten en el .zip**: no tiene sentido distribuir arte que el juego no
-  carga (y cuya licencia tampoco está registrada). Hoy son 10: `Round_LBs_8x8.png`, `autotiles.*`,
-  `player/16x16 *` (incluidos los `.aseprite`) y `tiles.txt`.
+  carga (y cuya licencia tampoco está registrada). Desde el 2026-11-04 no queda ninguno: los 10 que
+  había se quitaron de `public/` (sus originales siguen en `assets/source/`).
 
 `release/` está en `.gitignore`: el .zip se regenera cuando haga falta, no se versiona.
 

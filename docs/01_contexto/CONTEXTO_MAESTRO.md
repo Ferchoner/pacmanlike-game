@@ -177,10 +177,10 @@ Técnicos y de proceso:
 -   [x] `level:check` no avisaba si un nivel nuevo incumplía la regla de
     "sobran entre 5 y 8 gemas". Corregido: aviso `GEM_SURPLUS`, que dice
     qué valores de `gemasRequeridas` valdrían (`src/world/levelDesignRules.ts`).
--   [ ] 10 archivos de `public/assets` que el juego no usa (incluidos 3
-    `.aseprite`) se copian a `dist/` en cada build. No llegan al .zip,
-    pero conviene sacarlos de `public/` (sin borrar los originales de
-    `assets/source/`).
+-   [x] 10 archivos de `public/assets` que el juego no usa (incluidos 3
+    `.aseprite`) se copiaban a `dist/` en cada build. Corregido: se
+    quitaron de `public/`; los originales idénticos siguen en
+    `assets/source/`.
 -   [ ] Antes de publicar: subir la versión de `package.json` y hacer
     las pruebas manuales en Chrome y Firefox con la campaña completa
     (`docs/07_publicacion/CHECKLIST_PRUEBAS_FASE9.md`).
