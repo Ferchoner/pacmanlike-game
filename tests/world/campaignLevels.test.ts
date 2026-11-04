@@ -16,6 +16,14 @@ describe('Niveles de la campaña', () => {
     expect(new Set(LEVELS.map((l) => l.id)).size).toBe(LEVELS.length);
   });
 
+  it('en cada nivel sobran entre 5 y 8 gemas (regla de Fernando, 2026-11-04)', () => {
+    for (const level of LEVELS) {
+      const sobran = level.declared.gems.length - level.gemsRequired;
+      expect(sobran, level.id).toBeGreaterThanOrEqual(5);
+      expect(sobran, level.id).toBeLessThanOrEqual(8);
+    }
+  });
+
   it('los niveles nuevos coinciden con el plan aprobado (gemas y enemigos)', () => {
     const resumen = LEVELS.map((l) => ({
       id: l.id,
@@ -26,8 +34,8 @@ describe('Niveles de la campaña', () => {
     }));
     expect(resumen).toEqual([
       { id: 'comienzo-mazmorras', gemas: 30, requeridas: 25, hunters: 2, patrols: 2 },
-      { id: 'catacumbas', gemas: 35, requeridas: 20, hunters: 3, patrols: 3 },
-      { id: 'sala-del-guardian', gemas: 40, requeridas: 24, hunters: 4, patrols: 3 },
+      { id: 'catacumbas', gemas: 35, requeridas: 28, hunters: 3, patrols: 3 },
+      { id: 'sala-del-guardian', gemas: 40, requeridas: 33, hunters: 4, patrols: 3 },
     ]);
   });
 });
