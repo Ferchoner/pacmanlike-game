@@ -164,9 +164,8 @@ Interfaz y textos:
     pantalla: en el HUD es recogidas/**requeridas** ("Gemas: 2/25"); en
     Nivel completado y Game Over es recogidas/**totales** ("Gemas:
     27/30"). Elegir un criterio o decirlo en el texto.
--   [ ] "Run" en los textos ("se pierde la run", "La run vuelve a
-    empezar…"): palabra en inglés en una interfaz en español. Decidir
-    si se queda o se cambia por "partida".
+-   [x] "Run" en los textos ("se pierde la run", "La run vuelve a
+    empezar…"): cambiado por "partida" (Fernando, 2026-11-04; PR #14).
 -   [ ] La UI sigue siendo provisional (fuente del sistema, colores
     planos, pantallas solo de texto): pendiente de R-017 (Game Over),
     R-018 (Nivel completado) y R-026 (fuente).

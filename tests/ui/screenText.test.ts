@@ -7,6 +7,7 @@ import {
   victoryLines,
 } from '../../src/presentation/ui/screenText';
 import { isRunSummary, type RunSummary } from '../../src/systems/runSummary';
+import { GAME_TITLE } from '../../src/core/release';
 
 const run = (over: Partial<RunSummary> = {}): RunSummary => ({
   outcome: 'won',
@@ -91,16 +92,30 @@ describe('Pantallas', () => {
     expect(t).toMatch(/continuar/);
   });
 
-  it('la Victoria resume toda la run', () => {
+  it('la Victoria resume toda la partida', () => {
     const t = texts(victoryLines(run({ levelNumber: 3, hearts: 1, campaign: { levelIndex: 2, hearts: 1, gemsSoFar: 71 } })));
     expect(t).toMatch(/VICTORIA/);
     expect(t).toMatch(/3 niveles/);
-    expect(t).toMatch(/Gemas en toda la run: 71/);
+    expect(t).toMatch(/Gemas en toda la partida: 71/);
     expect(t).toMatch(/Corazones al final: 1\/3/);
   });
 
   it('sin gemas opcionales no muestra el "+0"', () => {
     expect(texts(levelCompleteLines(run(), 3))).not.toMatch(/opcionales/);
+  });
+
+  it('los textos dicen "partida", no "run" (decisión de Fernando, 2026-11-04)', () => {
+    const all = [
+      texts(MENU_LINES),
+      texts(gameOverLines(run({ outcome: 'died' }))),
+      texts(levelCompleteLines(run(), 3)),
+      texts(levelCompleteLines(run({ levelNumber: 3 }), 3)),
+      texts(victoryLines(run({ levelNumber: 3 }))),
+    ]
+      .join('\n')
+      .replaceAll(GAME_TITLE, ''); // el nombre del juego ("Search and Run") sí lleva "Run"
+    expect(all).not.toMatch(/\brun\b/i);
+    expect(all).toMatch(/partida/);
   });
 });
 
