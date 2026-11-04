@@ -41,6 +41,13 @@ protegidos de otras obras.
 -   Velocidad propuesta: jugador 160 px/s y Hunter 120 px/s,
     provisionales.
 -   Dash es una habilidad futura, no de Nivel 1.
+-   Campaña de varios niveles (aprobado por Fernando el 2026-11-04):
+    Nivel 1 → Nivel 2 → Nivel 3 → pantalla de Victoria. Los corazones
+    se arrastran entre niveles sin curar (configurable:
+    `carryHeartsBetweenLevels`); las gemas empiezan en 0 en cada nivel.
+    Morir sigue reiniciando la run desde el Nivel 1. Los mapas del
+    Nivel 2 y 3 se hacen en Tiled (`tiled/mapas/`), borradores
+    pendientes de su visto bueno.
 
 ## Recursos externos: decisión obligatoria
 

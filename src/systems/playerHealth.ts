@@ -32,6 +32,11 @@ export interface PlayerHealthConfig {
   readonly startingHearts: number;
   /** Segundos de invulnerabilidad tras recibir daño (provisional: 0.8). */
   readonly invulnerabilitySeconds: number;
+  /**
+   * Corazones con los que se ENTRA (por defecto, `startingHearts`). En la
+   * campaña los corazones se arrastran: se puede entrar al Nivel 2 con 2/3.
+   */
+  readonly currentHearts?: number;
 }
 
 export class PlayerHealth {
@@ -47,8 +52,12 @@ export class PlayerHealth {
     if (!(config.invulnerabilitySeconds >= 0)) {
       throw new Error(`invulnerabilitySeconds debe ser ≥ 0 (llegó ${config.invulnerabilitySeconds})`);
     }
+    const current = config.currentHearts ?? config.startingHearts;
+    if (!Number.isInteger(current) || current < 1 || current > config.startingHearts) {
+      throw new Error(`currentHearts debe ser un entero entre 1 y ${config.startingHearts} (llegó ${current})`);
+    }
     this.maxHearts = config.startingHearts;
-    this.current = config.startingHearts;
+    this.current = current;
   }
 
   get hearts(): number {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GRID } from '../../src/core/GameConstants';
-import { LEVEL_1, levelToPlay } from '../../src/data/levels';
+import { LEVEL_1, LEVELS, campaignStartIndex } from '../../src/data/levels';
 import { loadLevel } from '../../src/world/loadLevel';
 import { levelToTiled } from '../../src/world/tiled/levelToTiled';
 import {
@@ -224,13 +224,13 @@ describe('Tiled: errores que se informan (nunca se corrigen en silencio)', () =>
   });
 });
 
-describe('Qué nivel se juega (?nivel= solo en desarrollo)', () => {
-  it('sin parámetro o en producción siempre es el Nivel 1', () => {
-    expect(levelToPlay('', true)).toBe(LEVEL_1);
-    expect(levelToPlay('?nivel=level-1', false)).toBe(LEVEL_1);
+describe('En qué nivel empieza la run (?nivel= solo en desarrollo)', () => {
+  it('sin parámetro o en producción siempre es el primer nivel', () => {
+    expect(campaignStartIndex('', true)).toBe(0);
+    expect(campaignStartIndex(`?nivel=${LEVELS.at(-1)!.id}`, false)).toBe(0);
   });
-  it('en desarrollo, ?nivel=<id> elige un nivel registrado; uno desconocido cae al Nivel 1', () => {
-    expect(levelToPlay('?nivel=level-1', true)).toBe(LEVEL_1);
-    expect(levelToPlay('?nivel=no-existe', true)).toBe(LEVEL_1);
+  it('en desarrollo, ?nivel=<id> empieza en ese nivel; uno desconocido cae al primero', () => {
+    LEVELS.forEach((level, i) => expect(campaignStartIndex(`?nivel=${level.id}`, true)).toBe(i));
+    expect(campaignStartIndex('?nivel=no-existe', true)).toBe(0);
   });
 });

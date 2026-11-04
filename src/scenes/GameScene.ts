@@ -3,7 +3,7 @@ import { GRID } from '../core/GameConstants';
 import { nextScene } from '../core/sceneFlow';
 import { SceneKeys } from '../core/SceneKeys';
 import { GAME_TUNING } from '../data/gameTuning';
-import { levelToPlay } from '../data/levels';
+import { LEVELS, campaignStartIndex } from '../data/levels';
 import { EnemyGroup, type Enemy } from '../enemies/EnemyGroup';
 import { KeyboardPlayerInput } from '../player/KeyboardPlayerInput';
 import { Player } from '../player/Player';
@@ -19,6 +19,7 @@ import { LevelProgress, type ProgressEvent } from '../systems/levelProgress';
 import { separation } from '../systems/overlap';
 import { PlayerHealth, type HealthEvent } from '../systems/playerHealth';
 import type { RunSummary } from '../systems/runSummary';
+import { endLevel, isCampaignRun, newRun, type CampaignRun } from '../systems/campaign';
 import { LevelValidationError, loadLevel } from '../world/loadLevel';
 import { SHOW_DEV_TOOLS } from '../core/devTools';
 
@@ -29,6 +30,7 @@ import { SHOW_DEV_TOOLS } from '../core/devTools';
  * - `enemies/` mueve a los Hunters y Patrols (reglas, sin dibujar).
  * - `systems/levelProgress` lleva las gemas, la puerta y el fin del nivel.
  * - `systems/playerHealth` lleva los corazones, la invulnerabilidad y la muerte.
+ * - `systems/campaign` dice qué nivel de la campaña toca y con cuántos corazones.
  * - `presentation/` lo dibuja y lo hace sonar: arte externo del manifest si
  *   está aprobado, placeholders TEMP si no (la escena no distingue).
  *
@@ -47,6 +49,9 @@ export class GameScene extends Phaser.Scene {
   private enemyViews: EnemyView[] = [];
   private audio: AudioManager | null = null;
   private health: PlayerHealth | null = null;
+  /** Estado de la campaña con que se entró a este nivel. */
+  private run: CampaignRun = newRun(GAME_TUNING.startingHearts);
+  private levelName = '';
   /** true en cuanto la partida termina (ganar o morir): se deja de simular. */
   private ended = false;
 
@@ -54,7 +59,12 @@ export class GameScene extends Phaser.Scene {
     super(SceneKeys.Game);
   }
 
-  create(): void {
+  /**
+   * `data` = la `CampaignRun` que manda "Nivel completado" para seguir con el
+   * siguiente nivel. Sin ella (desde el Menú o el Game Over) empieza una run
+   * NUEVA: primer nivel, corazones llenos.
+   */
+  create(data: unknown): void {
     // Phaser reutiliza la instancia de la escena al volver a entrar: limpiamos.
     this.player = null;
     this.playerView = null;
@@ -67,12 +77,17 @@ export class GameScene extends Phaser.Scene {
     this.enemyViews = [];
     this.health = null;
     this.ended = false;
+    this.run =
+      isCampaignRun(data) && data.levelIndex < LEVELS.length
+        ? data
+        : newRun(GAME_TUNING.startingHearts, campaignStartIndex(window.location.search, SHOW_DEV_TOOLS));
     this.audio = createAudioManager(this);
     // Al salir de la escena (ganar, morir) la música se corta.
     this.events.once('shutdown', () => this.audio?.stopMusic());
 
     try {
-      const { level, warnings } = loadLevel(levelToPlay(window.location.search, SHOW_DEV_TOOLS));
+      const { level, warnings } = loadLevel(LEVELS[this.run.levelIndex]!);
+      this.levelName = level.name;
       for (const w of warnings) console.warn(`[nivel ${level.id}] ${w.message}`);
       renderLevel(this, level);
 
@@ -86,10 +101,12 @@ export class GameScene extends Phaser.Scene {
       this.exitView = createExitView(this, level.exit);
       this.hud = new TempHud(this);
 
-      // Salud nueva en cada create(): morir y volver a jugar = 3 corazones.
+      // Salud nueva en cada create(), con los corazones que trae la run:
+      // una run nueva entra con 3; el Nivel 2 entra con los que te quedaron.
       this.health = new PlayerHealth({
         startingHearts: GAME_TUNING.startingHearts,
         invulnerabilitySeconds: GAME_TUNING.invulnerabilitySeconds,
+        currentHearts: this.run.hearts,
       });
       this.refreshHud();
 
@@ -230,6 +247,8 @@ export class GameScene extends Phaser.Scene {
       hearts: health.hearts,
       maxHearts: health.maxHearts,
       exitOpen: progress.exitState === 'open',
+      levelNumber: this.run.levelIndex + 1,
+      levelCount: LEVELS.length,
     });
   }
 
@@ -248,6 +267,10 @@ export class GameScene extends Phaser.Scene {
       gemsRequired: progress.gemsRequired,
       hearts: health.hearts,
       maxHearts: health.maxHearts,
+      levelName: this.levelName,
+      levelNumber: this.run.levelIndex + 1,
+      levelCount: LEVELS.length,
+      campaign: endLevel(this.run, { gems: progress.gems.count, hearts: health.hearts }),
     };
     const go = () => this.scene.start(nextScene(SceneKeys.Game, outcome), summary);
     // El reloj de ESTA escena ya corre (llevamos jugando un rato), así que su

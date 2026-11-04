@@ -1,3 +1,5 @@
+import { isCampaignRun, type CampaignRun } from './campaign';
+
 /**
  * Resumen de cómo terminó una partida. La partida (GameScene) lo construye a
  * partir de los sistemas reales (progreso y salud) y se lo pasa a la pantalla
@@ -15,6 +17,14 @@ export interface RunSummary {
   /** Corazones que quedaban al terminar. */
   readonly hearts: number;
   readonly maxHearts: number;
+  /** Nombre del nivel que se jugaba (sale de sus datos). */
+  readonly levelName: string;
+  /** Número del nivel en la campaña, desde 1. */
+  readonly levelNumber: number;
+  /** Cuántos niveles tiene la campaña. */
+  readonly levelCount: number;
+  /** Estado de la campaña al terminar este nivel (ver `campaign.ts`). */
+  readonly campaign: CampaignRun;
 }
 
 /**
@@ -25,9 +35,14 @@ export interface RunSummary {
 export function isRunSummary(value: unknown): value is RunSummary {
   if (typeof value !== 'object' || value === null) return false;
   const v = value as Record<string, unknown>;
-  const counts = ['gems', 'totalGems', 'gemsRequired', 'hearts', 'maxHearts'];
+  const counts = ['gems', 'totalGems', 'gemsRequired', 'hearts', 'maxHearts', 'levelNumber', 'levelCount'];
   return (
     (v.outcome === 'won' || v.outcome === 'died') &&
-    counts.every((k) => typeof v[k] === 'number' && Number.isInteger(v[k]) && (v[k] as number) >= 0)
+    counts.every((k) => typeof v[k] === 'number' && Number.isInteger(v[k]) && (v[k] as number) >= 0) &&
+    typeof v.levelName === 'string' &&
+    (v.levelNumber as number) >= 1 &&
+    (v.levelNumber as number) <= (v.levelCount as number) &&
+    // Al morir con 0 corazones la campaña no continúa: solo se exige su forma si se ganó.
+    (v.outcome === 'died' || isCampaignRun(v.campaign))
   );
 }

@@ -1,0 +1,487 @@
+{
+ "type": "map",
+ "version": "1.10",
+ "tiledversion": "1.11.2",
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "infinite": false,
+ "compressionlevel": -1,
+ "width": 24,
+ "height": 18,
+ "tilewidth": 32,
+ "tileheight": 32,
+ "nextlayerid": 3,
+ "nextobjectid": 34,
+ "properties": [
+  {
+   "name": "id",
+   "type": "string",
+   "value": "level-2"
+  },
+  {
+   "name": "nombre",
+   "type": "string",
+   "value": "Las Catacumbas"
+  },
+  {
+   "name": "gemasRequeridas",
+   "type": "int",
+   "value": 20
+  }
+ ],
+ "tilesets": [
+  {
+   "firstgid": 1,
+   "source": "../tilesets/paredes_TEMP.tsx"
+  }
+ ],
+ "layers": [
+  {
+   "id": 1,
+   "name": "paredes",
+   "type": "tilelayer",
+   "x": 0,
+   "y": 0,
+   "width": 24,
+   "height": 18,
+   "opacity": 1,
+   "visible": true,
+   "data": [
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,
+1,0,1,1,1,0,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1,1,0,1,
+1,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,
+1,0,1,0,1,1,1,1,0,1,1,1,0,1,1,1,1,1,0,1,0,1,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,
+1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,1,1,
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+1,0,1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1,1,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1,1,0,1,
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,1,1,
+1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,
+1,0,1,1,1,1,0,1,1,0,1,1,1,0,1,0,1,1,1,1,0,1,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+  },
+  {
+   "id": 2,
+   "name": "entidades",
+   "type": "objectgroup",
+   "draworder": "topdown",
+   "x": 0,
+   "y": 0,
+   "opacity": 1,
+   "visible": true,
+   "objects": [
+    {
+     "id": 1,
+     "name": "Jugador",
+     "type": "jugador",
+     "x": 32,
+     "y": 32,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 2,
+     "name": "Salida",
+     "type": "salida",
+     "x": 704,
+     "y": 480,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 3,
+     "name": "Hunter 1",
+     "type": "hunter",
+     "x": 384,
+     "y": 224,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 4,
+     "name": "Hunter 2",
+     "type": "hunter",
+     "x": 224,
+     "y": 480,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 5,
+     "name": "Ruta Patrol 1",
+     "type": "ruta",
+     "x": 48,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "polyline": [
+      {
+       "x": 0,
+       "y": 0
+      },
+      {
+       "x": 288,
+       "y": 0
+      },
+      {
+       "x": 0,
+       "y": 0
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": "Patrol 1",
+     "type": "patrol",
+     "x": 32,
+     "y": 288,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "ruta",
+       "type": "object",
+       "value": 5
+      }
+     ]
+    },
+    {
+     "id": 7,
+     "name": "Ruta Patrol 2",
+     "type": "ruta",
+     "x": 720,
+     "y": 304,
+     "width": 0,
+     "height": 0,
+     "rotation": 0,
+     "visible": true,
+     "polyline": [
+      {
+       "x": 0,
+       "y": 0
+      },
+      {
+       "x": -288,
+       "y": 0
+      },
+      {
+       "x": 0,
+       "y": 0
+      }
+     ]
+    },
+    {
+     "id": 8,
+     "name": "Patrol 2",
+     "type": "patrol",
+     "x": 608,
+     "y": 288,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true,
+     "properties": [
+      {
+       "name": "ruta",
+       "type": "object",
+       "value": 7
+      }
+     ]
+    },
+    {
+     "id": 9,
+     "name": "",
+     "type": "gema",
+     "x": 352,
+     "y": 32,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 10,
+     "name": "",
+     "type": "gema",
+     "x": 608,
+     "y": 32,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 11,
+     "name": "",
+     "type": "gema",
+     "x": 96,
+     "y": 96,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 12,
+     "name": "",
+     "type": "gema",
+     "x": 352,
+     "y": 96,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 13,
+     "name": "",
+     "type": "gema",
+     "x": 512,
+     "y": 96,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 14,
+     "name": "",
+     "type": "gema",
+     "x": 576,
+     "y": 96,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 15,
+     "name": "",
+     "type": "gema",
+     "x": 128,
+     "y": 160,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 16,
+     "name": "",
+     "type": "gema",
+     "x": 384,
+     "y": 160,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 17,
+     "name": "",
+     "type": "gema",
+     "x": 512,
+     "y": 160,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 18,
+     "name": "",
+     "type": "gema",
+     "x": 640,
+     "y": 160,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 19,
+     "name": "",
+     "type": "gema",
+     "x": 32,
+     "y": 224,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 20,
+     "name": "",
+     "type": "gema",
+     "x": 672,
+     "y": 224,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 21,
+     "name": "",
+     "type": "gema",
+     "x": 32,
+     "y": 352,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 22,
+     "name": "",
+     "type": "gema",
+     "x": 352,
+     "y": 352,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 23,
+     "name": "",
+     "type": "gema",
+     "x": 672,
+     "y": 352,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 24,
+     "name": "",
+     "type": "gema",
+     "x": 128,
+     "y": 416,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 25,
+     "name": "",
+     "type": "gema",
+     "x": 352,
+     "y": 416,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 26,
+     "name": "",
+     "type": "gema",
+     "x": 576,
+     "y": 416,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 27,
+     "name": "",
+     "type": "gema",
+     "x": 96,
+     "y": 480,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 28,
+     "name": "",
+     "type": "gema",
+     "x": 384,
+     "y": 480,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 29,
+     "name": "",
+     "type": "gema",
+     "x": 544,
+     "y": 480,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 30,
+     "name": "",
+     "type": "gema",
+     "x": 32,
+     "y": 512,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 31,
+     "name": "",
+     "type": "gema",
+     "x": 224,
+     "y": 512,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 32,
+     "name": "",
+     "type": "gema",
+     "x": 416,
+     "y": 512,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    },
+    {
+     "id": 33,
+     "name": "",
+     "type": "gema",
+     "x": 672,
+     "y": 512,
+     "width": 32,
+     "height": 32,
+     "rotation": 0,
+     "visible": true
+    }
+   ]
+  }
+ ]
+}
