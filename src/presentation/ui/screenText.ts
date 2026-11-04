@@ -23,8 +23,9 @@ const line = (text: string, tone: LineTone = 'normal'): ScreenLine => ({ text, t
 export const MENU_LINES: readonly ScreenLine[] = [
   line('PAC-BIG-MAN', 'title'),
   line('Recoge gemas, esquiva a los monstruos y escapa por la puerta.'),
-  line('Con 20 gemas se abre la puerta: tócala para ganar.'),
-  line('Tienes 3 corazones. Si los pierdes, vuelves a empezar.'),
+  line('Reúne las gemas que pide cada nivel y toca la puerta para pasar al siguiente.'),
+  line('Tienes 3 corazones para toda la aventura: no se recuperan entre niveles.'),
+  line('Si los pierdes todos, vuelves a empezar desde el Nivel 1.'),
   line('Moverse: WASD o flechas', 'hint'),
   line('ENTER, ESPACIO o clic para jugar', 'good'),
   ...(RELEASE_STAGE === 'beta' ? BETA_NOTICE.map((text) => line(text, 'hint')) : []),
@@ -34,19 +35,52 @@ export function gameOverLines(run: RunSummary): ScreenLine[] {
   return [
     line('GAME OVER', 'title'),
     line('Te quedaste sin corazones.', 'bad'),
+    line(`Llegaste al ${levelTitle(run)}`),
     line(`Gemas recogidas: ${run.gems}/${run.totalGems} (hacían falta ${run.gemsRequired})`),
-    line('La run vuelve a empezar desde cero.', 'hint'),
+    line('La run vuelve a empezar desde cero, en el Nivel 1.', 'hint'),
     ...replayPrompt(),
   ];
 }
 
-export function levelCompleteLines(run: RunSummary): ScreenLine[] {
+/** "Nivel 2/3: Las Catacumbas". */
+function levelTitle(run: RunSummary): string {
+  return `Nivel ${run.levelNumber}/${run.levelCount}: ${run.levelName}`;
+}
+
+/** ¿Era el último nivel de la campaña? Entonces lo siguiente es la Victoria. */
+export function isFinalLevel(run: RunSummary): boolean {
+  return run.levelNumber >= run.levelCount;
+}
+
+/**
+ * Corazones con los que se entra al siguiente nivel: la escena los calcula con
+ * `campaign.nextLevelRun` (que respeta `carryHeartsBetweenLevels`) y los pasa aquí.
+ */
+export function levelCompleteLines(run: RunSummary, nextHearts: number): ScreenLine[] {
   const extra = run.gems - run.gemsRequired;
+  const last = isFinalLevel(run);
   return [
     line('¡NIVEL COMPLETADO!', 'title'),
-    line('Escapaste del Primer Laberinto.', 'good'),
+    line(`Escapaste del ${levelTitle(run)}`, 'good'),
     line(`Gemas: ${run.gems}/${run.totalGems}` + (extra > 0 ? ` (+${extra} opcionales)` : '')),
     line(`Corazones: ${run.hearts}/${run.maxHearts}`),
+    ...(last
+      ? [line('ENTER o ESPACIO: continuar', 'good')]
+      : [
+          line(`Entras al siguiente nivel con ${nextHearts}/${run.maxHearts} corazones.`, 'hint'),
+          line('ENTER o ESPACIO: siguiente nivel', 'good'),
+        ]),
+    line('ESC: volver al menú (se pierde la run)', 'hint'),
+  ];
+}
+
+/** Pantalla final de la campaña: el resumen de TODA la run. */
+export function victoryLines(run: RunSummary): ScreenLine[] {
+  return [
+    line('¡VICTORIA!', 'title'),
+    line(`Escapaste de los ${run.levelCount} niveles.`, 'good'),
+    line(`Gemas en toda la run: ${run.campaign.gemsSoFar}`),
+    line(`Corazones al final: ${run.hearts}/${run.maxHearts}`),
     ...replayPrompt(),
   ];
 }
@@ -62,6 +96,9 @@ export interface HudState {
   readonly hearts: number;
   readonly maxHearts: number;
   readonly exitOpen: boolean;
+  /** Nivel actual (desde 1) y total de la campaña. */
+  readonly levelNumber: number;
+  readonly levelCount: number;
 }
 
 export interface HudText {
@@ -73,7 +110,10 @@ export interface HudText {
 export function hudText(s: HudState): HudText {
   return {
     // "recolectadas/20" como pide el GDD; pasa de 20 si recoges opcionales.
-    gems: line(`Gemas: ${s.gems}/${s.gemsRequired}`, s.gems >= s.gemsRequired ? 'good' : 'normal'),
+    gems: line(
+      `Nivel ${s.levelNumber}/${s.levelCount}  Gemas: ${s.gems}/${s.gemsRequired}`,
+      s.gems >= s.gemsRequired ? 'good' : 'normal',
+    ),
     // Último corazón en rojo: la UI avisa del peligro antes de que sea tarde.
     hearts: line(`Corazones: ${s.hearts}/${s.maxHearts}`, s.hearts <= 1 ? 'bad' : 'normal'),
     exit: s.exitOpen

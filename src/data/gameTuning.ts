@@ -12,6 +12,12 @@
 export const GAME_TUNING = {
   /** Corazones al empezar una run (aprobado). */
   startingHearts: 3,
+  /**
+   * true = los corazones que te quedan pasan al siguiente nivel, sin curar
+   * (elegido por Fernando el 2026-11-04). false = cada nivel empieza con
+   * `startingHearts`. Morir siempre reinicia la run desde el Nivel 1.
+   */
+  carryHeartsBetweenLevels: true,
   /** Velocidad del jugador en px/s (provisional). */
   playerSpeed: 160,
   /**

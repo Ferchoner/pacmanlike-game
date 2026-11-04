@@ -12,8 +12,15 @@ describe('Flujo de pantallas', () => {
     expect(nextScene(SceneKeys.Game, 'died')).toBe(SceneKeys.GameOver);
   });
 
-  it('desde las pantallas finales se juega otra vez (run nueva) o se vuelve al menú', () => {
-    for (const from of [SceneKeys.GameOver, SceneKeys.LevelComplete]) {
+  it('Nivel completado lleva al siguiente nivel, a la Victoria o al menú', () => {
+    expect(nextScene(SceneKeys.LevelComplete, 'next')).toBe(SceneKeys.Game);
+    expect(nextScene(SceneKeys.LevelComplete, 'finish')).toBe(SceneKeys.Victory);
+    expect(nextScene(SceneKeys.LevelComplete, 'menu')).toBe(SceneKeys.Menu);
+    expect(() => nextScene(SceneKeys.LevelComplete, 'retry')).toThrow();
+  });
+
+  it('desde Game Over y Victoria se juega otra vez (run nueva) o se vuelve al menú', () => {
+    for (const from of [SceneKeys.GameOver, SceneKeys.Victory]) {
       expect(nextScene(from, 'retry')).toBe(SceneKeys.Game);
       expect(nextScene(from, 'menu')).toBe(SceneKeys.Menu);
     }

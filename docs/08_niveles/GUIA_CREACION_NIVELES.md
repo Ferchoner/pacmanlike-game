@@ -168,19 +168,23 @@ izquierda. En Tiled la celda bajo el ratón aparece en la barra de estado inferi
 
 ## 5. Registrar el nivel y jugarlo
 
-1. En `src/data/levels/index.ts`, tradúcelo y añádelo a `LEVELS`:
+1. En `src/data/levels/index.ts`, tradúcelo y añádelo a `LEVELS`. **`LEVELS` es la campaña**: el
+   orden de la lista es el orden en que se juegan (así están `comienzo_mazmorras`, `catacumbas` y `sala_del_guardian`):
 
    ```ts
-   import { tiledToLevel } from '../../world/tiled/tiledToLevel';
-   import nivel2Tiled from '../../../tiled/mapas/nivel2.json';
+   import nivel4Tiled from '../../../tiled/mapas/nivel4.json';
 
-   export const LEVEL_2 = tiledToLevel(nivel2Tiled, { source: 'tiled/mapas/nivel2.json' });
-   export const LEVELS: readonly LevelDefinition[] = [LEVEL_1, LEVEL_2];
+   export const LEVEL_4 = tiledToLevel(nivel4Tiled, { source: 'tiled/mapas/nivel4.json' });
+   export const LEVELS: readonly LevelDefinition[] = [COMIENZO_MAZMORRAS, CATACUMBAS, SALA_DEL_GUARDIAN, LEVEL_4];
    ```
 
+   Y actualiza la prueba `tests/world/campaignLevels.test.ts`, que resume gemas y enemigos de
+   cada nivel: así un cambio en un mapa nunca pasa desapercibido.
+
 2. Arranca el juego en modo desarrollo (`npm run dev`) y abre la URL con `?nivel=<id>`, por ejemplo
-   `http://localhost:5173/?nivel=level-2`. Ese parámetro **solo funciona en desarrollo**; la
-   versión publicada siempre empieza en el Nivel 1.
+   `http://localhost:5173/?nivel=catacumbas`. La run empieza en ese nivel y, al completarlo, sigue con
+   el siguiente de la campaña. Ese parámetro **solo funciona en desarrollo**; la versión publicada
+   siempre empieza en el Nivel 1.
 3. Si algo falla, depende de en qué paso:
    - **Errores de validación** (`BORDER_OPEN`, `EXIT_UNREACHABLE`...): la partida no empieza y la
      pantalla muestra "Nivel inválido (TEMP)" con la lista de problemas.
@@ -190,8 +194,9 @@ izquierda. En Tiled la celda bajo el ratón aparece en la barra de estado inferi
    Por eso conviene pasar siempre antes `npm run level:check`, que muestra ambos tipos.
 4. Ejecuta `npm test` y `npm run build` antes de hacer commit.
 
-> Jugar varios niveles seguidos (completar el 1 y pasar al 2) **todavía no existe**: es una
-> ampliación del MVP y necesita una decisión aprobada. Esta guía solo cubre crear y probar niveles.
+> **Cómo se encadenan los niveles:** al tocar la puerta abierta aparece "Nivel completado" y ENTER
+> lleva al siguiente nivel con los corazones que te quedaron (`src/systems/campaign.ts`). Tras el
+> último nivel llega la pantalla de Victoria. Morir siempre vuelve al Nivel 1.
 
 ---
 

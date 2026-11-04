@@ -100,5 +100,14 @@ describe('PlayerHealth', () => {
   it('rechaza configuraciones sin sentido', () => {
     expect(() => new PlayerHealth({ startingHearts: 0, invulnerabilitySeconds: 0.8 })).toThrow();
     expect(() => new PlayerHealth({ startingHearts: 3, invulnerabilitySeconds: -1 })).toThrow();
+    expect(() => new PlayerHealth({ startingHearts: 3, invulnerabilitySeconds: 0.8, currentHearts: 0 })).toThrow();
+    expect(() => new PlayerHealth({ startingHearts: 3, invulnerabilitySeconds: 0.8, currentHearts: 4 })).toThrow();
+  });
+
+  it('en la campaña puede entrar al nivel con los corazones que le quedaron', () => {
+    const h = new PlayerHealth({ startingHearts: 3, invulnerabilitySeconds: 0.8, currentHearts: 1 });
+    expect(h.hearts).toBe(1);
+    expect(h.maxHearts).toBe(3);
+    expect(h.update(1 / 60, true)).toEqual([{ type: 'damaged', hearts: 0 }, { type: 'died' }]);
   });
 });

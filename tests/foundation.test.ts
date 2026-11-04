@@ -22,9 +22,9 @@ describe('Constantes técnicas (CONTEXTO_MAESTRO)', () => {
 });
 
 describe('Escenas', () => {
-  it('existen las escenas base (+ LevelComplete) con claves únicas', () => {
+  it('existen las escenas base (+ LevelComplete y Victory) con claves únicas', () => {
     const keys = Object.values(SceneKeys);
-    expect(keys).toEqual(['Boot', 'Preload', 'Menu', 'Game', 'GameOver', 'LevelComplete']);
+    expect(keys).toEqual(['Boot', 'Preload', 'Menu', 'Game', 'GameOver', 'LevelComplete', 'Victory']);
     expect(new Set(keys).size).toBe(keys.length);
   });
 });
@@ -33,6 +33,7 @@ describe('Valores de ajuste provisionales', () => {
   it('coinciden con los documentados', () => {
     expect(GAME_TUNING).toEqual({
       startingHearts: 3,
+      carryHeartsBetweenLevels: true,
       playerSpeed: 160,
       playerBodySize: 22,
       cornerAssistPx: 12,
