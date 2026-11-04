@@ -162,10 +162,10 @@ Interfaz y textos:
     N") y los corazones se dibujan directamente sobre la fila de
     ladrillos de arriba. Se lee, pero con poco contraste, sobre todo el
     rojo de "Puerta: faltan".
--   [ ] El "/N" de las gemas significa cosas distintas según la
-    pantalla: en el HUD es recogidas/**requeridas** ("Gemas: 2/25"); en
-    Nivel completado y Game Over es recogidas/**totales** ("Gemas:
-    27/30"). Elegir un criterio o decirlo en el texto.
+-   [x] El "/N" de las gemas significaba cosas distintas según la
+    pantalla. Decisión de Fernando (2026-11-04): en todas son las
+    **requeridas**; los resúmenes añaden el total ("Gemas: 27/25 (había
+    30)").
 -   [x] "Run" en los textos ("se pierde la run", "La run vuelve a
     empezar…"): cambiado por "partida" (Fernando, 2026-11-04; PR #14).
 -   [ ] La UI sigue siendo provisional (fuente del sistema, colores
