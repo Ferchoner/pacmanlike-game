@@ -20,6 +20,7 @@ import { GRID } from '../../src/core/GameConstants.ts';
 import type { LevelDefinition } from '../../src/world/LevelTypes.ts';
 import { convertTiledMap } from '../../src/world/tiled/tiledToLevel.ts';
 import { validateLevel } from '../../src/world/validateLevel.ts';
+import { gemSurplusWarning } from '../../src/world/levelDesignRules.ts';
 
 const file = process.argv[2];
 if (!file) {
@@ -74,8 +75,13 @@ if (report.stats) {
 for (const e of errors) console.log(`  ✖ [${e.code}] ${e.message}`);
 for (const w of warnings) console.log(`  ⚠ [${w.code}] ${w.message}`);
 
+// Regla de diseño (no de validez): se avisa, pero el nivel sigue siendo jugable.
+const surplus = gemSurplusWarning(def);
+if (surplus) console.log(`  ⚠ [GEM_SURPLUS] ${surplus}`);
+const totalWarnings = warnings.length + (surplus ? 1 : 0);
+
 if (!report.ok) {
-  console.log(`\n✖ El nivel NO es jugable: ${errors.length} errores, ${warnings.length} avisos.`);
+  console.log(`\n✖ El nivel NO es jugable: ${errors.length} errores, ${totalWarnings} avisos.`);
   process.exit(1);
 }
-console.log(`\n✔ Nivel válido${warnings.length ? ` (${warnings.length} avisos para revisar)` : ''}.`);
+console.log(`\n✔ Nivel válido${totalWarnings ? ` (${totalWarnings} avisos para revisar)` : ''}.`);

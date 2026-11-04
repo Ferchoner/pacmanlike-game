@@ -174,9 +174,9 @@ Interfaz y textos:
 
 Técnicos y de proceso:
 
--   [ ] `level:check` no avisa si un nivel nuevo incumple la regla de
-    "sobran entre 5 y 8 gemas"; hoy solo lo vigila la prueba de la
-    campaña al añadirlo a `LEVELS`.
+-   [x] `level:check` no avisaba si un nivel nuevo incumplía la regla de
+    "sobran entre 5 y 8 gemas". Corregido: aviso `GEM_SURPLUS`, que dice
+    qué valores de `gemasRequeridas` valdrían (`src/world/levelDesignRules.ts`).
 -   [ ] 10 archivos de `public/assets` que el juego no usa (incluidos 3
     `.aseprite`) se copian a `dist/` en cada build. No llegan al .zip,
     pero conviene sacarlos de `public/` (sin borrar los originales de
