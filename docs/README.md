@@ -1,4 +1,4 @@
-# PAC-BIG-MAN --- Paquete inicial v1.0
+# Search and Run (antes PAC-BIG-MAN) --- Paquete inicial v1.0
 
 Paquete autónomo para Claude, ChatGPT u otra IA.
 

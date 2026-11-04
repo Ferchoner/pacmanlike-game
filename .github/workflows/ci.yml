@@ -1,0 +1,41 @@
+# Integración continua (CI): en cada PR y en cada push a main, GitHub instala
+# el proyecto en una máquina limpia y comprueba que todo sigue en verde.
+# Si algo falla, el PR aparece con una cruz roja antes de fusionarlo.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  comprobar:
+    name: Tipos, pruebas, niveles y build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22 # el proyecto pide Node 22.18 o superior
+          cache: npm
+
+      - name: Instalar dependencias (exactas, desde package-lock.json)
+        run: npm ci
+
+      - name: Comprobar tipos
+        run: npm run typecheck
+
+      - name: Pruebas
+        run: npm test
+
+      - name: Validar los mapas de Tiled
+        run: |
+          for mapa in tiled/mapas/*.json; do
+            echo "::group::$mapa"
+            npm run -s level:check -- "$mapa"
+            echo "::endgroup::"
+          done
+
+      - name: Build de producción
+        run: npm run build

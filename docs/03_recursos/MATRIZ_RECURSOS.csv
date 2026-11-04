@@ -1,20 +1,20 @@
 ﻿ID,Entidad,Tipo,Recurso,Prioridad,Cantidad,Formato,Dimensiones/referencia,Animación/evento,Estado,Origen previsto,Proveedor/autor,URL/licencia,Notas
-R-001,Jugador,Spritesheet,Idle,P0,1,PNG,Según proveedor,idle,Pendiente,Mixto,,,Puede integrarse en sheet principal
-R-002,Jugador,Spritesheet,Movimiento,P0,1,PNG,Según proveedor,walk 4 direcciones; diagonal opcional,Pendiente,Mixto,,,Confirmar filas/direcciones
-R-003,Jugador,Spritesheet,Daño,P0,1,PNG,Según proveedor,damage/hit,Pendiente,Mixto,,,Puede formar parte del sheet principal
-R-004,Jugador,Spritesheet,Muerte,P0,1,PNG,Según proveedor,death,Pendiente,Mixto,,,Puede formar parte del sheet principal
-R-005,Hunter,Spritesheet,Movimiento,P0,1,PNG,Según proveedor,walk/chase,Pendiente,Mixto,,,IA controla persecución
+R-001,Jugador,Spritesheet,Idle,P0,1,PNG,Según proveedor,idle,Uso temporal,Mixto,Zerie,https://zerie.itch.io/tiny-rpg-character-asset-pack,Puede integrarse en sheet principal
+R-002,Jugador,Spritesheet,Movimiento,P0,1,PNG,Según proveedor,walk 4 direcciones; diagonal opcional,Uso temporal,Mixto,Zerie,https://zerie.itch.io/tiny-rpg-character-asset-pack,Confirmar filas/direcciones
+R-003,Jugador,Spritesheet,Daño,P0,1,PNG,Según proveedor,damage/hit,Uso temporal,Mixto,Zerie,https://zerie.itch.io/tiny-rpg-character-asset-pack,Puede formar parte del sheet principal
+R-004,Jugador,Spritesheet,Muerte,P0,1,PNG,Según proveedor,death,Uso temporal,Mixto,Zerie,https://zerie.itch.io/tiny-rpg-character-asset-pack,Puede formar parte del sheet principal
+R-005,Hunter,Spritesheet,Movimiento,P0,1,PNG,Según proveedor,walk/chase,Uso temporal,Mixto,Zerie,https://zerie.itch.io/tiny-rpg-character-asset-pack,IA controla persecución
 R-006,Hunter,Spritesheet,Daño/muerte,P1,1,PNG,Según proveedor,hit/death si aplica,Pendiente,Mixto,,,Confirmar necesidad
-R-007,Patrol,Spritesheet,Movimiento,P0,1,PNG,Según proveedor,walk direccional,Pendiente,Mixto,,,IA controla waypoints
-R-008,Patrol,Spritesheet,Idle,P1,1,PNG,Según proveedor,idle,Pendiente,Mixto,,,Opcional
-R-009,Mazmorra,Tileset,Suelo,P0,1,PNG,Tiles 16×16,N/A,Pendiente,Mixto,,,Variaciones visuales
-R-010,Mazmorra,Tileset,Paredes/esquinas,P0,1,PNG,Tiles 16×16,N/A,Pendiente,Mixto,,,"Rectas, esquinas, uniones y extremos"
+R-007,Patrol,Spritesheet,Movimiento,P0,1,PNG,Según proveedor,walk direccional,Uso temporal,Mixto,Zerie,https://zerie.itch.io/tiny-rpg-character-asset-pack-02,IA controla waypoints
+R-008,Patrol,Spritesheet,Idle,P1,1,PNG,Según proveedor,idle,Uso temporal,Mixto,Zerie,https://zerie.itch.io/tiny-rpg-character-asset-pack-02,Opcional
+R-009,Mazmorra,Tileset,Suelo,P0,1,PNG,Tiles 16×16,N/A,Uso temporal,Mixto,Seth,https://sethbb.itch.io/32rogues,Variaciones visuales
+R-010,Mazmorra,Tileset,Paredes/esquinas,P0,1,PNG,Tiles 16×16,N/A,Uso temporal,Mixto,Seth,https://sethbb.itch.io/32rogues,"Rectas, esquinas, uniones y extremos"
 R-011,Mazmorra,Tileset,Transiciones/decoración,P1,1,PNG,Tiles 16×16,N/A,Pendiente,Mixto,,,Decoración sin colisión salvo definición
-R-012,Gema,Sprite,Coleccionable,P0,1,PNG,16×16 o múltiplos,shine opcional,Pendiente,Mixto,,,Puede ser estática
-R-013,Puerta,Sprite/Sheet,Cerrada,P0,1,PNG,Según proveedor,locked,Pendiente,Mixto,,,Salida bloqueada
-R-014,Puerta,Sprite/Sheet,Abierta,P0,1,PNG,Según proveedor,open/unlocked,Pendiente,Mixto,,,Se activa con 20 gemas
-R-015,HUD,Iconos,Corazón lleno/vacío,P0,1 conjunto,PNG,16×16 o múltiplos,N/A,Pendiente,Mixto,,,Tres corazones
-R-016,HUD,UI,Contador gemas,P0,1,PNG o UI,Adaptable,N/A,Pendiente,Mixto,,,Mostrar collected/20
+R-012,Gema,Sprite,Coleccionable,P0,1,PNG,16×16 o múltiplos,shine opcional,Uso temporal,Mixto,Vryell,https://vryell.itch.io/tiny-gui-pack,Puede ser estática
+R-013,Puerta,Sprite/Sheet,Cerrada,P0,1,PNG,Según proveedor,locked,Uso temporal,Mixto,Seth,https://sethbb.itch.io/32rogues,Salida bloqueada
+R-014,Puerta,Sprite/Sheet,Abierta,P0,1,PNG,Según proveedor,open/unlocked,Uso temporal,Mixto,Seth,https://sethbb.itch.io/32rogues,Se activa con las gemas requeridas del nivel
+R-015,HUD,Iconos,Corazón lleno/vacío,P0,1 conjunto,PNG,16×16 o múltiplos,N/A,Uso temporal,Mixto,Vryell,https://vryell.itch.io/tiny-gui-pack,Tres corazones
+R-016,HUD,UI,Contador gemas,P0,1,PNG o UI,Adaptable,N/A,Pendiente,Mixto,,,Mostrar recogidas/requeridas del nivel
 R-017,UI,Pantalla,Game Over,P1,1 conjunto,PNG/elementos,Adaptable,N/A,Pendiente,Mixto,,,Puede componerse con UI externa
 R-018,UI,Pantalla,Nivel completado,P1,1 conjunto,PNG/elementos,Adaptable,N/A,Pendiente,Mixto,,,Puede componerse con UI externa
 R-019,Audio,Música,Tema del nivel,P1,1,OGG/MP3,N/A,loop opcional,Pendiente,Mixto,,,Registrar loop
@@ -25,4 +25,4 @@ R-023,Audio,SFX,Desbloqueo puerta,P0,1,OGG/WAV,N/A,exit:unlocked,Pendiente,Mixto
 R-024,Audio,SFX,Victoria/salida,P1,1,OGG/WAV,N/A,level:completed,Pendiente,Mixto,,,One-shot
 R-025,Audio,SFX,Enemigos/ambiente,P2,Variable,OGG/WAV,N/A,según recurso,Pendiente,Mixto,,,Opcional
 R-026,Fuentes,Tipografía,Fuente UI,P2,1,WOFF2/WOFF/TTF,N/A,N/A,Pendiente,Mixto,,,Licencia y fallback
-R-027,Hunter,Spritesheet,Idle,P1,1,PNG,Según proveedor,idle,Uso temporal,Mixto,,,Añadido 2026-11-03 (Orc_Idle temporal)
+R-027,Hunter,Spritesheet,Idle,P1,1,PNG,Según proveedor,idle,Uso temporal,Mixto,Zerie,https://zerie.itch.io/tiny-rpg-character-asset-pack,Añadido 2026-11-03 (Orc_Idle temporal)

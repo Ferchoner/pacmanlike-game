@@ -1,6 +1,6 @@
 # Guía de creación y edición de niveles (Tiled)
 
-Esta guía explica cómo dibujar un nivel nuevo de PAC-BIG-MAN con **Tiled**, comprobar que es
+Esta guía explica cómo dibujar un nivel nuevo de Search and Run con **Tiled**, comprobar que es
 jugable y probarlo en el juego. Está pensada para aprender: cada paso dice **qué** hacer y
 **por qué** el juego lo necesita así.
 
@@ -39,7 +39,7 @@ Tiled es un cuadro gris **TEMP**: sirve para editar, nunca aparece en el juego.
 
 1. Descarga Tiled desde <https://www.mapeditor.org> (gratis; en itch.io puedes pagar 0).
    Usa la **versión 1.10 o más nueva**: así funcionan las clases de objeto del proyecto.
-2. Abre Tiled y elige **File → Open File or Project…** y abre `tiled/pac-big-man.tiled-project`
+2. Abre Tiled y elige **File → Open File or Project…** y abre `tiled/search-and-run.tiled-project`
    (está en la raíz del repositorio).
 
 El archivo de proyecto define las **clases** (`jugador`, `hunter`, `patrol`, `salida`, `gema`,
@@ -204,7 +204,7 @@ izquierda. En Tiled la celda bajo el ratón aparece en la barra de estado inferi
 
 | Archivo | Qué es |
 |---|---|
-| `tiled/pac-big-man.tiled-project` | Proyecto de Tiled con las clases y sus colores. |
+| `tiled/search-and-run.tiled-project` | Proyecto de Tiled con las clases y sus colores. |
 | `tiled/plantilla_nivel.json` | Punto de partida para un nivel nuevo. |
 | `tiled/mapas/nivel1_referencia.json` | Nivel 1 en Tiled (solo lectura; se regenera con `npm run level:export-nivel1`). |
 | `tiled/tilesets/paredes_TEMP.tsx` / `.png` | Tileset técnico TEMP para pintar paredes. |

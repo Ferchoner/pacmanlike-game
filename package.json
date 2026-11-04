@@ -1,8 +1,8 @@
 {
-  "name": "pac-big-man",
+  "name": "search-and-run",
   "private": true,
   "version": "0.1.0-beta.1",
-  "description": "PAC-BIG-MAN: juego 2D arcade de laberinto (Phaser 4 + TypeScript + Vite)",
+  "description": "Search and Run: juego 2D arcade de laberinto (Phaser 4 + TypeScript + Vite)",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -1,5 +1,5 @@
 import type { RunSummary } from '../../systems/runSummary';
-import { BETA_NOTICE, RELEASE_STAGE } from '../../core/release';
+import { BETA_NOTICE, GAME_TITLE, RELEASE_STAGE } from '../../core/release';
 
 /**
  * TEXTOS de la UI, como funciones PURAS (sin Phaser): reciben el estado y
@@ -21,7 +21,7 @@ export interface ScreenLine {
 const line = (text: string, tone: LineTone = 'normal'): ScreenLine => ({ text, tone });
 
 export const MENU_LINES: readonly ScreenLine[] = [
-  line('PAC-BIG-MAN', 'title'),
+  line(GAME_TITLE, 'title'),
   line('Recoge gemas, esquiva a los monstruos y escapa por la puerta.'),
   line('Reúne las gemas que pide cada nivel y toca la puerta para pasar al siguiente.'),
   line('Tienes 3 corazones para toda la aventura: no se recuperan entre niveles.'),
@@ -37,7 +37,7 @@ export function gameOverLines(run: RunSummary): ScreenLine[] {
     line('Te quedaste sin corazones.', 'bad'),
     line(`Llegaste al ${levelTitle(run)}`),
     line(`Gemas recogidas: ${run.gems}/${run.totalGems} (hacían falta ${run.gemsRequired})`),
-    line('La run vuelve a empezar desde cero, en el Nivel 1.', 'hint'),
+    line('La partida vuelve a empezar desde cero, en el Nivel 1.', 'hint'),
     ...replayPrompt(),
   ];
 }
@@ -70,7 +70,7 @@ export function levelCompleteLines(run: RunSummary, nextHearts: number): ScreenL
           line(`Entras al siguiente nivel con ${nextHearts}/${run.maxHearts} corazones.`, 'hint'),
           line('ENTER o ESPACIO: siguiente nivel', 'good'),
         ]),
-    line('ESC: volver al menú (se pierde la run)', 'hint'),
+    line('ESC: volver al menú (se pierde la partida)', 'hint'),
   ];
 }
 
@@ -79,7 +79,7 @@ export function victoryLines(run: RunSummary): ScreenLine[] {
   return [
     line('¡VICTORIA!', 'title'),
     line(`Escapaste de los ${run.levelCount} niveles.`, 'good'),
-    line(`Gemas en toda la run: ${run.campaign.gemsSoFar}`),
+    line(`Gemas en toda la partida: ${run.campaign.gemsSoFar}`),
     line(`Corazones al final: ${run.hearts}/${run.maxHearts}`),
     ...replayPrompt(),
   ];

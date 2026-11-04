@@ -17,7 +17,11 @@ archivo y rellenar su entrada en `manifest.json`.
    - `status`: `"approved"` cuando el checklist de `docs/05_control/` esté completo, o
      `"temp-dev"` para un recurso gratuito que solo se usa mientras se desarrolla (ver 6).
 4. Registra la licencia en `docs/05_control/REGISTRO_LICENCIAS.csv`.
-5. `npm test` (valida el manifest) y `npm run dev` para verlo. La consola del navegador muestra
+5. Actualiza **a mano** la fila del recurso en `MATRIZ_RECURSOS.csv` y `MATRIZ_RECURSOS.xlsx`
+   (Estado, Proveedor/autor, URL/licencia). Equivalencias: `pending` = Pendiente (o En búsqueda,
+   Seleccionado, Recibido, Validando…), `temp-dev` = Uso temporal, `approved` = Aprobado.
+   Si se te olvida, `tests/presentation/resourceMatrix.test.ts` falla y dice qué fila no cuadra.
+6. `npm test` (valida el manifest y la matriz) y `npm run dev` para verlo. La consola del navegador muestra
    `[recursos] N aprobados · M pendientes` y cualquier error de la ficha.
 
 Mientras un recurso no esté `"approved"`, el juego usa su placeholder TEMP. Si un archivo

@@ -19,6 +19,7 @@
  * - AVISOS: se puede publicar, pero conviene saberlo (recursos P1/P2 que
  *   faltan, archivos de `public/` que el juego no usa y se dejan fuera).
  */
+import { GAME_TITLE } from '../../src/core/release.ts';
 import { readManifest, type AssetManifest, type ManifestEntry } from '../../src/presentation/assets/assetManifest.ts';
 
 /**
@@ -176,7 +177,7 @@ export function creditsText(manifest: AssetManifest, mode: ReleaseMode, version:
     const key = entry.source_url ?? entry.path;
     groups.set(key, [...(groups.get(key) ?? []), entry]);
   }
-  const lines: string[] = [`PAC-BIG-MAN ${version}`, ''];
+  const lines: string[] = [`${GAME_TITLE} ${version}`, ''];
   if (mode === 'beta') {
     lines.push(
       'VERSIÓN BETA: no es un producto terminado.',

@@ -1,4 +1,7 @@
-# PAC-BIG-MAN --- Contexto maestro
+# Search and Run --- Contexto maestro
+
+> Nombre público decidido por Fernando el 2026-11-04. El nombre de trabajo
+> original era "PAC-BIG-MAN"; algunos documentos históricos lo conservan.
 
 ## Identidad y objetivo
 
@@ -49,6 +52,13 @@ protegidos de otras obras.
     Todos los mapas viven en Tiled (`tiled/mapas/`). El primer nivel es
     el rediseño de Fernando del Nivel 1; el Blueprint v0.1 de abajo queda
     como referencia histórica y ya no está en la campaña.
+-   Nombre del juego: **Search and Run** (Fernando, 2026-11-04), en el
+    menú, en el build, en los créditos y en itch.io.
+-   Fase de mantenimiento antes de publicar otra versión (Fernando,
+    2026-11-04): de momento no se publica; faltan detalles del juego.
+-   La matriz de recursos se mantiene a mano (Fernando, 2026-11-04). Una
+    prueba (`tests/presentation/resourceMatrix.test.ts`) avisa si no
+    coincide con el manifest en IDs, prioridad o estado.
 
 ## Recursos externos: decisión obligatoria
 
@@ -119,9 +129,63 @@ monolítica.
 
 ## Pendientes
 
-Cámara fija o seguimiento; densidad final y balance; paquetes de arte;
-dimensiones exactas de sprites; secuencias/FPS; mezcla de audio; valores
-definitivos de velocidad, detección e invulnerabilidad.
+Estado al 2026-11-04:
+
+-   Arte definitivo: hoy hay 14 recursos de uso temporal (`temp-dev`,
+    válidos para la beta, no para la versión final).
+-   Audio: no hay ninguno. Faltan los SFX P0 R-020 (gema), R-021 (daño),
+    R-022 (muerte) y R-023 (puerta), y el icono del contador de gemas
+    R-016.
+-   FPS de las animaciones: provisionales (idle 6, walk 10, daño 12,
+    muerte 4) hasta tener el arte definitivo.
+-   Balance: valores definitivos de velocidad, detección e
+    invulnerabilidad; densidad de enemigos y gemas por nivel.
+-   Mezcla de audio, cuando llegue el audio.
+-   Cámara: hoy fija (el mapa cabe en 768×576); revisar si un nivel
+    futuro es más grande.
+
+### Detalles a corregir del juego
+
+Lista de Fernando (desde el 2026-11-04), con los detalles vistos en la
+revisión de estado de ese día. Se corrigen antes de la próxima
+publicación, cada uno con su aprobación. Al corregir uno, marcarlo [x]
+y anotar el PR.
+
+Interfaz y textos:
+
+-   [ ] Menú: dos líneas de texto ("Reúne las gemas que pide cada
+    nivel…" y "Tienes 3 corazones para toda la aventura…") son más
+    anchas que la pantalla de 768 px y se cortan por los lados.
+-   [ ] HUD sin fondo: el texto ("Nivel 1/3 Gemas…", "Puerta: faltan
+    N") y los corazones se dibujan directamente sobre la fila de
+    ladrillos de arriba. Se lee, pero con poco contraste, sobre todo el
+    rojo de "Puerta: faltan".
+-   [ ] El "/N" de las gemas significa cosas distintas según la
+    pantalla: en el HUD es recogidas/**requeridas** ("Gemas: 2/25"); en
+    Nivel completado y Game Over es recogidas/**totales** ("Gemas:
+    27/30"). Elegir un criterio o decirlo en el texto.
+-   [x] "Run" en los textos ("se pierde la run", "La run vuelve a
+    empezar…"): cambiado por "partida" (Fernando, 2026-11-04; PR #14).
+-   [ ] La UI sigue siendo provisional (fuente del sistema, colores
+    planos, pantallas solo de texto): pendiente de R-017 (Game Over),
+    R-018 (Nivel completado) y R-026 (fuente).
+
+Técnicos y de proceso:
+
+-   [ ] `level:check` no avisa si un nivel nuevo incumple la regla de
+    "sobran entre 5 y 8 gemas"; hoy solo lo vigila la prueba de la
+    campaña al añadirlo a `LEVELS`.
+-   [ ] 10 archivos de `public/assets` que el juego no usa (incluidos 3
+    `.aseprite`) se copian a `dist/` en cada build. No llegan al .zip,
+    pero conviene sacarlos de `public/` (sin borrar los originales de
+    `assets/source/`).
+-   [ ] Antes de publicar: subir la versión de `package.json` y hacer
+    las pruebas manuales en Chrome y Firefox con la campaña completa
+    (`docs/07_publicacion/CHECKLIST_PRUEBAS_FASE9.md`).
+-   [ ] Carpeta compartida del proyecto: la copia de `docs/` es de antes
+    de la Fase 8; actualizarla o borrarla.
+
+Recursos (ver Pendientes): audio P0 R-020…R-023 e icono R-016.
 
 ## Principio rector
 
