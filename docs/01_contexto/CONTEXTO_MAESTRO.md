@@ -144,6 +144,15 @@ Estado al 2026-11-04:
 -   Cámara: hoy fija (el mapa cabe en 768×576); revisar si un nivel
     futuro es más grande.
 
+### Detalles a corregir del juego
+
+Lista de Fernando (desde el 2026-11-04). Se corrigen antes de la
+próxima publicación, cada uno con su aprobación.
+
+-   [ ] Menú: dos líneas de texto ("Reúne las gemas que pide cada
+    nivel…" y "Tienes 3 corazones para toda la aventura…") son más
+    anchas que la pantalla de 768 px y se cortan por los lados.
+
 ## Principio rector
 
 Primero una versión pequeña, completa, comprensible y publicable. No
