@@ -36,10 +36,19 @@ export function gameOverLines(run: RunSummary): ScreenLine[] {
     line('GAME OVER', 'title'),
     line('Te quedaste sin corazones.', 'bad'),
     line(`Llegaste al ${levelTitle(run)}`),
-    line(`Gemas recogidas: ${run.gems}/${run.totalGems} (hacían falta ${run.gemsRequired})`),
+    line(`Gemas recogidas: ${gemsOverRequired(run)}`),
     line('La partida vuelve a empezar desde cero, en el Nivel 1.', 'hint'),
     ...replayPrompt(),
   ];
+}
+
+/**
+ * "27/25 (había 30)". En TODAS las pantallas el "/N" son las gemas REQUERIDAS,
+ * como en el HUD (decisión de Fernando, 2026-11-04); el total del nivel va
+ * aparte entre paréntesis. Así una barra nunca significa dos cosas distintas.
+ */
+function gemsOverRequired(run: RunSummary): string {
+  return `${run.gems}/${run.gemsRequired} (había ${run.totalGems})`;
 }
 
 /** "Nivel 2/3: Las Catacumbas". */
@@ -57,12 +66,11 @@ export function isFinalLevel(run: RunSummary): boolean {
  * `campaign.nextLevelRun` (que respeta `carryHeartsBetweenLevels`) y los pasa aquí.
  */
 export function levelCompleteLines(run: RunSummary, nextHearts: number): ScreenLine[] {
-  const extra = run.gems - run.gemsRequired;
   const last = isFinalLevel(run);
   return [
     line('¡NIVEL COMPLETADO!', 'title'),
     line(`Escapaste del ${levelTitle(run)}`, 'good'),
-    line(`Gemas: ${run.gems}/${run.totalGems}` + (extra > 0 ? ` (+${extra} opcionales)` : '')),
+    line(`Gemas: ${gemsOverRequired(run)}`),
     line(`Corazones: ${run.hearts}/${run.maxHearts}`),
     ...(last
       ? [line('ENTER o ESPACIO: continuar', 'good')]

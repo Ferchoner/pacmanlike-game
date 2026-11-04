@@ -67,15 +67,15 @@ describe('Pantallas', () => {
   it('Game Over muestra las gemas reales y avisa del reinicio', () => {
     const t = texts(gameOverLines(run({ outcome: 'died', gems: 13, hearts: 0 })));
     expect(t).toMatch(/GAME OVER/);
-    expect(t).toMatch(/13\/25/);
+    expect(t).toMatch(/Gemas recogidas: 13\/20 \(había 25\)/);
     expect(t).toMatch(/desde cero, en el Nivel 1/);
     expect(t).toMatch(/Nivel 1\/3: El Primer Laberinto/);
     expect(t).toMatch(/ESC/);
   });
 
-  it('Nivel completado muestra gemas, opcionales y corazones restantes', () => {
+  it('Nivel completado muestra gemas (recogidas/requeridas y el total) y corazones restantes', () => {
     const t = texts(levelCompleteLines(run({ gems: 23, hearts: 2 }), 2));
-    expect(t).toMatch(/Gemas: 23\/25 \(\+3 opcionales\)/);
+    expect(t).toMatch(/Gemas: 23\/20 \(había 25\)/);
     expect(t).toMatch(/Corazones: 2\/3/);
     expect(t).toMatch(/Escapaste del Nivel 1\/3: El Primer Laberinto/);
   });
@@ -100,8 +100,12 @@ describe('Pantallas', () => {
     expect(t).toMatch(/Corazones al final: 1\/3/);
   });
 
-  it('sin gemas opcionales no muestra el "+0"', () => {
-    expect(texts(levelCompleteLines(run(), 3))).not.toMatch(/opcionales/);
+  it('el "/N" de las gemas son las requeridas en HUD, Nivel completado y Game Over', () => {
+    const r = run({ gems: 7, gemsRequired: 28, totalGems: 35 });
+    const hud = hudText({ gems: 7, gemsRequired: 28, hearts: 3, maxHearts: 3, exitOpen: false, levelNumber: 2, levelCount: 3 });
+    expect(hud.gems.text).toMatch(/7\/28/);
+    expect(texts(levelCompleteLines(r, 3))).toMatch(/7\/28 \(había 35\)/);
+    expect(texts(gameOverLines({ ...r, outcome: 'died' }))).toMatch(/7\/28 \(había 35\)/);
   });
 
   it('los textos dicen "partida", no "run" (decisión de Fernando, 2026-11-04)', () => {

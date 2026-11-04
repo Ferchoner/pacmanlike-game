@@ -17,3 +17,8 @@ export const TONE_STYLE: Record<LineTone, { readonly size: number; readonly colo
 
 /** Tamaño del texto del HUD (cabe en la fila superior de 32 px, que es pared). */
 export const HUD_FONT_SIZE = 16;
+
+/** Franja del HUD: alto de la fila superior (1 celda), color y opacidad (0 = invisible, 1 = opaca). */
+export const HUD_BAND_HEIGHT = 32;
+export const HUD_BAND_COLOR = 0x000000;
+export const HUD_BAND_ALPHA = 0.7;

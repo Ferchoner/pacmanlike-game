@@ -153,17 +153,19 @@ y anotar el PR.
 
 Interfaz y textos:
 
--   [ ] Menú: dos líneas de texto ("Reúne las gemas que pide cada
-    nivel…" y "Tienes 3 corazones para toda la aventura…") son más
-    anchas que la pantalla de 768 px y se cortan por los lados.
--   [ ] HUD sin fondo: el texto ("Nivel 1/3 Gemas…", "Puerta: faltan
-    N") y los corazones se dibujan directamente sobre la fila de
-    ladrillos de arriba. Se lee, pero con poco contraste, sobre todo el
-    rojo de "Puerta: faltan".
--   [ ] El "/N" de las gemas significa cosas distintas según la
-    pantalla: en el HUD es recogidas/**requeridas** ("Gemas: 2/25"); en
-    Nivel completado y Game Over es recogidas/**totales** ("Gemas:
-    27/30"). Elegir un criterio o decirlo en el texto.
+-   [x] Menú: dos líneas de texto ("Reúne las gemas que pide cada
+    nivel…" y "Tienes 3 corazones para toda la aventura…") eran más
+    anchas que la pantalla de 768 px y se cortaban por los lados.
+    Corregido: las pantallas de texto parten las líneas largas con 32 px
+    de margen.
+-   [x] HUD sin fondo: el texto y los corazones se dibujaban
+    directamente sobre la fila de ladrillos de arriba, con poco
+    contraste. Corregido: franja negra al 70 % detrás del HUD (valores
+    en `uiTheme.ts`).
+-   [x] El "/N" de las gemas significaba cosas distintas según la
+    pantalla. Decisión de Fernando (2026-11-04): en todas son las
+    **requeridas**; los resúmenes añaden el total ("Gemas: 27/25 (había
+    30)").
 -   [x] "Run" en los textos ("se pierde la run", "La run vuelve a
     empezar…"): cambiado por "partida" (Fernando, 2026-11-04; PR #14).
 -   [ ] La UI sigue siendo provisional (fuente del sistema, colores

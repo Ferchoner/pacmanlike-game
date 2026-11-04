@@ -11,18 +11,27 @@ import { SHOW_DEV_TOOLS } from '../../core/devTools';
 export function renderTempScreen(scene: Phaser.Scene, lines: readonly ScreenLine[]): void {
   const { width, height } = scene.scale;
   const gap = 14;
-  const heights = lines.map((l) => TONE_STYLE[l.tone].size + gap + (l.tone === 'title' ? 24 : 0));
-  let y = (height - heights.reduce((a, b) => a + b, 0)) / 2;
-  lines.forEach((l, i) => {
+  // Margen a cada lado: una línea más ancha que la pantalla se parte en dos
+  // (`wordWrap`) en vez de cortarse por los bordes. Por eso primero se crean
+  // los textos y DESPUÉS se colocan: hasta crearlos no sabemos cuántas líneas
+  // ocupa cada uno, y sin esa altura no se puede centrar el bloque.
+  const margin = 32;
+  const texts = lines.map((l) => {
     const style = TONE_STYLE[l.tone];
-    scene.add
-      .text(width / 2, y + style.size / 2, l.text, {
+    return scene.add
+      .text(width / 2, 0, l.text, {
         fontFamily: UI_FONT_FAMILY,
         fontSize: `${style.size}px`,
         color: style.color,
         align: 'center',
+        wordWrap: { width: width - margin * 2, useAdvancedWrap: true },
       })
-      .setOrigin(0.5);
+      .setOrigin(0.5, 0);
+  });
+  const heights = texts.map((t, i) => t.height + gap + (lines[i]!.tone === 'title' ? 24 : 0));
+  let y = (height - heights.reduce((a, b) => a + b, 0)) / 2;
+  texts.forEach((t, i) => {
+    t.setY(y);
     y += heights[i]!;
   });
   // Recordatorio para desarrollar; en el build publicado no se muestra.
