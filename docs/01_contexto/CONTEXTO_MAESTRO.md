@@ -158,10 +158,10 @@ Interfaz y textos:
     anchas que la pantalla de 768 px y se cortaban por los lados.
     Corregido: las pantallas de texto parten las líneas largas con 32 px
     de margen.
--   [ ] HUD sin fondo: el texto ("Nivel 1/3 Gemas…", "Puerta: faltan
-    N") y los corazones se dibujan directamente sobre la fila de
-    ladrillos de arriba. Se lee, pero con poco contraste, sobre todo el
-    rojo de "Puerta: faltan".
+-   [x] HUD sin fondo: el texto y los corazones se dibujaban
+    directamente sobre la fila de ladrillos de arriba, con poco
+    contraste. Corregido: franja negra al 70 % detrás del HUD (valores
+    en `uiTheme.ts`).
 -   [x] El "/N" de las gemas significaba cosas distintas según la
     pantalla. Decisión de Fernando (2026-11-04): en todas son las
     **requeridas**; los resúmenes añaden el total ("Gemas: 27/25 (había

@@ -1,6 +1,6 @@
 import type Phaser from 'phaser';
 import { hudText, type HudState, type ScreenLine } from './ui/screenText';
-import { HUD_FONT_SIZE, TONE_STYLE, UI_FONT_FAMILY } from './ui/uiTheme';
+import { HUD_BAND_ALPHA, HUD_BAND_COLOR, HUD_BAND_HEIGHT, HUD_FONT_SIZE, TONE_STYLE, UI_FONT_FAMILY } from './ui/uiTheme';
 import { Frames } from './assets/assetKeys';
 import type { FrameRef } from './assets/gameAssets';
 import { loadedFrame } from './PickupViews';
@@ -27,6 +27,14 @@ export class TempHud {
   constructor(private readonly scene: Phaser.Scene) {
     const style = { fontFamily: UI_FONT_FAMILY, fontSize: `${HUD_FONT_SIZE}px`, color: '#ffffff' };
     const { width } = scene.scale;
+    // Franja oscura semitransparente detrás del HUD: sin ella, el texto se
+    // dibujaba directamente sobre los ladrillos de la fila de arriba y se leía
+    // mal (sobre todo el rojo). Se ven los ladrillos debajo, pero el texto
+    // tiene contraste. Va justo por debajo del texto (profundidad 9 < 10).
+    scene.add
+      .rectangle(0, 0, width, HUD_BAND_HEIGHT, HUD_BAND_COLOR, HUD_BAND_ALPHA)
+      .setOrigin(0, 0)
+      .setDepth(9);
     this.gems = scene.add.text(8, 7, '', style).setDepth(10);
     this.hearts = scene.add.text(width / 2, 7, '', style).setOrigin(0.5, 0).setDepth(10);
     this.exit = scene.add.text(width - 8, 7, '', style).setOrigin(1, 0).setDepth(10);
