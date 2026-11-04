@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { LEVEL_1, LEVELS } from '../../src/data/levels';
+import { COMIENZO_MAZMORRAS, LEVELS } from '../../src/data/levels';
 import { validateLevel } from '../../src/world/validateLevel';
 
 describe('Niveles de la campaña', () => {
-  it('el Nivel 1 aprobado va primero', () => {
-    expect(LEVELS[0]).toBe(LEVEL_1);
+  it('el primer nivel es "Comienzo de las mazmorras" (diseño de Fernando)', () => {
+    expect(LEVELS[0]).toBe(COMIENZO_MAZMORRAS);
+    expect(LEVELS[0]!.name).toBe('Comienzo de las mazmorras');
   });
 
   it('cada nivel es válido (sin errores) y tiene un id único', () => {
@@ -24,9 +25,9 @@ describe('Niveles de la campaña', () => {
       patrols: l.declared.patrols.length,
     }));
     expect(resumen).toEqual([
-      { id: 'level-1', gemas: 25, requeridas: 20, hunters: 2, patrols: 1 },
-      { id: 'level-2', gemas: 25, requeridas: 20, hunters: 2, patrols: 2 },
-      { id: 'level-3', gemas: 30, requeridas: 24, hunters: 3, patrols: 2 },
+      { id: 'comienzo-mazmorras', gemas: 30, requeridas: 25, hunters: 2, patrols: 2 },
+      { id: 'catacumbas', gemas: 35, requeridas: 20, hunters: 3, patrols: 3 },
+      { id: 'sala-del-guardian', gemas: 40, requeridas: 24, hunters: 4, patrols: 3 },
     ]);
   });
 });

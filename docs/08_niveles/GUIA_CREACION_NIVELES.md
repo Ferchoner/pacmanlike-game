@@ -169,20 +169,20 @@ izquierda. En Tiled la celda bajo el ratón aparece en la barra de estado inferi
 ## 5. Registrar el nivel y jugarlo
 
 1. En `src/data/levels/index.ts`, tradúcelo y añádelo a `LEVELS`. **`LEVELS` es la campaña**: el
-   orden de la lista es el orden en que se juegan (así están el Nivel 2 y el Nivel 3):
+   orden de la lista es el orden en que se juegan (así están `comienzo_mazmorras`, `catacumbas` y `sala_del_guardian`):
 
    ```ts
    import nivel4Tiled from '../../../tiled/mapas/nivel4.json';
 
    export const LEVEL_4 = tiledToLevel(nivel4Tiled, { source: 'tiled/mapas/nivel4.json' });
-   export const LEVELS: readonly LevelDefinition[] = [LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4];
+   export const LEVELS: readonly LevelDefinition[] = [COMIENZO_MAZMORRAS, CATACUMBAS, SALA_DEL_GUARDIAN, LEVEL_4];
    ```
 
    Y actualiza la prueba `tests/world/campaignLevels.test.ts`, que resume gemas y enemigos de
    cada nivel: así un cambio en un mapa nunca pasa desapercibido.
 
 2. Arranca el juego en modo desarrollo (`npm run dev`) y abre la URL con `?nivel=<id>`, por ejemplo
-   `http://localhost:5173/?nivel=level-2`. La run empieza en ese nivel y, al completarlo, sigue con
+   `http://localhost:5173/?nivel=catacumbas`. La run empieza en ese nivel y, al completarlo, sigue con
    el siguiente de la campaña. Ese parámetro **solo funciona en desarrollo**; la versión publicada
    siempre empieza en el Nivel 1.
 3. Si algo falla, depende de en qué paso:
