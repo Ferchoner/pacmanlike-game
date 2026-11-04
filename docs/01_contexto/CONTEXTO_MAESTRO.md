@@ -146,12 +146,47 @@ Estado al 2026-11-04:
 
 ### Detalles a corregir del juego
 
-Lista de Fernando (desde el 2026-11-04). Se corrigen antes de la
-próxima publicación, cada uno con su aprobación.
+Lista de Fernando (desde el 2026-11-04), con los detalles vistos en la
+revisión de estado de ese día. Se corrigen antes de la próxima
+publicación, cada uno con su aprobación. Al corregir uno, marcarlo [x]
+y anotar el PR.
+
+Interfaz y textos:
 
 -   [ ] Menú: dos líneas de texto ("Reúne las gemas que pide cada
     nivel…" y "Tienes 3 corazones para toda la aventura…") son más
     anchas que la pantalla de 768 px y se cortan por los lados.
+-   [ ] HUD sin fondo: el texto ("Nivel 1/3 Gemas…", "Puerta: faltan
+    N") y los corazones se dibujan directamente sobre la fila de
+    ladrillos de arriba. Se lee, pero con poco contraste, sobre todo el
+    rojo de "Puerta: faltan".
+-   [ ] El "/N" de las gemas significa cosas distintas según la
+    pantalla: en el HUD es recogidas/**requeridas** ("Gemas: 2/25"); en
+    Nivel completado y Game Over es recogidas/**totales** ("Gemas:
+    27/30"). Elegir un criterio o decirlo en el texto.
+-   [ ] "Run" en los textos ("se pierde la run", "La run vuelve a
+    empezar…"): palabra en inglés en una interfaz en español. Decidir
+    si se queda o se cambia por "partida".
+-   [ ] La UI sigue siendo provisional (fuente del sistema, colores
+    planos, pantallas solo de texto): pendiente de R-017 (Game Over),
+    R-018 (Nivel completado) y R-026 (fuente).
+
+Técnicos y de proceso:
+
+-   [ ] `level:check` no avisa si un nivel nuevo incumple la regla de
+    "sobran entre 5 y 8 gemas"; hoy solo lo vigila la prueba de la
+    campaña al añadirlo a `LEVELS`.
+-   [ ] 10 archivos de `public/assets` que el juego no usa (incluidos 3
+    `.aseprite`) se copian a `dist/` en cada build. No llegan al .zip,
+    pero conviene sacarlos de `public/` (sin borrar los originales de
+    `assets/source/`).
+-   [ ] Antes de publicar: subir la versión de `package.json` y hacer
+    las pruebas manuales en Chrome y Firefox con la campaña completa
+    (`docs/07_publicacion/CHECKLIST_PRUEBAS_FASE9.md`).
+-   [ ] Carpeta compartida del proyecto: la copia de `docs/` es de antes
+    de la Fase 8; actualizarla o borrarla.
+
+Recursos (ver Pendientes): audio P0 R-020…R-023 e icono R-016.
 
 ## Principio rector
 
