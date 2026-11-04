@@ -13,3 +13,8 @@ Flujo: `data/levels/level1.json` → `parseMap` (lee el ASCII) → `validateLeve
 | `distanceField.ts` | BFS con distancias: cuántos pasos hay a un objetivo desde cada celda. Navegación de Hunter y Patrol (Fase 5). |
 | `gridMath.ts` | Conversión celda ↔ píxeles (celda = 32 px). |
 | `loadLevel.ts` | Valida y construye el `Level`. |
+| `tiled/tiledToLevel.ts` | Traduce un mapa JSON de Tiled al mismo `LevelDefinition` (luego pasa por `validateLevel` como cualquier nivel). |
+| `tiled/levelToTiled.ts` | Lo inverso: genera la copia de referencia del Nivel 1 para Tiled. |
+| `tiled/TiledTypes.ts` | Los campos del JSON de Tiled que leemos. |
+
+Guía para crear niveles: `docs/08_niveles/GUIA_CREACION_NIVELES.md`.

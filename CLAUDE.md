@@ -68,3 +68,8 @@ Provisionales (deben ser configurables): jugador 160 px/s, Hunter 120 px/s, invu
 - `npm run build` — `tsc --noEmit` + build de producción en `dist/`.
 - `npm test` — pruebas con Vitest (`tests/**/*.test.ts`).
 - `npm run typecheck` — solo comprobación de tipos.
+- `npm run level:check -- <archivo.json>` — traduce (si es de Tiled) y valida un nivel desde la terminal.
+- `npm run level:export-nivel1` — regenera `tiled/mapas/nivel1_referencia.json` (copia de referencia).
+
+Niveles nuevos: se dibujan en Tiled (`tiled/`) siguiendo `docs/08_niveles/GUIA_CREACION_NIVELES.md`.
+El Nivel 1 aprobado se sigue cargando desde `src/data/levels/level1.json`.

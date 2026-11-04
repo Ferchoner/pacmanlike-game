@@ -1,0 +1,84 @@
+{
+    "automappingRulesFile": "",
+    "commands": [],
+    "compatibilityVersion": 1100,
+    "extensionsPath": "extensions",
+    "folders": [
+        "."
+    ],
+    "properties": [],
+    "propertyTypes": [
+        {
+            "id": 1,
+            "name": "jugador",
+            "type": "class",
+            "color": "#ff3b82f6",
+            "drawFill": true,
+            "useAs": [
+                "object"
+            ],
+            "members": []
+        },
+        {
+            "id": 2,
+            "name": "hunter",
+            "type": "class",
+            "color": "#ffef4444",
+            "drawFill": true,
+            "useAs": [
+                "object"
+            ],
+            "members": []
+        },
+        {
+            "id": 3,
+            "name": "patrol",
+            "type": "class",
+            "color": "#fff97316",
+            "drawFill": true,
+            "useAs": [
+                "object"
+            ],
+            "members": [
+                {
+                    "name": "ruta",
+                    "type": "object",
+                    "value": 0
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "salida",
+            "type": "class",
+            "color": "#ff22c55e",
+            "drawFill": true,
+            "useAs": [
+                "object"
+            ],
+            "members": []
+        },
+        {
+            "id": 5,
+            "name": "gema",
+            "type": "class",
+            "color": "#ffeab308",
+            "drawFill": true,
+            "useAs": [
+                "object"
+            ],
+            "members": []
+        },
+        {
+            "id": 6,
+            "name": "ruta",
+            "type": "class",
+            "color": "#fffb923c",
+            "drawFill": false,
+            "useAs": [
+                "object"
+            ],
+            "members": []
+        }
+    ]
+}

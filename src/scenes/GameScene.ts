@@ -3,7 +3,7 @@ import { GRID } from '../core/GameConstants';
 import { nextScene } from '../core/sceneFlow';
 import { SceneKeys } from '../core/SceneKeys';
 import { GAME_TUNING } from '../data/gameTuning';
-import { LEVEL_1 } from '../data/levels';
+import { levelToPlay } from '../data/levels';
 import { EnemyGroup, type Enemy } from '../enemies/EnemyGroup';
 import { KeyboardPlayerInput } from '../player/KeyboardPlayerInput';
 import { Player } from '../player/Player';
@@ -72,7 +72,7 @@ export class GameScene extends Phaser.Scene {
     this.events.once('shutdown', () => this.audio?.stopMusic());
 
     try {
-      const { level, warnings } = loadLevel(LEVEL_1);
+      const { level, warnings } = loadLevel(levelToPlay(window.location.search, SHOW_DEV_TOOLS));
       for (const w of warnings) console.warn(`[nivel ${level.id}] ${w.message}`);
       renderLevel(this, level);
 

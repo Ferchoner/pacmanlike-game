@@ -1,6 +1,6 @@
 import type { GridPoint, LevelDefinition, ParsedMap, PatrolDefinition } from './LevelTypes';
-import { parseMap } from './parseMap';
-import { isWalkable, pointKey, reachableFrom, samePoint } from './gridSearch';
+import { parseMap } from './parseMap.ts';
+import { isWalkable, pointKey, reachableFrom, samePoint } from './gridSearch.ts';
 
 /**
  * - `error`: el nivel no se puede jugar o los datos se contradicen. Bloquea la carga.
