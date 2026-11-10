@@ -119,6 +119,9 @@ Un Patrol necesita dos objetos:
 Reglas que comprueba el validador:
 - Cada tramo entre dos vértices debe ser **horizontal o vertical** y **sin paredes en medio**.
 - El Patrol debería empezar **sobre** su circuito (si no, es un aviso).
+- La ruta **no puede estar girada** (*Rotation* = 0). Si dibujas la polilínea en vertical y luego
+  la giras 90°, Tiled la muestra horizontal pero guarda los puntos en vertical; el juego leería esos
+  puntos. Para cambiar su dirección, vuelve a dibujarla (error `TILED_ROUTE_ROTATED`).
 
 ¿Por qué una referencia y no "la ruta más cercana"? Porque con dos Patrols cerca el juego no
 puede adivinar cuál es de quién. Una referencia explícita no tiene ambigüedad.
@@ -156,6 +159,7 @@ El comando también acepta niveles escritos a mano: `npm run level:check -- src/
 | `TILED_OBJECT_ON_WALL` | Entidad encima de una pared. | Muévela o borra la pared. |
 | `TILED_OBJECT_OVERLAP` | Dos entidades en la misma celda. | Separa una de ellas. |
 | `TILED_ROUTE_MISSING` | El Patrol no apunta a su ruta. | Propiedad `ruta` → selecciona la polilínea. |
+| `TILED_ROUTE_ROTATED` | La ruta está girada (*Rotation* ≠ 0). Tiled guarda los puntos sin girar, así que el juego la leería en otra dirección. | Pon *Rotation* = 0 y vuelve a dibujar los puntos donde los quieres. |
 | `BORDER_OPEN` | Hay un hueco en el borde. | Pinta pared en esa celda. |
 | `EXIT_UNREACHABLE` | La salida queda encerrada. | Abre un pasillo hasta ella. |
 | `NOT_ENOUGH_REACHABLE_GEMS` | No se alcanzan suficientes gemas. | Baja `gemasRequeridas` o abre pasillos. |

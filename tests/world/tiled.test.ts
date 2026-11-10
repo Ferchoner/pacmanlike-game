@@ -215,6 +215,17 @@ describe('Tiled: errores que se informan (nunca se corrigen en silencio)', () =>
     expect(codes(smallMap(rutaRect))).toEqual(['TILED_ROUTE_INVALID']);
   });
 
+  it('ruta girada en Tiled: se informa en lugar de leer sus puntos sin girar', () => {
+    // Se ve horizontal en Tiled (vertical + 90°), pero el archivo guarda los puntos en vertical.
+    const ruta = (rotation: number) => [
+      ...BASIC,
+      { id: 9, type: 'ruta', x: 112, y: 48, rotation, polyline: [{ x: 0, y: 0 }, { x: 0, y: 64 }] },
+      point(4, 'patrol', 2, 1, { properties: [{ name: 'ruta', type: 'object', value: 9 }] }),
+    ];
+    expect(codes(smallMap(ruta(90)))).toEqual(['TILED_ROUTE_ROTATED']);
+    expect(codes(smallMap(ruta(0)))).toEqual([]);
+  });
+
   it('tiledToLevel lanza TiledLevelError con todos los problemas', () => {
     expect(() => tiledToLevel({}, OPTIONS)).toThrow(TiledLevelError);
   });
