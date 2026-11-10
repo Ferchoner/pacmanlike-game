@@ -72,7 +72,8 @@ export type TiledIssueCode =
   | 'TILED_PLAYER_MISSING'
   | 'TILED_EXIT_MISSING'
   | 'TILED_ROUTE_MISSING'
-  | 'TILED_ROUTE_INVALID';
+  | 'TILED_ROUTE_INVALID'
+  | 'TILED_ROUTE_ROTATED';
 
 export interface TiledIssue {
   readonly code: TiledIssueCode;
@@ -270,6 +271,16 @@ export function convertTiledMap(json: unknown, options: TiledConversionOptions):
       add(
         'TILED_ROUTE_INVALID',
         `La ruta de ${label} (${describe(route)}) debe ser una polilínea o polígono con al menos 2 vértices.`,
+        cell,
+      );
+      continue;
+    }
+    // Tiled guarda los vértices SIN girar y el ángulo aparte: lo que se ve en pantalla no es lo
+    // que hay en el archivo. En lugar de aplicar el giro en silencio, se pide dejarlo en 0.
+    if (route.rotation !== undefined && route.rotation !== 0) {
+      add(
+        'TILED_ROUTE_ROTATED',
+        `La ruta de ${label} (${describe(route)}) está girada ${route.rotation}°. Tiled guarda sus puntos sin girar, así que el juego no la vería donde tú la ves. Pon Rotation = 0 y vuelve a dibujar los puntos.`,
         cell,
       );
       continue;

@@ -35,6 +35,8 @@ export interface TiledObject {
   readonly width?: number;
   readonly height?: number;
   readonly point?: boolean;
+  /** Giro en grados (horario). Tiled NO mueve los vértices al girar: solo guarda este ángulo. */
+  readonly rotation?: number;
   /** Si existe, es un objeto-tile: su (x, y) es la esquina INFERIOR izquierda. */
   readonly gid?: number;
   /** Vértices relativos a (x, y). */
