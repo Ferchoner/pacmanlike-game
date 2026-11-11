@@ -182,8 +182,9 @@ Técnicos y de proceso:
     quitaron de `public/`; los originales idénticos siguen en
     `assets/source/`.
 -   [ ] Antes de publicar: subir la versión de `package.json` y hacer
-    las pruebas manuales en Chrome y Firefox con la campaña completa
-    (`docs/07_publicacion/CHECKLIST_PRUEBAS_FASE9.md`).
+    las pruebas manuales en Chrome y Firefox con la campaña completa.
+    Versión subida a `0.2.0-beta.1` (2026-11-11); las pruebas manuales
+    siguen en `docs/07_publicacion/CHECKLIST_VALIDACION_BETA_2.md`.
 -   [ ] Carpeta compartida del proyecto: la copia de `docs/` es de antes
     de la Fase 8; actualizarla o borrarla.
 

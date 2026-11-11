@@ -5,3 +5,6 @@ coverage/
 .DS_Store
 .vite/
 /release/
+# Archivos locales del IDE (PhpStorm) y de la sesión de Tiled
+.idea/
+*.tiled-session

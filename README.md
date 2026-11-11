@@ -53,7 +53,7 @@ public/assets/        Recursos preparados para cargar (rutas en docs/03_recursos
 .github/workflows/    CI: tipos, pruebas, mapas y build en cada PR
 ```
 
-## Estado (2026-11-04)
+## Estado (2026-11-11)
 
 | Entrega | Qué quedó |
 |---|---|
@@ -66,13 +66,14 @@ public/assets/        Recursos preparados para cargar (rutas en docs/03_recursos
 | Fase 6: daño y reinicio | Tocar un enemigo resta un corazón, 0.8 s de invulnerabilidad y empujón; con 0 corazones, Game Over y reinicio completo. |
 | Fase 7: UI y escenas | Menú, HUD, Game Over, Nivel completado y secuencia de muerte antes del Game Over. |
 | Fase 8: recursos externos | Carga desde `manifest.json`; 14 recursos de uso temporal (`temp-dev`). Guía: [`GUIA_INTEGRACION_RECURSOS.md`](docs/03_recursos/GUIA_INTEGRACION_RECURSOS.md). |
-| Fase 9: publicación | `npm run package:itch`; beta 0.1.0-beta.1 (un solo nivel) subida a [itch.io](https://ferchoner77.itch.io/search-and-run) el 2026-11-03. Guía: [`PUBLICACION_ITCHIO.md`](docs/07_publicacion/PUBLICACION_ITCHIO.md). |
+| Fase 9: publicación | `npm run package:itch`; beta 0.1.0-beta.1 (un solo nivel) subida a [itch.io](https://ferchoner77.itch.io/search-and-run) el 2026-11-03. Segunda beta **0.2.0-beta.1** (campaña de 3 niveles) en validación: [`CHECKLIST_VALIDACION_BETA_2.md`](docs/07_publicacion/CHECKLIST_VALIDACION_BETA_2.md). Guía: [`PUBLICACION_ITCHIO.md`](docs/07_publicacion/PUBLICACION_ITCHIO.md). |
 | Niveles con Tiled | Traductor, `level:check` y guía: [`GUIA_CREACION_NIVELES.md`](docs/08_niveles/GUIA_CREACION_NIVELES.md). |
 | Campaña | Comienzo de las mazmorras → Las Catacumbas → La Sala del Guardián → Victoria. |
 | Mantenimiento | Nombre Search and Run, CI en GitHub, matriz de recursos al día y documentación revisada. |
 
 Falta para la versión final: arte definitivo, el audio (SFX P0 R-020 a R-023) y el icono del
-contador de gemas (R-016). De momento no se publica otra versión.
+contador de gemas (R-016). La segunda beta (0.2.0-beta.1, con los 3 niveles) se valida con
+[`CHECKLIST_VALIDACION_BETA_2.md`](docs/07_publicacion/CHECKLIST_VALIDACION_BETA_2.md).
 
 En el menú, ENTER, ESPACIO o clic inician. En el juego: flechas/WASD mueven y B (solo con
 `npm run dev`) muestra el cuerpo de colisión. Entre niveles, ENTER o ESPACIO siguen. En Game Over o
