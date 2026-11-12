@@ -1,15 +1,15 @@
 # Publicación en itch.io (Fase 9)
 
-> **Estado al 2026-11-04.**
+> **Estado al 2026-11-11.**
 >
-> - En itch.io está la **beta 0.1.0-beta.1**, subida por Fernando el 2026-11-03 como
->   [Search and Run](https://ferchoner77.itch.io/search-and-run). Es la versión de **un solo
->   nivel** (el Blueprint v0.1): se generó antes de la campaña de 3 niveles.
-> - El juego pasó a llamarse **Search and Run** en todas partes (menú, `index.html`, `CREDITOS.txt`
+> - La primera beta, **0.1.0-beta.1** (un solo nivel, el Blueprint v0.1), la subió Fernando el
+>   2026-11-03 como [Search and Run](https://ferchoner77.itch.io/search-and-run).
+> - El 2026-11-11 Fernando subió una **segunda beta con la campaña de 3 niveles**. En el repo pasa
+>   a ser la versión **0.2.0-beta.1** (`package.json`) para no tener dos juegos distintos con el
+>   mismo número; el proceso para validarla y firmarla está en
+>   [`CHECKLIST_VALIDACION_BETA_2.md`](CHECKLIST_VALIDACION_BETA_2.md).
+> - El juego se llama **Search and Run** en todas partes (menú, `index.html`, `CREDITOS.txt`
 >   y nombre del .zip: `search-and-run-v<versión>-…zip`).
-> - **De momento no se publica otra versión** (Fernando, 2026-11-04): faltan detalles del juego.
->   Cuando se publique la campaña, conviene subir antes la versión de `package.json` (por ejemplo
->   a `0.2.0-beta.1`) para no tener dos juegos distintos con el mismo número.
 > - La versión **final** sigue sin ser publicable: 14 recursos `temp-dev` y faltan 5 P0 (R-016 y
 >   los SFX R-020…R-023).
 >
@@ -104,7 +104,8 @@ Qué cambia en la beta:
   `RELEASE_STAGE` a `'final'` desaparecen.
 - El .zip incluye `CREDITOS.txt`, generado desde el manifest: archivo, autor, origen y licencia de
   cada recurso externo que el juego carga.
-- `package.json` lleva la versión `0.1.0-beta.1`.
+- `package.json` lleva la versión de la beta (`0.1.0-beta.1` la primera, `0.2.0-beta.1` la
+  segunda, con la campaña).
 
 **Un matiz importante sobre "no redistribuir".** Un juego HTML5 en itch.io funciona descargando los
 PNG al navegador de cada jugador, así que publicar el juego sí distribuye esos archivos *dentro del

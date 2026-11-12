@@ -12,6 +12,9 @@ imita la página de itch.io, con Chromium sin GPU (Playwright).
 > PR. **Las pruebas manuales siguen pendientes** y conviene hacerlas con la campaña completa
 > antes de la próxima publicación.
 
+> **2026-11-11:** las pruebas de la segunda beta (0.2.0-beta.1, campaña de 3 niveles) siguen
+> [`CHECKLIST_VALIDACION_BETA_2.md`](CHECKLIST_VALIDACION_BETA_2.md).
+
 Leyenda: ✅ comprobado · ⚠️ comprobado con observaciones · ⬜ pendiente (manual, en navegador real).
 
 ## Automático (lo repite `npm test` o `npm run package:itch`)
